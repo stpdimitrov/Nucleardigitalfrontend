@@ -20,7 +20,7 @@ import {
 
 
 export default function App() {
-  return ( <div className="text-black text-[16px] leading-[normal]" style={{"fontFamily":"\"Times New Roman\"","width":"1024px","transform":"scale(1)","margin":"auto"}}>
+  return ( <div className="text-black text-[16px] leading-[normal]" style={{"fontFamily":"\"Times New Roman\""}}>
   <div className="bg-black text-[12px]" style={{"fontFamily":"sans-serif"}}>
     <div>
       <div className="items-center flex flex-col h-min justify-start overflow-clip relative bg-black gap-[0px] min-h-[640px]">
