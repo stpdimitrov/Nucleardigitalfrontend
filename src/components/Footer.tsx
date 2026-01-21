@@ -3,6 +3,8 @@
 // DO NOT modify class names, inline styles, or structure
 // Source: App.tsx lines ~2024-2217
 
+import { Link } from 'react-router-dom';
+
 export function Footer() {
   return (
     <div className="relative w-full shrink-[0]" style={{"order":"1003"}}>
@@ -19,44 +21,44 @@ export function Footer() {
                 </div>
                 <div aria-label="Wrapper" className="items-start flex flex-col h-min justify-center relative w-full gap-[12px] shrink-[0] opacity-[0.9]">
                   <div aria-label="Footer link" className="relative shrink-[0]">
-                    <a href="/" aria-label="Footer link" className="items-center flex flex-col size-min justify-center overflow-clip relative text-[rgb(0,_0,_238)] gap-[8px]" style={{"textDecoration":"rgb(0, 0, 238)"}}>
+                    <Link to="/" aria-label="Footer link" className="items-center flex flex-col size-min justify-center overflow-clip relative text-[rgb(0,_0,_238)] gap-[8px]" style={{"textDecoration":"rgb(0, 0, 238)"}}>
                       <div className="flex flex-col justify-start relative whitespace-pre shrink-[0] opacity-[0.6]">
                         <p className="font-medium text-white text-[16px] tracking-[-0.32px] leading-[24px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>Homepage</p>
                       </div>
                       <div className="flex flex-col justify-start absolute whitespace-pre left-[50%] bottom-[-20px] translate-x-[-50%] z-[1] shrink-[0]">
                         <p className="font-medium text-white text-[16px] tracking-[-0.32px] leading-[24px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>Homepage</p>
                       </div>
-                    </a>
+                    </Link>
                   </div>
                   <div aria-label="Footer link" className="relative shrink-[0]">
-                    <a href="/about-us" aria-label="Footer link" className="items-center flex flex-col size-min justify-center overflow-clip relative text-[rgb(0,_0,_238)] gap-[8px]" style={{"textDecoration":"rgb(0, 0, 238)"}}>
+                    <Link to="/about-us" aria-label="Footer link" className="items-center flex flex-col size-min justify-center overflow-clip relative text-[rgb(0,_0,_238)] gap-[8px]" style={{"textDecoration":"rgb(0, 0, 238)"}}>
                       <div className="flex flex-col justify-start relative whitespace-pre shrink-[0] opacity-[0.6]">
                         <p className="font-medium text-white text-[16px] tracking-[-0.32px] leading-[24px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>About us</p>
                       </div>
                       <div className="flex flex-col justify-start absolute whitespace-pre left-[50%] bottom-[-20px] translate-x-[-50%] z-[1] shrink-[0]">
                         <p className="font-medium text-white text-[16px] tracking-[-0.32px] leading-[24px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>About us</p>
                       </div>
-                    </a>
+                    </Link>
                   </div>
                   <div aria-label="Footer link" className="relative shrink-[0]">
-                    <a href="/contact-us" aria-label="Footer link" className="items-center flex flex-col size-min justify-center overflow-clip relative text-[rgb(0,_0,_238)] gap-[8px]" style={{"textDecoration":"rgb(0, 0, 238)"}}>
+                    <Link to="/contact-us" aria-label="Footer link" className="items-center flex flex-col size-min justify-center overflow-clip relative text-[rgb(0,_0,_238)] gap-[8px]" style={{"textDecoration":"rgb(0, 0, 238)"}}>
                       <div className="flex flex-col justify-start relative whitespace-pre shrink-[0] opacity-[0.6]">
                         <p className="font-medium text-white text-[16px] tracking-[-0.32px] leading-[24px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>Contact us</p>
                       </div>
                       <div className="flex flex-col justify-start absolute whitespace-pre left-[50%] bottom-[-20px] translate-x-[-50%] z-[1] shrink-[0]">
                         <p className="font-medium text-white text-[16px] tracking-[-0.32px] leading-[24px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>Contact us</p>
                       </div>
-                    </a>
+                    </Link>
                   </div>
                   <div aria-label="Footer link" className="relative shrink-[0]">
-                    <a href="/404" aria-label="Footer link" className="items-center flex flex-col size-min justify-center overflow-clip relative text-[rgb(0,_0,_238)] gap-[8px]" style={{"textDecoration":"rgb(0, 0, 238)"}}>
+                    <Link to="/404" aria-label="Footer link" className="items-center flex flex-col size-min justify-center overflow-clip relative text-[rgb(0,_0,_238)] gap-[8px]" style={{"textDecoration":"rgb(0, 0, 238)"}}>
                       <div className="flex flex-col justify-start relative whitespace-pre shrink-[0] opacity-[0.6]">
                         <p className="font-medium text-white text-[16px] tracking-[-0.32px] leading-[24px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>404</p>
                       </div>
                       <div className="flex flex-col justify-start absolute whitespace-pre left-[50%] bottom-[-20px] translate-x-[-50%] z-[1] shrink-[0]">
                         <p className="font-medium text-white text-[16px] tracking-[-0.32px] leading-[24px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>404</p>
                       </div>
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -66,34 +68,34 @@ export function Footer() {
                 </div>
                 <div aria-label="Wrapper" className="items-start flex flex-col h-min justify-center relative w-full gap-[12px] shrink-[0] opacity-[0.9]">
                   <div aria-label="Footer link" className="relative shrink-[0]">
-                    <a href="/services" aria-label="Footer link" className="items-center flex flex-col size-min justify-center overflow-clip relative text-[rgb(0,_0,_238)] gap-[8px]" style={{"textDecoration":"rgb(0, 0, 238)"}}>
+                    <Link to="/services" aria-label="Footer link" className="items-center flex flex-col size-min justify-center overflow-clip relative text-[rgb(0,_0,_238)] gap-[8px]" style={{"textDecoration":"rgb(0, 0, 238)"}}>
                       <div className="flex flex-col justify-start relative whitespace-pre shrink-[0] opacity-[0.6]">
                         <p className="font-medium text-white text-[16px] tracking-[-0.32px] leading-[24px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>Services</p>
                       </div>
                       <div className="flex flex-col justify-start absolute whitespace-pre left-[50%] bottom-[-20px] translate-x-[-50%] z-[1] shrink-[0]">
                         <p className="font-medium text-white text-[16px] tracking-[-0.32px] leading-[24px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>Services</p>
                       </div>
-                    </a>
+                    </Link>
                   </div>
                   <div aria-label="Footer link" className="relative shrink-[0]">
-                    <a href="/projects" aria-label="Footer link" className="items-center flex flex-col size-min justify-center overflow-clip relative text-[rgb(0,_0,_238)] gap-[8px]" style={{"textDecoration":"rgb(0, 0, 238)"}}>
+                    <Link to="/projects" aria-label="Footer link" className="items-center flex flex-col size-min justify-center overflow-clip relative text-[rgb(0,_0,_238)] gap-[8px]" style={{"textDecoration":"rgb(0, 0, 238)"}}>
                       <div className="flex flex-col justify-start relative whitespace-pre shrink-[0] opacity-[0.6]">
                         <p className="font-medium text-white text-[16px] tracking-[-0.32px] leading-[24px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>Projects</p>
                       </div>
                       <div className="flex flex-col justify-start absolute whitespace-pre left-[50%] bottom-[-20px] translate-x-[-50%] z-[1] shrink-[0]">
                         <p className="font-medium text-white text-[16px] tracking-[-0.32px] leading-[24px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>Projects</p>
                       </div>
-                    </a>
+                    </Link>
                   </div>
                   <div aria-label="Footer link" className="relative shrink-[0]">
-                    <a href="/blogs" aria-label="Footer link" className="items-center flex flex-col size-min justify-center overflow-clip relative text-[rgb(0,_0,_238)] gap-[8px]" style={{"textDecoration":"rgb(0, 0, 238)"}}>
+                    <Link to="/blogs" aria-label="Footer link" className="items-center flex flex-col size-min justify-center overflow-clip relative text-[rgb(0,_0,_238)] gap-[8px]" style={{"textDecoration":"rgb(0, 0, 238)"}}>
                       <div className="flex flex-col justify-start relative whitespace-pre shrink-[0] opacity-[0.6]">
                         <p className="font-medium text-white text-[16px] tracking-[-0.32px] leading-[24px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>Blogs</p>
                       </div>
                       <div className="flex flex-col justify-start absolute whitespace-pre left-[50%] bottom-[-20px] translate-x-[-50%] z-[1] shrink-[0]">
                         <p className="font-medium text-white text-[16px] tracking-[-0.32px] leading-[24px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>Blogs</p>
                       </div>
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
