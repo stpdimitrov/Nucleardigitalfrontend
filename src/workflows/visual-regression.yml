@@ -1,0 +1,136 @@
+name: Visual Regression Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:  # Allow manual triggers
+
+jobs:
+  visual-regression:
+    name: Visual Regression Testing
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]  # Parallel execution across 3 shards
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+      
+      - name: Run Playwright tests
+        run: npx playwright test --shard=${{ matrix.shard }}/${{ strategy.job-total }}
+        env:
+          CI: true
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results-${{ matrix.shard }}
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 30
+      
+      - name: Upload failure screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-screenshots-${{ matrix.shard }}
+          path: test-results/**/*-diff.png
+          retention-days: 30
+  
+  merge-reports:
+    name: Merge Test Reports
+    needs: visual-regression
+    if: always()
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-results
+          pattern: playwright-results-*
+      
+      - name: Merge reports
+        run: |
+          npx playwright merge-reports --reporter html all-results/playwright-results-*
+      
+      - name: Upload merged report
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-merged
+          path: playwright-report/
+          retention-days: 30
+      
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const resultsPath = 'test-results/visual-regression-results.json';
+            
+            if (fs.existsSync(resultsPath)) {
+              const results = JSON.parse(fs.readFileSync(resultsPath, 'utf8'));
+              const passed = results.stats.expected;
+              const failed = results.stats.unexpected;
+              const total = passed + failed;
+              
+              const body = `## 📸 Visual Regression Test Results
+              
+              - ✅ **Passed**: ${passed}/${total}
+              - ❌ **Failed**: ${failed}/${total}
+              - 📊 **Success Rate**: ${((passed/total) * 100).toFixed(1)}%
+              
+              ${failed > 0 ? '⚠️ **Visual differences detected!** Review the [test report](../actions/runs/${{ github.run_id }}) for details.' : '✅ **All tests passed!** Visual parity maintained.'}
+              `;
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: body
+              });
+            }
+  
+  visual-parity-check:
+    name: Visual Parity Summary
+    needs: merge-reports
+    if: always()
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check test status
+        run: |
+          echo "Visual regression testing complete"
+          echo "Review artifacts for detailed results"

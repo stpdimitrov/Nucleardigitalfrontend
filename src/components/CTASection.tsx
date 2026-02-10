@@ -3,7 +3,9 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 import { scrollFadeIn, viewport } from '../lib/animations';
+import svgPaths from '../imports/svg-hytnsfvgzh';
 
 interface CTASectionProps {
   tag: string;
@@ -23,41 +25,69 @@ export function CTASection({
   backgroundAlt
 }: CTASectionProps) {
   return (
-    <div className="h-screen relative w-full shrink-[0]" style={{"order":"1002"}}>
-      <motion.section
-        aria-label="Desktop"
-        className="items-center flex size-full justify-center overflow-clip relative gap-[8px] pt-[100px] pr-0 pb-[100px] pl-0"
+    <div className="content-stretch flex flex-col items-start justify-center relative size-full" data-name="div.framer-18y2yvd-container">
+      <motion.div
+        className="content-stretch flex items-center justify-center overflow-clip pb-[463.18px] pt-[463.19px] relative shrink-0 w-full"
+        data-name="Desktop"
         initial="hidden"
         whileInView="visible"
         viewport={viewport}
         variants={scrollFadeIn}
       >
-        <div className="absolute left-0 top-0 right-0 bottom-0">
-          <img alt={backgroundAlt} src={backgroundImage} className="block size-full object-cover overflow-clip aspect-[auto_1280_/_1280]" />
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <img alt={backgroundAlt} className="absolute h-[160%] left-0 max-w-none top-[-30%] w-full" src={backgroundImage} />
         </div>
-        <div aria-label="Overlay" className="size-full overflow-clip absolute left-[0%] top-[0%] bg-black z-[1] shrink-[0] opacity-[0.3]"></div>
-        <div aria-label="Container" className="items-center flex grow h-min justify-center overflow-clip relative w-px basis-0 gap-[64px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
-          <div aria-label="Wrapper" className="items-center flex flex-col grow h-min justify-center overflow-clip relative w-px basis-0 gap-[24px] max-w-[790px] z-[2] shrink-[0]">
-            <div aria-label="Section tag" className="relative shrink-[0]">
-              <div aria-label="Section tag" className="items-center flex size-min justify-center overflow-clip relative gap-[8px]">
-                <div aria-label="Description" className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
-                  <p className="font-medium text-left uppercase text-white text-[16px] tracking-[-0.16px] leading-[22.4px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>{tag}</p>
+        <div className="content-stretch flex items-center justify-center max-w-[1240px] overflow-clip px-[24px] relative shrink-0 w-[1240px]" data-name="Container">
+          <div className="content-stretch flex flex-col gap-[22.9px] items-center justify-center max-w-[790px] overflow-clip relative shrink-0 w-[790px]" data-name="Wrapper">
+            {/* Section Tag */}
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-name="Section tag">
+              <div className="content-stretch flex h-[22.41px] items-center justify-center overflow-clip pb-px relative shrink-0" data-name="Section tag">
+                <div className="content-stretch flex flex-col items-start relative shrink-0" data-name="Description">
+                  <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
+                    <div className="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14.1px] text-white tracking-[-0.16px] uppercase whitespace-nowrap" style={{fontFamily: '"Apfel Grotezk", "Apfel Grotezk Placeholder", sans-serif'}}>
+                      <p className="leading-[22.4px]">{tag}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="flex flex-col justify-start relative w-full shrink-[0]">
-              <h2 className="font-medium text-center text-white text-[44px] tracking-[-1.32px] leading-[46.2px]" style={{"fontFamily":"Ronzino, \"Ronzino Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>{heading}</h2>
+
+            {/* Heading */}
+            <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="div.framer-sfb8j">
+              <div className="content-stretch flex flex-col items-center relative shrink-0 w-full" data-name="h2.framer-text">
+                <div className="flex flex-col font-medium justify-center leading-[50.4px] not-italic relative shrink-0 text-[45.4px] text-center text-white tracking-[-1.44px]" style={{fontFamily: 'Ronzino, "Ronzino Placeholder", sans-serif'}}>
+                  <h2 className="mb-0 whitespace-pre-wrap">{heading}</h2>
+                </div>
+              </div>
             </div>
-            <div aria-label="Button wrapper" className="items-center flex h-min justify-center relative w-full gap-[8px] pt-2 pr-0 pb-0 pl-0 shrink-[0]">
-              <div aria-label="Button" className="relative shrink-[0]">
-                <Link to={buttonHref} aria-label="Small" className="items-center flex size-min justify-start overflow-clip relative bg-[rgb(253,_197,_0)] text-[rgb(0,_0,_238)] gap-[14px] pt-[6px] pr-[6px] pb-[6px] pl-4 rounded-[62.5rem]" style={{"textDecoration":"rgb(0, 0, 238)"}}>
-                  <div aria-label="Description" className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
-                    <p className="font-medium text-left uppercase text-black text-[16px] tracking-[-0.16px] leading-[22.4px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}>{buttonText}</p>
+
+            {/* Button */}
+            <div className="content-stretch flex items-center justify-center pt-[9.1px] relative shrink-0 w-full" data-name="Button wrapper">
+              <div className="content-stretch flex flex-col items-start relative shrink-0" data-name="Button">
+                <Link to={buttonHref} className="bg-[#fdc500] content-stretch cursor-pointer flex gap-[14px] items-center overflow-clip pl-[16px] pr-[6px] py-[6px] relative rounded-[1000px] shrink-0" data-name="Small">
+                  <div className="content-stretch flex flex-col items-start relative shrink-0" data-name="Description">
+                    <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
+                      <div className="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[0px] text-black text-left tracking-[-0.16px] uppercase whitespace-nowrap" style={{fontFamily: '"Apfel Grotezk", "Apfel Grotezk Placeholder", sans-serif'}} role="link" tabIndex={0}>
+                        <p className="cursor-pointer leading-[22.4px] text-[14.1px]">{buttonText}</p>
+                      </div>
+                    </div>
                   </div>
-                  <div aria-label="Icon wrapper" className="items-center flex flex-col justify-center overflow-clip relative w-8 h-8 bg-black gap-[8px] shrink-[0] rounded-[62.5rem]">
-                    <div aria-label="Icons" className="items-center flex size-min justify-center overflow-hidden relative gap-[8px] shrink-[0]">
-                      <div aria-label="Icon" className="aspect-square relative w-[15px] bg-white z-[1] shrink-[0]"></div>
-                      <div aria-label="Icon" className="aspect-square absolute w-[15px] left-[-20px] top-[47%] bg-white translate-y-[-50%] z-[1] shrink-[0]"></div>
+                  <div className="bg-black content-stretch flex flex-col items-center justify-center overflow-clip relative rounded-[1000px] shrink-0 size-[32px]" data-name="Icon wrapper">
+                    <div className="overflow-clip relative shrink-0 size-[15px]" data-name="Icons">
+                      <div className="-translate-x-1/2 -translate-y-1/2 absolute content-stretch flex flex-col items-start left-1/2 top-1/2 w-[15px]" data-name="Icon:mask">
+                        <div className="content-stretch flex flex-col items-center justify-center overflow-clip relative shrink-0 size-[15px]" data-name="Component 6">
+                          <div className="relative shrink-0 size-[20px]" data-name="Component 1">
+                            <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 20 20">
+                              <g>
+                                <path d={svgPaths.p3b6ad300} stroke="black" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.66667" />
+                              </g>
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="-translate-x-1/2 -translate-y-1/2 absolute left-1/2 size-[15px] top-1/2 flex items-center justify-center" data-name="Icon">
+                        <ArrowRight className="w-full h-full text-white" strokeWidth={2} />
+                      </div>
                     </div>
                   </div>
                 </Link>
@@ -65,7 +95,7 @@ export function CTASection({
             </div>
           </div>
         </div>
-      </motion.section>
+      </motion.div>
     </div>
   );
 }

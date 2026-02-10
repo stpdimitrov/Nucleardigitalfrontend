@@ -198,6 +198,81 @@ export const slideInBottom: Variants = {
 };
 
 // ============================================
+// PAGE TRANSITION ANIMATIONS
+// ============================================
+
+/**
+ * Page transition animation for route changes
+ * Smooth fade with slight vertical movement
+ * Matches Framer's typical page transitions
+ */
+export const pageTransition: Variants = {
+  initial: { opacity: 0, y: 20 },
+  animate: { 
+    opacity: 1, 
+    y: 0,
+    transition: { 
+      duration: 0.4, 
+      ease: [0.22, 1, 0.36, 1] 
+    }
+  },
+  exit: { 
+    opacity: 0, 
+    y: -20,
+    transition: { 
+      duration: 0.4, 
+      ease: [0.22, 1, 0.36, 1] 
+    }
+  },
+};
+
+/**
+ * Faster page transition for quick navigation
+ */
+export const pageTransitionFast: Variants = {
+  initial: { opacity: 0, y: 10 },
+  animate: { 
+    opacity: 1, 
+    y: 0,
+    transition: { 
+      duration: 0.25, 
+      ease: [0.22, 1, 0.36, 1] 
+    }
+  },
+  exit: { 
+    opacity: 0, 
+    y: -10,
+    transition: { 
+      duration: 0.25, 
+      ease: [0.22, 1, 0.36, 1] 
+    }
+  },
+};
+
+/**
+ * Slide page transition (horizontal)
+ */
+export const pageTransitionSlide: Variants = {
+  initial: { opacity: 0, x: 50 },
+  animate: { 
+    opacity: 1, 
+    x: 0,
+    transition: { 
+      duration: 0.5, 
+      ease: [0.22, 1, 0.36, 1] 
+    }
+  },
+  exit: { 
+    opacity: 0, 
+    x: -50,
+    transition: { 
+      duration: 0.5, 
+      ease: [0.22, 1, 0.36, 1] 
+    }
+  },
+};
+
+// ============================================
 // HOVER ANIMATIONS
 // ============================================
 

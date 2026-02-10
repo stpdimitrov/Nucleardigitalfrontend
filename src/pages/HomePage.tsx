@@ -1,8 +1,7 @@
-'use client';
-
 import React from 'react';
 import { motion } from "motion/react";
 import { Link } from 'react-router-dom';
+import { ArrowDown, ArrowRight } from 'lucide-react';
 import { ProjectCard } from '../components/ProjectCard';
 import { AboutUsSection } from '../components/AboutUsSection';
 import { WhyChooseUsSection } from '../components/WhyChooseUsSection';
@@ -11,6 +10,7 @@ import { ServicesSection } from '../components/ServicesSection';
 import { PricingSection } from '../components/PricingSection';
 import { TestimonialsSection } from '../components/TestimonialsSection';
 import { FAQSection } from '../components/FAQSection';
+import { HowWeWorkSection } from '../components/HowWeWorkSection';
 import { projects, clientLogos, services, pricingPlans, faqItems, testimonials, whyChooseUsItems } from '../services/mock-data';
 import { 
   heroAnimation, 
@@ -41,7 +41,9 @@ export function HomePage() {
                 <div className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
                   <p className="font-medium text-left uppercase text-white text-[16px] tracking-[-0.16px] leading-[22.4px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>Scroll down</p>
                 </div>
-                <div aria-label="Icon" className="aspect-square relative w-[18px] bg-white z-[1] shrink-[0]"></div>
+                <div aria-label="Icon" className="aspect-square relative w-[18px] z-[1] shrink-[0] flex items-center justify-center">
+                  <ArrowDown className="w-full h-full text-white" strokeWidth={2} />
+                </div>
               </div>
             </div>
             <div aria-label="Hero video" className="relative shrink-[0]">
@@ -86,7 +88,9 @@ export function HomePage() {
                   </div>
                   <div aria-label="Icon wrapper" className="items-center flex flex-col justify-center overflow-clip relative w-8 h-8 bg-black gap-[8px] shrink-[0] rounded-[62.5rem]">
                     <div aria-label="Icons" className="items-center flex size-min justify-center overflow-hidden relative gap-[8px] shrink-[0]">
-                      <div aria-label="Icon" className="aspect-square relative w-[15px] bg-white z-[1] shrink-[0]"></div>
+                      <div aria-label="Icon" className="aspect-square relative w-[15px] z-[1] shrink-[0] flex items-center justify-center">
+                        <ArrowRight className="w-full h-full text-white" strokeWidth={2} />
+                      </div>
                       <div aria-label="Icon" className="aspect-square absolute w-[15px] left-[-20px] top-[47%] bg-white translate-y-[-50%] z-[1] shrink-[0]"></div>
                     </div>
                   </div>
@@ -135,7 +139,9 @@ export function HomePage() {
                 </div>
                 <div aria-label="Icon wrapper" className="items-center flex flex-col justify-center overflow-clip relative w-8 h-8 bg-black gap-[8px] shrink-[0] rounded-[62.5rem]">
                   <div aria-label="Icons" className="items-center flex size-min justify-center overflow-hidden relative gap-[8px] shrink-[0]">
-                    <div aria-label="Icon" className="aspect-square relative w-[15px] bg-white z-[1] shrink-[0]"></div>
+                    <div aria-label="Icon" className="aspect-square relative w-[15px] z-[1] shrink-[0] flex items-center justify-center">
+                      <ArrowRight className="w-full h-full text-white" strokeWidth={2} />
+                    </div>
                     <div aria-label="Icon" className="aspect-square absolute w-[15px] left-[-20px] top-[47%] bg-white translate-y-[-50%] z-[1] shrink-[0]"></div>
                   </div>
                 </div>
@@ -159,18 +165,11 @@ export function HomePage() {
         buttonHref="/about-us"
       />
 
+      <ServicesSection services={services} />
+
       <WhyChooseUsSection items={whyChooseUsItems} />
 
-      <CTASection
-        tag="Lets work together"
-        heading="Ready to bring your vision to life? Let's create stunning visuals that captivate, inspire, and deliver results."
-        buttonText="contact us"
-        buttonHref="/contact-us"
-        backgroundImage="https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F034782943c0a8b7c7fd2455a1e51d707289a39ec.jpeg%3Fwidth=1280&amp;height=1280?generation=1768843023470915&amp;alt=media"
-        backgroundAlt="Silhouette of a filmmaker with a camera on a tripod in a dimly lit alley, bathed in orange light and mist, creating a moody, cinematic atmosphere."
-      />
-
-      <ServicesSection services={services} />
+      <HowWeWorkSection />
 
       <PricingSection pricingPlans={pricingPlans} />
 
@@ -180,6 +179,15 @@ export function HomePage() {
         faqs={faqItems}
         coverImageUrl="https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F2d3a81b8ccba0e26d61088a5aa4e7ee9ba77f6f4.jpeg%3Fscale-down-to=1024&amp;width=1280&amp;height=1280?generation=1768843023272576&amp;alt=media"
         coverImageAlt="Silhouetted band members play instruments in a smoky warehouse, backlit by vibrant orange and teal lights, creating a moody, dramatic ambiance."
+      />
+
+      <CTASection
+        tag="Lets work together"
+        heading="Ready to bring your vision to life? Let's create stunning visuals that captivate, inspire, and deliver results."
+        buttonText="contact us"
+        buttonHref="/contact-us"
+        backgroundImage="https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F034782943c0a8b7c7fd2455a1e51d707289a39ec.jpeg%3Fwidth=1280&amp;height=1280?generation=1768843023470915&amp;alt=media"
+        backgroundAlt="Silhouette of a filmmaker with a camera on a tripod in a dimly lit alley, bathed in orange light and mist, creating a moody, cinematic atmosphere."
       />
     </div>
   );

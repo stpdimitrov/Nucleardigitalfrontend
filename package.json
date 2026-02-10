@@ -4,6 +4,8 @@
       "version": "0.1.0",
       "private": true,
       "dependencies": {
+          "@playwright/test": "*",
+          "lucide-react": "*",
           "motion": "*",
           "next": "*",
           "react": "^18.3.1",

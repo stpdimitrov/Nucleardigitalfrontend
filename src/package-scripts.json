@@ -1,0 +1,17 @@
+{
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "test:visual": "playwright test",
+    "test:visual:update": "playwright test --update-snapshots",
+    "test:visual:ui": "playwright test --ui",
+    "test:visual:debug": "playwright test --debug",
+    "test:visual:headed": "playwright test --headed",
+    "test:visual:report": "playwright show-report",
+    "test:visual:mobile": "playwright test --project=mobile",
+    "test:visual:tablet": "playwright test --project=tablet",
+    "test:visual:desktop": "playwright test --project=desktop"
+  }
+}

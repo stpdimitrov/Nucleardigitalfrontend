@@ -1,7 +1,6 @@
-'use client';
-
 import React from 'react';
 import { motion } from 'motion/react';
+import { ArrowRight } from 'lucide-react';
 import { staggerContainer, staggerItem } from '../lib/animations';
 
 interface SectionHeaderProps {
@@ -66,7 +65,9 @@ export function SectionHeader({
             </div>
             <div aria-label="Icon wrapper" className="items-center flex flex-col justify-center overflow-clip relative w-8 h-8 bg-black gap-[8px] shrink-[0] rounded-[62.5rem]">
               <div aria-label="Icons" className="items-center flex size-min justify-center overflow-hidden relative gap-[8px] shrink-[0]">
-                <div aria-label="Icon" className="aspect-square relative w-[15px] bg-white z-[1] shrink-[0]"></div>
+                <div aria-label="Icon" className="aspect-square relative w-[15px] z-[1] shrink-[0] flex items-center justify-center">
+                  <ArrowRight className="w-full h-full text-white" strokeWidth={2} />
+                </div>
                 <div aria-label="Icon" className="aspect-square absolute w-[15px] left-[-20px] top-[47%] bg-white translate-y-[-50%] z-[1] shrink-[0]"></div>
               </div>
             </div>
