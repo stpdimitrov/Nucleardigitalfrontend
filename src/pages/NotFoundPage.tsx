@@ -1,6 +1,6 @@
 'use client';
 
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { ArrowRight } from 'lucide-react';
 
 export function NotFoundPage() {

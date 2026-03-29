@@ -1,44 +1,418 @@
-import Component1920WLight, { 
-  HeroSection, 
-  VideoSection, 
-  AwardsSection, 
-  CTASection, 
-  FooterSection 
-} from '../imports/1920WLight-111-1387';
-import OurTeamSection from '../imports/OurTeam';
+import {
+  EditableText,
+  EditableImage,
+  EditableLink,
+  EditableTeamSection,
+  EditableAwardsContainer,
+  EditableOverlay,
+  type TeamMember,
+  useCMSStore,
+} from '../src/cms';
+import imgCoverImage from "figma:asset/738c1c6b3be0ed43dbe8bb635d38249d662af9dc.png";
+import imgImage01 from "figma:asset/22c6d322b798c1239707ba80c7d1773d257413b9.png";
+import imgImage02 from "figma:asset/64104bdaf781a9a828a362ea1cd947edc85a971e.png";
+import imgProfileImage from "figma:asset/c974f57a6fa51c7d3af1193130ada91836aed5f3.png";
+import imgProfileImage1 from "figma:asset/501935f93877b31074a2af14092b441b87f633c8.png";
+import imgProfileImage2 from "figma:asset/ded83a73b49789b68af85c0612dfbe33c99b01e8.png";
+import imgProfileImage3 from "figma:asset/bf43cf518b04b120fbd2b9523cdd7e612ddfd875.png";
+import imgProfileImage4 from "figma:asset/e427903404bbb36b3dd77f7ff9d14762c9fdbc72.png";
+import imgProfileImage5 from "figma:asset/e6b888f6921111bc33485c6597979941b4748289.png";
+import imgXmNDt2JWd6Z1ApLfBpTfkZwfp90Mp4 from "figma:asset/3d937a7d755ee480612b8b26f0f1e7f78875a0da.png";
+import imgDesktop from "figma:asset/440a9540a3ca269479ea831effae21961445d048.png";
+import svgPaths from "../imports/svg-oba3n6vetg";
 
 /**
- * AboutUsPage - 100% Pixel-Perfect Framer Migration
+ * AboutUsPage - 100% Pixel-Perfect with Full CMS Integration
  * 
- * This is a DOM-preserving HTML → JSX transpilation where:
- * - Every HTML element exists in JSX with same nesting depth
- * - Same order, same class names, same inline styles  
- * - Same data attributes, same Framer motion wrappers
- * - Uses react-router-dom for routing functionality
- * 
- * Visual regression tests enforce 100% visual fidelity at:
- * - Mobile (390x844)
- * - Tablet (768x1024)  
- * - Desktop (1440x900)
- * 
- * REFACTORED: Broken down into independently selectable components
- * - HeroSection: Title and intro content
- * - OurTeamSection: Team member cards
- * - VideoSection: Video showcase
- * - AwardsSection: Awards and recognition
- * - CTASection: Call-to-action with stats
- * - FooterSection: Footer content
+ * Every element is editable when edit mode is enabled (Cmd+E)
+ * Visual design remains 100% identical to original
  */
+
+// Default team members
+const defaultTeamMembers: TeamMember[] = [
+  {
+    id: '1',
+    name: 'Liam Carter',
+    role: 'Creative Director',
+    image: imgProfileImage,
+    twitter: 'https://x.com/home',
+    dribbble: 'https://dribbble.com/',
+    instagram: 'https://www.instagram.com/',
+    linkedin: 'https://www.linkedin.com/',
+  },
+  {
+    id: '2',
+    name: 'Noah Reed',
+    role: 'Senior Videographer',
+    image: imgProfileImage1,
+    twitter: 'https://x.com/home',
+    dribbble: 'https://dribbble.com/',
+    instagram: 'https://www.instagram.com/',
+    linkedin: 'https://www.linkedin.com/',
+  },
+  {
+    id: '3',
+    name: 'Ava Mitchell',
+    role: 'Editor & Colorist',
+    image: imgProfileImage2,
+    twitter: 'https://x.com/home',
+    dribbble: 'https://dribbble.com/',
+    instagram: 'https://www.instagram.com/',
+    linkedin: 'https://www.linkedin.com/',
+  },
+  {
+    id: '4',
+    name: 'Ethan Brooks',
+    role: 'Motion Designer',
+    image: imgProfileImage3,
+    twitter: 'https://x.com/home',
+    dribbble: 'https://dribbble.com/',
+    instagram: 'https://www.instagram.com/',
+    linkedin: 'https://www.linkedin.com/',
+  },
+  {
+    id: '5',
+    name: 'Sophia Bennett',
+    role: 'Production Manager',
+    image: imgProfileImage4,
+    twitter: 'https://x.com/home',
+    dribbble: 'https://dribbble.com/',
+    instagram: 'https://www.instagram.com/',
+    linkedin: 'https://www.linkedin.com/',
+  },
+  {
+    id: '6',
+    name: 'Mason Price',
+    role: 'Sound Designer',
+    image: imgProfileImage5,
+    twitter: 'https://x.com/home',
+    dribbble: 'https://dribbble.com/',
+    instagram: 'https://www.instagram.com/',
+    linkedin: 'https://www.linkedin.com/',
+  },
+];
+
+/**
+ * Editable Hero Section - 100% Visually Identical
+ */
+function EditableHeroSection() {
+  const { isEditMode } = useCMSStore();
+  
+  return (
+    <div className="content-stretch flex items-center justify-center pb-[72px] pt-[100px] px-[24px] md:px-[60px] lg:px-[100px] xl:px-[140px] 2xl:px-[340px] relative w-full" data-name="Hero section">
+      <div className="content-stretch flex flex-col gap-[64px] items-center max-w-[1240px] overflow-clip px-[24px] relative shrink-0" data-name="Container">
+        
+        {/* Grid 6x - Header with Title */}
+        <div className="content-stretch flex gap-[8px] items-end justify-center overflow-clip relative shrink-0 w-full" data-name="Grid 6x">
+          {/* Left spacer - 2020-2025 */}
+          <div className="content-stretch flex flex-col gap-[23.59px] h-[85.59px] items-start min-h-px min-w-px overflow-clip relative w-[392px]" data-name="Users wrapper">
+            <div className="blur-[2px] h-[62px] relative w-[392px]" data-name="2020-2025" />
+            <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
+              <EditableText
+                contentKey="about.hero.yearsLabel"
+                defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#ddd] text-[13.1px] tracking-[-0.16px] uppercase whitespace-nowrap'><p class='leading-[22.4px]'>2020-2025</p></div>"
+                as="div"
+                className=""
+              />
+            </div>
+          </div>
+
+          {/* Center - Title and Description (EDITABLE) */}
+          <div className="content-stretch flex flex-[1_0_0] flex-col gap-[8px] items-start min-h-px min-w-px overflow-clip relative" data-name="Text wrapper">
+            {/* Title: "About us" */}
+            <div className="content-stretch flex gap-[13.46px] items-start relative shrink-0 w-full" data-name="h1.framer-text">
+              <div className="blur-[2px] content-stretch flex items-start relative shrink-0">
+                <EditableText
+                  contentKey="about.hero.title.part1"
+                  defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[56px] text-white tracking-[-1.8px] whitespace-nowrap'><p class='leading-[63px]'>About</p></div>"
+                  as="div"
+                  className=""
+                />
+              </div>
+              <div className="blur-[0px] content-stretch flex items-start relative shrink-0">
+                <EditableText
+                  contentKey="about.hero.title.part2"
+                  defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[56px] text-white tracking-[-1.8px] whitespace-nowrap'><p class='leading-[63px]'>us</p></div>"
+                  as="div"
+                  className=""
+                />
+              </div>
+            </div>
+            {/* Description */}
+            <div className="content-stretch flex flex-col items-start opacity-60 relative shrink-0 w-full" data-name="p.framer-text">
+              <EditableText
+                contentKey="about.hero.description"
+                defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[27px] not-italic relative shrink-0 text-[#ddd] text-[16.3px] w-full whitespace-pre-wrap'><p class='mb-0'>We're a creative video agency crafting stories that </p><p>inspire, engage, & elevate brands globally.</p></div>"
+                as="div"
+                className=""
+                multiline
+              />
+            </div>
+          </div>
+
+          {/* Right - Scroll Down */}
+          <div className="content-stretch flex gap-[4px] h-[22.41px] items-center justify-end overflow-clip pb-px pl-[267.17px] relative shrink-0" data-name="Scroll down → Scroll down">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-name="div.framer-1lpeffq">
+              <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
+                <EditableText
+                  contentKey="about.hero.scrollDown"
+                  defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14.1px] text-white tracking-[-0.16px] uppercase whitespace-nowrap'><p class='leading-[22.4px]'>Scroll down</p></div>"
+                  as="div"
+                  className=""
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Cover Image */}
+        <div className="h-[660px] overflow-clip relative shrink-0 w-full" data-name="Cover image">
+          <div className={`absolute inset-0 overflow-hidden ${isEditMode ? '' : 'pointer-events-none'}`}>
+            <EditableImage
+              contentKey="about.hero.coverImage"
+              defaultSrc={imgCoverImage}
+              alt=""
+              className="absolute h-[180.61%] left-0 max-w-none top-[-40.3%] w-full"
+            />
+          </div>
+        </div>
+
+        {/* Wrapper - Story and Mission (EDITABLE) */}
+        <div className="content-stretch flex flex-col gap-[32px] items-center justify-center relative shrink-0 w-full" data-name="Wrapper">
+          
+          {/* Our Story */}
+          <div className="h-[120px] overflow-clip relative shrink-0 w-full" data-name="About us text → Desktop">
+            <div className="absolute content-stretch flex flex-col items-start left-0 pr-[164.7px] right-[999.3px] top-0" data-name="Description">
+              <EditableText
+                contentKey="about.story.number"
+                defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#ddd] text-[14.1px] tracking-[-0.32px] whitespace-nowrap'><p class='leading-[24px]'>001.</p></div>"
+                as="div"
+                className=""
+              />
+            </div>
+            <div className="absolute content-stretch flex flex-col items-start left-[200px] pb-[0.59px] pr-[257.75px] right-[599.25px] top-[-1px]" data-name="h5.framer-text">
+              <EditableText
+                contentKey="about.story.title"
+                defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[30.4px] text-white tracking-[-0.64px] whitespace-nowrap'><p class='leading-[33.6px]'>Our Story</p></div>"
+                as="div"
+                className=""
+              />
+            </div>
+            <div className="absolute content-stretch flex flex-col items-start left-[600px] opacity-80 pr-[9.55px] right-[-3.55px] top-0" data-name="p.framer-text">
+              <EditableText
+                contentKey="about.story.description"
+                defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[24px] not-italic relative shrink-0 text-[#ddd] text-[14.4px] tracking-[-0.32px] whitespace-nowrap'><p class='mb-0'>Flixen™ began with a simple yet powerful vision — to transform creative ideas into </p><p class='mb-0'>cinematic stories that inspire and connect people everywhere. From our humble </p><p class='mb-0'>beginnings as a small, passionate production team, we've grown into a full-scale creative </p><p class='mb-0'>agency trusted by global brands. Today, we continue crafting visuals that spark emotion, </p><p>build connection, and elevate every story we tell.</p></div>"
+                as="div"
+                className=""
+                multiline
+              />
+            </div>
+          </div>
+
+          <div className="bg-[#b0b0b0] h-px opacity-30 shrink-0 w-full" data-name="Line" />
+
+          {/* Our Mission */}
+          <div className="h-[120px] overflow-clip relative shrink-0 w-full" data-name="About us text → Desktop">
+            <div className="absolute content-stretch flex flex-col items-start left-0 pr-[161.77px] right-[999.23px] top-0" data-name="Description">
+              <EditableText
+                contentKey="about.mission.number"
+                defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#ddd] text-[14.3px] tracking-[-0.32px] whitespace-nowrap'><p class='leading-[24px]'>002.</p></div>"
+                as="div"
+                className=""
+              />
+            </div>
+            <div className="absolute content-stretch flex flex-col items-start left-[200px] pb-[0.59px] pr-[226.61px] right-[600.39px] top-[-1px]" data-name="h5.framer-text">
+              <EditableText
+                contentKey="about.mission.title"
+                defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[30.1px] text-white tracking-[-0.64px] whitespace-nowrap'><p class='leading-[33.6px]'>Our Mission</p></div>"
+                as="div"
+                className=""
+              />
+            </div>
+            <div className="absolute content-stretch flex flex-col items-start left-[600px] opacity-80 pr-[3.42px] right-[-3.42px] top-0" data-name="p.framer-text">
+              <EditableText
+                contentKey="about.mission.description"
+                defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[24px] not-italic relative shrink-0 text-[#ddd] text-[14.4px] tracking-[-0.32px] whitespace-nowrap'><p class='mb-0'>Our mission is to deliver powerful, emotion-driven videos that deeply engage audiences, </p><p class='mb-0'>strengthen brands, and create lasting impressions. We believe every story deserves to be </p><p class='mb-0'>told with passion, precision, and creativity — transforming ideas into visuals that inspire, </p><p class='mb-0'>connect, and endure. At Flixen™, we turn every client's vision into an unforgettable </p><p>cinematic experience that truly stands out.</p></div>"
+                as="div"
+                className=""
+                multiline
+              />
+            </div>
+          </div>
+
+          <div className="bg-[#b0b0b0] h-px opacity-30 shrink-0 w-full" data-name="Line" />
+        </div>
+
+        {/* Grid 2x - Images */}
+        <div className="content-stretch flex gap-[24px] items-start justify-center overflow-clip relative shrink-0 w-full" data-name="Grid 2x">
+          <div className="flex-[1_0_0] h-[470px] min-h-px min-w-px overflow-clip relative" data-name="Image 01">
+            <div className={`absolute inset-0 overflow-hidden ${isEditMode ? '' : 'pointer-events-none'}`}>
+              <EditableImage
+                contentKey="about.hero.image01"
+                defaultSrc={imgImage01}
+                alt=""
+                className="absolute h-[124.26%] left-0 max-w-none top-[-12.13%] w-full"
+              />
+            </div>
+          </div>
+          <div className="flex-[1_0_0] h-[470px] min-h-px min-w-px overflow-clip relative" data-name="Image 02">
+            <div className={`absolute inset-0 overflow-hidden ${isEditMode ? '' : 'pointer-events-none'}`}>
+              <EditableImage
+                contentKey="about.hero.image02"
+                defaultSrc={imgImage02}
+                alt=""
+                className="absolute h-[124.26%] left-0 max-w-none top-[-12.13%] w-full"
+              />
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Editable Video Section - 100% Visually Identical
+ */
+function EditableVideoSection() {
+  const { isEditMode } = useCMSStore();
+  
+  return (
+    <div className="content-stretch flex flex-col h-[1200px] items-start justify-center relative w-full" data-name="Video">
+      <div className="flex-[1_0_0] min-h-px min-w-px relative w-full" data-name="xmNDt2jWD6z1ApLfBpTfkZwfp90.mp4">
+        <div className={`absolute inset-0 overflow-hidden ${isEditMode ? '' : 'pointer-events-none'}`}>
+          <EditableImage
+            contentKey="about.video.thumbnail"
+            defaultSrc={imgXmNDt2JWd6Z1ApLfBpTfkZwfp90Mp4}
+            alt=""
+            className="absolute h-[160%] left-0 max-w-none top-[-30%] w-full"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Editable Awards Section - Uses existing Container3 with CMS wrapper
+ */
+function EditableAwardsSection() {
+  return (
+    <div className="content-stretch flex items-center justify-center overflow-clip px-[24px] md:px-[60px] lg:px-[100px] xl:px-[140px] 2xl:px-[340px] py-[100px] relative w-full" data-name="Awards">
+      <EditableAwardsContainer />
+    </div>
+  );
+}
+
+/**
+ * Editable CTA Section - 100% Visually Identical
+ */
+function EditableCTASection() {
+  const { isEditMode } = useCMSStore();
+  
+  return (
+    <div className="content-stretch flex flex-col h-[1200px] items-start justify-center relative w-full" data-name="div.framer-18y2yvd-container">
+      <div className="content-stretch flex items-center justify-center overflow-clip pb-[463.18px] pt-[463.19px] relative shrink-0 w-full" data-name="Desktop">
+        <div className={`absolute inset-0 overflow-hidden ${isEditMode ? '' : 'pointer-events-none'}`}>
+          <EditableImage
+            contentKey="about.cta.bgImage"
+            defaultSrc={imgDesktop}
+            alt=""
+            className="absolute h-[160%] left-0 max-w-none top-[-30%] w-full"
+          />
+        </div>
+        <EditableOverlay
+          contentKey="about.cta"
+          defaultOpacity={30}
+          defaultColor="#000000"
+          className="inset-[0_0_0.02%_0]"
+        >
+          <div className="content-stretch flex items-center justify-center max-w-[1240px] overflow-clip px-[24px] relative shrink-0 w-[1240px]" data-name="Container">
+            <div className="content-stretch flex flex-col gap-[22.9px] items-center justify-center max-w-[790px] overflow-clip relative shrink-0 w-[790px]" data-name="Wrapper">
+              {/* Section Tag */}
+              <div className="content-stretch flex flex-col items-start relative shrink-0" data-name="Section tag">
+                <div className="content-stretch flex h-[22.41px] items-center justify-center overflow-clip pb-px relative shrink-0" data-name="Section tag">
+                  <div className="content-stretch flex flex-col items-start relative shrink-0" data-name="Description">
+                    <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
+                      <EditableText
+                        contentKey="about.cta.sectionTag"
+                        defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14.1px] text-white tracking-[-0.16px] uppercase whitespace-nowrap'><p class='leading-[22.4px]'>Lets work together</p></div>"
+                        as="div"
+                        className=""
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Main Headline */}
+              <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="div.framer-sfb8j">
+                <div className="content-stretch flex flex-col items-center relative shrink-0 w-full" data-name="h2.framer-text">
+                  <EditableText
+                    contentKey="about.cta.headline"
+                    defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[50.4px] not-italic relative shrink-0 text-[45.4px] text-center text-white tracking-[-1.44px] whitespace-nowrap'><p class='mb-0'>Ready to bring your vision to life?</p><p class='mb-0'>Let's create stunning visuals that</p><p>captivate, inspire, and deliver results.</p></div>"
+                    as="div"
+                    className=""
+                    multiline
+                  />
+                </div>
+              </div>
+
+              {/* Button */}
+              <div className="content-stretch flex items-center justify-center pt-[9.1px] relative shrink-0 w-full" data-name="Button wrapper">
+                <div className="content-stretch flex flex-col items-start relative shrink-0" data-name="Button">
+                  <EditableLink
+                    contentKey="about.cta.buttonLink"
+                    defaultValue="https://primary-words-404174.framer.app/contact-us"
+                    className="bg-[#fdc500] content-stretch cursor-pointer flex gap-[14px] items-center overflow-clip pl-[16px] pr-[6px] py-[6px] relative rounded-[1000px] shrink-0"
+                    data-name="Small"
+                  >
+                    <div className="content-stretch flex flex-col items-start relative shrink-0" data-name="Description">
+                      <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
+                        <EditableText
+                          contentKey="about.cta.buttonText"
+                          defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14.1px] text-black text-left tracking-[-0.16px] uppercase whitespace-nowrap' role='link' tabIndex='0'><p class='cursor-pointer leading-[22.4px]'>contact us</p></div>"
+                          as="div"
+                          className=""
+                        />
+                      </div>
+                    </div>
+                    <div className="bg-black content-stretch flex flex-col items-center justify-center overflow-clip relative rounded-[1000px] shrink-0 size-[32px]" data-name="Icon wrapper">
+                      <div className="overflow-clip relative shrink-0 size-[32px]" data-name="Icons">
+                        <div className="-translate-x-1/2 -translate-y-1/2 absolute content-stretch flex flex-col items-start left-1/2 top-1/2 w-[15px]" data-name="Icon:mask">
+                          <div className="content-stretch flex flex-col items-center justify-center overflow-clip relative shrink-0 size-[15px]" data-name="Component 4">
+                            <div className="relative shrink-0 size-[15px]" data-name="Component 1">
+                              <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 15 15">
+                                <g id="Component 1">
+                                  <path d={svgPaths.pb055200} id="Vector" stroke="var(--stroke-0, black)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.25" />
+                                </g>
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-white left-1/2 size-[15px] top-1/2" data-name="Icon" />
+                      </div>
+                    </div>
+                  </EditableLink>
+                </div>
+              </div>
+            </div>
+          </div>
+        </EditableOverlay>
+      </div>
+    </div>
+  );
+}
 
 export function AboutUsPage() {
   return (
     <div className="bg-black flex flex-col min-h-screen relative w-full">
-      <HeroSection />
-      <OurTeamSection />
-      <VideoSection />
-      <AwardsSection />
-      <CTASection />
-      <FooterSection />
+      <EditableHeroSection />
+      <EditableTeamSection defaultMembers={defaultTeamMembers} />
+      <EditableVideoSection />
+      <EditableAwardsSection />
+      <EditableCTASection />
     </div>
   );
 }

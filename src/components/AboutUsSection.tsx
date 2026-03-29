@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { ArrowRight } from 'lucide-react';
 import { scrollFadeIn, viewport } from '../lib/animations';
 
@@ -45,7 +45,7 @@ export function AboutUsSection({
                   </div>
                 </div>
                 <div className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
-                  <p className="font-medium uppercase text-white text-[24px] tracking-[-0.72px] leading-[24px]" style={{"fontFamily":"Ronzino, \"Ronzino Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>Flixen™</p>
+                  <p className="font-medium uppercase text-white text-[24px] tracking-[-0.72px] leading-[24px]" style={{"fontFamily":"Ronzino, \"Ronzino Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>Flixen��</p>
                 </div>
               </Link>
             </div>

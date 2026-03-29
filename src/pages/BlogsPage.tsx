@@ -1,4 +1,5 @@
 'use client';
+import { EditableCTASection } from '../src/cms';
 
 export function BlogsPage() {
   return (
@@ -13,6 +14,9 @@ export function BlogsPage() {
           </div>
         </div>
       </section>
+      
+      {/* CTA Section - Lets work together */}
+      <EditableCTASection contentKey="blogs.cta" />
     </div>
   );
 }

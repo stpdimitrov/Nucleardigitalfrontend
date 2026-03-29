@@ -1,17 +1,20 @@
-'use client';
-
 import React from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router';
 import { motion, AnimatePresence } from 'motion/react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { EditModeToggle } from './src/cms/EditModeToggle';
 import { NavbarAnimated } from './components/NavbarAnimated';
 import { Footer } from './components/Footer';
 import { HomePage } from './pages/HomePage';
 import { AboutUsPage } from './pages/AboutUsPage';
-import { ContactUsPage } from './pages/ContactUsPage';
-import { ServicesPageNew } from './pages/ServicesPageNew';
-import { ProjectsPage } from './pages/ProjectsPage';
+import { ContactUsPageCMS } from './pages/ContactUsPageCMS';
+import { EditableServicesPage } from './src/cms/EditableServicesPage';
+import { ServicesPageCRUD } from './pages/ServicesPageCRUD';
+import { ProjectsPageNew } from './pages/ProjectsPageNew';
 import { BlogsPage } from './pages/BlogsPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { ProjectDetailPage } from './pages/ProjectDetailPage';
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -27,13 +30,16 @@ function AnimatedRoutes() {
           duration: 0.4,
           ease: [0.22, 1, 0.36, 1]
         }}
+        style={{ width: '100%' }}
       >
         <Routes location={location}>
           <Route path="/" element={<HomePage />} />
           <Route path="/about-us" element={<AboutUsPage />} />
-          <Route path="/contact-us" element={<ContactUsPage />} />
-          <Route path="/services" element={<ServicesPageNew />} />
-          <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/contact-us" element={<ContactUsPageCMS />} />
+          <Route path="/services" element={<EditableServicesPage />} />
+          <Route path="/services/crud" element={<ServicesPageCRUD />} />
+          <Route path="/projects" element={<ProjectsPageNew />} />
+          <Route path="/projects/:slug" element={<ProjectDetailPage />} />
           <Route path="/blogs" element={<BlogsPage />} />
           <Route path="/404" element={<NotFoundPage />} />
           <Route path="*" element={<NotFoundPage />} />
@@ -46,19 +52,24 @@ function AnimatedRoutes() {
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="text-black text-[16px] leading-[normal]" style={{"fontFamily":"\"Times New Roman\""}}>
-        <div className="bg-black text-[12px]" style={{"fontFamily":"sans-serif"}}>
-          <div>
-            <div className="items-center flex flex-col h-min justify-start overflow-clip relative bg-black gap-[0px] min-h-[640px]">
-              <NavbarAnimated />
-              
-              <AnimatedRoutes />
+      <DndProvider backend={HTML5Backend}>
+        <div className="text-black text-[16px] leading-[normal]" style={{"fontFamily":"\"Times New Roman\""}}>
+          <div className="bg-black text-[12px]" style={{"fontFamily":"sans-serif"}}>
+            <div>
+              <div className="items-center flex flex-col h-min justify-start overflow-clip relative bg-black gap-[0px] min-h-[640px]">
+                <NavbarAnimated />
+                
+                <AnimatedRoutes />
 
-              <Footer />
+                <Footer />
+                
+                {/* Edit Mode Button */}
+                <EditModeToggle />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </DndProvider>
     </BrowserRouter>
   );
 }

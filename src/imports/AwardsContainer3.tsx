@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import svgPaths from "./svg-oba3n6vetg";
 
 // Arrow icon component for the Contact Us button

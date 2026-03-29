@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import svgPaths from "./svg-oba3n6vetg";
 import imgSmilingManWearingGlassesAndACasualBlueShirtOverAWhiteTShirtStandingInSoftNaturalLightWithWindowShadowsOnAGrayWallBehind from "figma:asset/ad8e44f82010d6d3555a4658497f155a131ede8e.png";
 import imgSmilingManWithShortHairAndBeardWearingABeigeShirtStandsAgainstASoftlyLitGrayBackgroundCastingGentleShadowsTheMoodIsWarmAndJoyful from "figma:asset/be285e0068bd5e11f8149ab60eed991f42ec0858.png";

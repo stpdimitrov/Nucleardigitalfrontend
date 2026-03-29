@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { ArrowRight } from 'lucide-react';
 import svgPaths from "../imports/svg-awqwrfynnl";
 import imgCoverImageConnect from "figma:asset/64551b4f8a24e6e0541fe588b92468f0e00c3a5e.png";

@@ -17,7 +17,15 @@ import type {
   HeroContent,
   SiteSettings,
   HomepageData,
-} from '@/types';
+  ContactUsPageData,
+  ContactHeroContent,
+  ContactFormConfig,
+  ContactFormField,
+  ContactInfo,
+  SocialMediaLink,
+  ContactCardsContent,
+  MapConfig,
+} from '../types';
 
 // ============================================
 // SITE SETTINGS
@@ -69,48 +77,72 @@ export const projects: Project[] = [
     id: "project-1",
     slug: "lumen-brew",
     name: "Lumen Brew",
+    title: "Lumen Brew",
+    description: "Created a cinematic video showcasing the warmth, craftsmanship, and storytelling behind Lumen Brew Coffee.",
     videoUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F64b0a1a53a864523488081e7312ff8fe5ffcdfc5.mp4?generation=1768843022678820&alt=media",
+    image: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F64b0a1a53a864523488081e7312ff8fe5ffcdfc5.mp4?generation=1768843022678820&alt=media",
     service: "Video Production",
+    category: "Video Production",
     date: "Nov 4, 2025",
   },
   {
     id: "project-2",
     slug: "pulse-drive",
     name: "Pulse Drive",
+    title: "Pulse Drive",
+    description: "High-energy automotive campaign capturing speed, precision, and innovation.",
     videoUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F4baea21278109afdf6ad52b7f1bc92064c750bfc.mp4?generation=1768843022831653&alt=media",
+    image: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F4baea21278109afdf6ad52b7f1bc92064c750bfc.mp4?generation=1768843022831653&alt=media",
     service: "Creative Direction",
+    category: "Creative Direction",
     date: "Apr 10, 2025",
   },
   {
     id: "project-3",
     slug: "echo-frames",
     name: "Echo Frames",
+    title: "Echo Frames",
+    description: "Artistic exploration of movement and sound through visual storytelling.",
     videoUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F7166c66f8f1b9ba340b0f978dd8b91a152a53f34.mp4?generation=1768843022674074&alt=media",
+    image: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F7166c66f8f1b9ba340b0f978dd8b91a152a53f34.mp4?generation=1768843022674074&alt=media",
     service: "Video Production",
+    category: "Video Production",
     date: "Aug 4, 2024",
   },
   {
     id: "project-4",
     slug: "waveline",
     name: "Waveline",
+    title: "Waveline",
+    description: "Dynamic brand film showcasing fluid motion and modern aesthetics.",
     videoUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2Fe5aaf449795958d028fcd4c74c04f17b42566998.mp4?generation=1768843022845391&alt=media",
+    image: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2Fe5aaf449795958d028fcd4c74c04f17b42566998.mp4?generation=1768843022845391&alt=media",
     service: "Post-Production & Editing",
+    category: "Post-Production",
     date: "Dec 19, 2023",
   },
   {
     id: "project-5",
     slug: "noir-threads",
     name: "Noir Threads",
+    title: "Noir Threads",
+    description: "Fashion-forward cinematography blending elegance with bold creativity.",
     videoUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F5cba97d1c8d90adbe24a83c6153eec57a5f594c1.mp4?generation=1768843022814400&alt=media",
+    image: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F5cba97d1c8d90adbe24a83c6153eec57a5f594c1.mp4?generation=1768843022814400&alt=media",
     service: "Creative Direction",
+    category: "Creative Direction",
     date: "Oct 18, 2022",
   },
   {
     id: "project-6",
     slug: "auralis",
     name: "Auralis",
+    title: "Auralis",
+    description: "Ethereal visual journey combining light, color, and cinematic excellence.",
     videoUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2Fc56a53f96b5a5696fdb5c3660cf3328d3973d852.mp4?generation=1768843022788930&alt=media",
+    image: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2Fc56a53f96b5a5696fdb5c3660cf3328d3973d852.mp4?generation=1768843022788930&alt=media",
     service: "Video Production",
+    category: "Video Production",
     date: "Jun 22, 2021",
   },
 ];
@@ -466,4 +498,126 @@ export const homepageData: HomepageData = {
     items: faqItems,
   },
   testimonials: testimonials,
+};
+
+// ============================================
+// CONTACT US PAGE DATA
+// ============================================
+
+export const contactUsPageData: ContactUsPageData = {
+  id: "contact-us-page",
+  hero: {
+    id: "contact-hero",
+    sectionTag: "CONTACT US",
+    heading: "Let's Connect",
+    description: [
+      "Connect with our team for collaborations,",
+      "inquiries, and creative opportunities."
+    ],
+    scrollDownText: "Scroll down",
+    coverImage: "figma:asset/f0ab34e01eb7a68a97d2f698b486de3693299155.png",
+    coverImageAlt: "Silhouette of a camera operator filming on a professional set"
+  },
+  form: {
+    id: "contact-form",
+    fields: [
+      {
+        id: "field-name",
+        label: "Your name:",
+        placeholder: "Jane Smith",
+        type: "text",
+        name: "name",
+        required: true
+      },
+      {
+        id: "field-email",
+        label: "Email Address",
+        placeholder: "testing@gmail.com",
+        type: "email",
+        name: "email",
+        required: true
+      },
+      {
+        id: "field-service",
+        label: "Select Services",
+        placeholder: "Select…",
+        type: "select",
+        name: "service",
+        required: false,
+        options: ["Video Production", "Creative Direction", "Post-Production & Editing"]
+      },
+      {
+        id: "field-message",
+        label: "Message",
+        placeholder: "Write your message here...",
+        type: "textarea",
+        name: "message",
+        required: true
+      }
+    ],
+    submitButtonText: "SUBMIT"
+  },
+  map: {
+    id: "contact-map",
+    embedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3305.4326!2d-118.37!3d34.09!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzTCsDA1JzI0LjAiTiAxMTjCsDIyJzEyLjAiVw!5e0!3m2!1sen!2sus!4v1234567890",
+    height: "650px",
+    title: "Office Location Map"
+  },
+  cards: {
+    id: "contact-cards",
+    contactCard: {
+      title: "Contact us",
+      contacts: [
+        {
+          id: "contact-phone",
+          type: "phone",
+          icon: "phone",
+          label: "Phone",
+          value: "+1 (310) 458-9274",
+          href: undefined
+        },
+        {
+          id: "contact-email",
+          type: "email",
+          icon: "email",
+          label: "Email",
+          value: "name@email.com",
+          href: "mailto:name@email.com"
+        },
+        {
+          id: "contact-location",
+          type: "location",
+          icon: "location",
+          label: "Location",
+          value: "Los Angeles, CA",
+          href: "https://www.google.com/maps/search/92+Crescent+Avenue,+Los+Angeles,+CA/@34.0892625,-118.3685139,578m/data=!3m2!1e3!4b1"
+        }
+      ]
+    },
+    socialCard: {
+      title: "Follow us on",
+      links: [
+        {
+          id: "social-dribbble",
+          platform: "Dribbble",
+          url: "https://dribbble.com/"
+        },
+        {
+          id: "social-twitter",
+          platform: "Twitter-X",
+          url: "https://x.com/home"
+        },
+        {
+          id: "social-linkedin",
+          platform: "Linkedin",
+          url: "https://www.linkedin.com/"
+        }
+      ]
+    },
+    officeCard: {
+      title: "Visit our Office",
+      globeImage: "figma:asset/e55f19621fc993b2cbf97f430d52ffb48c20a89a.png",
+      globeImageAlt: "Spinning globe illustration"
+    }
+  }
 };

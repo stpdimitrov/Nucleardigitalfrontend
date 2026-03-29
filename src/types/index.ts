@@ -9,10 +9,88 @@
 export interface Project {
   id: string;
   slug: string;
-  name: string;
-  videoUrl: string;
-  service: string;
+  title?: string; // For CMS compatibility
+  name?: string; // Legacy field
+  description?: string;
+  image?: string; // CMS image URL
+  videoUrl?: string; // Legacy field
+  service?: string; // Legacy field
+  category?: string;
+  featured?: boolean;
+  client?: string;
   date: string;
+  services?: string[];
+  // Project detail page fields
+  overview?: string;
+  process?: string;
+  result?: string;
+  images?: string[];
+  videos?: string[];
+}
+
+// ============================================
+// BLOG POSTS
+// ============================================
+
+export interface BlogPost {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  image?: string; // CMS compatibility
+  imageUrl?: string; // Legacy field
+  author: string | BlogAuthor;
+  publishedAt?: string; // CMS format
+  publishedDate?: string; // Legacy field
+  category: string;
+  tags?: string[];
+  readTime?: number;
+}
+
+export interface BlogAuthor {
+  name: string;
+  avatar?: string;
+  bio?: string;
+}
+
+// ============================================
+// SERVICES
+// ============================================
+
+export interface ServiceFeature {
+  id?: string;
+  name?: string;
+  text?: string; // Alternative field name
+}
+
+export interface Service {
+  id: string;
+  slug?: string;
+  title: string;
+  shortDescription?: string;
+  description: string;
+  icon?: string;
+  image?: string;
+  videoUrl?: string;
+  features: ServiceFeature[] | string[];
+}
+
+// ============================================
+// TEAM MEMBERS
+// ============================================
+
+export interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  bio?: string;
+  image?: string;
+  social?: {
+    linkedin?: string;
+    instagram?: string;
+    twitter?: string;
+  };
 }
 
 // ============================================
@@ -23,24 +101,84 @@ export interface ClientLogo {
   id: string;
   name: string;
   logoUrl: string;
-  aspectRatio: string; // e.g., "auto_103_/_27"
+  website?: string;
 }
 
 // ============================================
-// SERVICES
+// CONTACT US PAGE
 // ============================================
 
-export interface ServiceFeature {
+export interface ContactHeroContent {
   id: string;
+  sectionTag: string;
+  heading: string;
+  description: string[];
+  scrollDownText: string;
+  coverImage: string;
+  coverImageAlt: string;
+}
+
+export interface ContactFormField {
+  id: string;
+  label: string;
+  placeholder: string;
+  type: 'text' | 'email' | 'select' | 'textarea';
   name: string;
+  required: boolean;
+  options?: string[]; // For select fields
 }
 
-export interface Service {
+export interface ContactFormConfig {
   id: string;
+  fields: ContactFormField[];
+  submitButtonText: string;
+}
+
+export interface ContactInfo {
+  id: string;
+  type: 'phone' | 'email' | 'location';
+  icon: 'phone' | 'email' | 'location';
+  label: string;
+  value: string;
+  href?: string;
+}
+
+export interface SocialMediaLink {
+  id: string;
+  platform: string;
+  url: string;
+}
+
+export interface ContactCardsContent {
+  id: string;
+  contactCard: {
+    title: string;
+    contacts: ContactInfo[];
+  };
+  socialCard: {
+    title: string;
+    links: SocialMediaLink[];
+  };
+  officeCard: {
+    title: string;
+    globeImage: string;
+    globeImageAlt: string;
+  };
+}
+
+export interface MapConfig {
+  id: string;
+  embedUrl: string;
+  height: string;
   title: string;
-  description: string;
-  videoUrl: string;
-  features: ServiceFeature[];
+}
+
+export interface ContactUsPageData {
+  id: string;
+  hero: ContactHeroContent;
+  form: ContactFormConfig;
+  map: MapConfig;
+  cards: ContactCardsContent;
 }
 
 // ============================================
@@ -112,23 +250,6 @@ export interface Testimonial {
   imageAlt?: string;
   rating?: number | string;
   metric?: string; // e.g., "Faster Delivery"
-}
-
-// ============================================
-// BLOG POSTS
-// ============================================
-
-export interface BlogPost {
-  id: string;
-  slug: string;
-  title: string;
-  excerpt: string;
-  content: string;
-  imageUrl: string;
-  author: string;
-  publishedDate: string;
-  category: string;
-  tags: string[];
 }
 
 // ============================================

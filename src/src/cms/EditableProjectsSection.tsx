@@ -1,0 +1,619 @@
+import { useState, useMemo } from 'react';
+import { DndProvider, useDrag, useDrop } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useCMSStore } from './cmsStore';
+import { contentAPI } from './contentApi';
+import { motion } from 'motion/react';
+import { Link } from 'react-router';
+import { EditableGridItem } from './EditableGridItem';
+
+export interface Project {
+  id: string;
+  title: string;
+  slug: string;
+  shortDescription: string;
+  date: string;
+  service: string;
+  clientName: string;
+  thumbnailUrl: string;
+  videoUrl?: string;
+}
+
+interface ProjectModalProps {
+  project: Project | null;
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (project: Project) => void;
+}
+
+function ProjectModal({ project, isOpen, onClose, onSave }: ProjectModalProps) {
+  const [formData, setFormData] = useState<Project>(
+    project || {
+      id: Date.now().toString(),
+      title: '',
+      slug: '',
+      shortDescription: '',
+      date: new Date().toISOString().split('T')[0],
+      service: 'Video Production',
+      clientName: '',
+      thumbnailUrl: '',
+      videoUrl: '',
+    }
+  );
+
+  if (!isOpen) return null;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSave(formData);
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center">
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+        onClick={onClose}
+      />
+
+      {/* Modal */}
+      <div className="relative z-10 w-full max-w-[800px] max-h-[90vh] overflow-y-auto rounded-xl border border-white/10 bg-[#1a1a1a] p-8 shadow-2xl">
+        <form onSubmit={handleSubmit}>
+          {/* Header */}
+          <div className="mb-6 flex items-center justify-between">
+            <h2 className="text-2xl font-medium text-white">
+              {project ? 'Edit Project' : 'New Item'}
+            </h2>
+            <button
+              type="button"
+              onClick={onClose}
+              className="text-white/60 transition-colors hover:text-white"
+            >
+              <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Form Fields */}
+          <div className="space-y-4">
+            {/* Project Name */}
+            <div>
+              <label className="mb-2 block text-sm font-medium text-white">
+                Project Name
+              </label>
+              <input
+                type="text"
+                required
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                className="w-full rounded-lg border border-white/10 bg-[#2a2a2a] px-4 py-3 text-white outline-none transition-colors focus:border-blue-500 focus:bg-[#333]"
+                placeholder="e.g. Lumen Brew"
+              />
+            </div>
+
+            {/* Slug */}
+            <div>
+              <label className="mb-2 block text-sm font-medium text-white">
+                Slug
+              </label>
+              <input
+                type="text"
+                required
+                value={formData.slug}
+                onChange={(e) => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') })}
+                className="w-full rounded-lg border border-white/10 bg-[#2a2a2a] px-4 py-3 text-white outline-none transition-colors focus:border-blue-500 focus:bg-[#333]"
+                placeholder="e.g. lumen-brew"
+              />
+            </div>
+
+            {/* Short Description */}
+            <div>
+              <label className="mb-2 block text-sm font-medium text-white">
+                Short description
+              </label>
+              <input
+                type="text"
+                required
+                value={formData.shortDescription}
+                onChange={(e) => setFormData({ ...formData, shortDescription: e.target.value })}
+                className="w-full rounded-lg border border-white/10 bg-[#2a2a2a] px-4 py-3 text-white outline-none transition-colors focus:border-blue-500 focus:bg-[#333]"
+                placeholder="Brief project description"
+              />
+            </div>
+
+            {/* Date */}
+            <div>
+              <label className="mb-2 block text-sm font-medium text-white">
+                Date
+              </label>
+              <input
+                type="date"
+                required
+                value={formData.date}
+                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                className="w-full rounded-lg border border-white/10 bg-[#2a2a2a] px-4 py-3 text-white outline-none transition-colors focus:border-blue-500 focus:bg-[#333]"
+              />
+            </div>
+
+            {/* Services */}
+            <div>
+              <label className="mb-2 block text-sm font-medium text-white">
+                Services
+              </label>
+              <select
+                required
+                value={formData.service}
+                onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+                className="w-full rounded-lg border border-white/10 bg-[#2a2a2a] px-4 py-3 text-white outline-none transition-colors focus:border-blue-500 focus:bg-[#333]"
+              >
+                <option value="Video Production">Video Production</option>
+                <option value="Creative Direction">Creative Direction</option>
+                <option value="Post-Production & Editing">Post-Production & Editing</option>
+                <option value="Motion Graphics">Motion Graphics</option>
+                <option value="Photography">Photography</option>
+              </select>
+            </div>
+
+            {/* Client Name */}
+            <div>
+              <label className="mb-2 block text-sm font-medium text-white">
+                Client Name
+              </label>
+              <input
+                type="text"
+                value={formData.clientName}
+                onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
+                className="w-full rounded-lg border border-white/10 bg-[#2a2a2a] px-4 py-3 text-white outline-none transition-colors focus:border-blue-500 focus:bg-[#333]"
+                placeholder="Client or company name"
+              />
+            </div>
+
+            {/* Thumbnail URL */}
+            <div>
+              <label className="mb-2 block text-sm font-medium text-white">
+                Thumbnail Image URL
+              </label>
+              <input
+                type="url"
+                required
+                value={formData.thumbnailUrl}
+                onChange={(e) => setFormData({ ...formData, thumbnailUrl: e.target.value })}
+                className="w-full rounded-lg border border-white/10 bg-[#2a2a2a] px-4 py-3 text-white outline-none transition-colors focus:border-blue-500 focus:bg-[#333]"
+                placeholder="https://..."
+              />
+              {formData.thumbnailUrl && (
+                <img
+                  src={formData.thumbnailUrl}
+                  alt="Preview"
+                  className="mt-2 h-32 w-full rounded-lg object-cover"
+                />
+              )}
+            </div>
+
+            {/* Video URL (Optional) */}
+            <div>
+              <label className="mb-2 block text-sm font-medium text-white">
+                Video URL (Optional)
+              </label>
+              <input
+                type="url"
+                value={formData.videoUrl || ''}
+                onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+                className="w-full rounded-lg border border-white/10 bg-[#2a2a2a] px-4 py-3 text-white outline-none transition-colors focus:border-blue-500 focus:bg-[#333]"
+                placeholder="https://..."
+              />
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="mt-6 flex gap-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 rounded-lg bg-[#333] px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-[#444]"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="flex-1 rounded-lg bg-[#999] px-4 py-3 text-sm font-medium text-black transition-colors hover:bg-[#aaa]"
+            >
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+interface DraggableProjectCardProps {
+  project: Project;
+  index: number;
+  isEditMode: boolean;
+  onEdit: () => void;
+  onDelete: () => void;
+  moveCard: (dragIndex: number, hoverIndex: number) => void;
+}
+
+function DraggableProjectCard({
+  project,
+  index,
+  isEditMode,
+  onEdit,
+  onDelete,
+  moveCard,
+}: DraggableProjectCardProps) {
+  const [{ isDragging }, drag] = useDrag({
+    type: 'PROJECT',
+    item: { index },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+    canDrag: isEditMode,
+  });
+
+  const [{ isOver }, drop] = useDrop({
+    accept: 'PROJECT',
+    hover: (item: { index: number }) => {
+      if (item.index !== index) {
+        moveCard(item.index, index);
+        item.index = index;
+      }
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+    }),
+  });
+
+  // Format date
+  const formattedDate = new Date(project.date).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  });
+
+  return (
+    <motion.div
+      ref={(node) => drag(drop(node))}
+      aria-label="Project card"
+      className={`self-start justify-self-start relative w-full group transition-all ${isDragging ? 'opacity-50' : ''} ${
+        isOver ? 'scale-[1.02]' : ''
+      }`}
+    >
+      {/* Edit/Delete Controls */}
+      {isEditMode && (
+        <div className="absolute -right-2 -top-2 z-10 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+          <button
+            onClick={onEdit}
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 text-white shadow-lg hover:bg-blue-600"
+            title="Edit"
+          >
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+            </svg>
+          </button>
+          <button
+            onClick={onDelete}
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white shadow-lg hover:bg-red-600"
+            title="Delete"
+          >
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      )}
+
+      {/* Project Card */}
+      <Link
+        to={isEditMode ? '#' : `/projects/${project.slug}`}
+        aria-label="Project card"
+        className={`items-center flex h-min justify-center relative w-full text-[rgb(0,_0,_238)] gap-[10px] min-h-[440px] ${
+          isEditMode ? 'pointer-events-none cursor-move' : ''
+        }`}
+        style={{"textDecoration":"rgb(0, 0, 238)"}}
+        onClick={(e) => isEditMode && e.preventDefault()}
+      >
+        <div aria-label="BG blur" className="absolute w-full h-[175px] left-[0%] bottom-0 backdrop-blur-[10px] z-[2] shrink-[0]"></div>
+        <div aria-label="Video" className="size-full pointer-events-none absolute left-[0%] top-[0%] z-[1] shrink-[0]">
+          {project.videoUrl ? (
+            <video src={project.videoUrl} className="size-full object-cover overflow-clip pointer-events-none"></video>
+          ) : (
+            <img 
+              src={project.thumbnailUrl} 
+              alt={project.title}
+              className="size-full object-cover overflow-clip pointer-events-none"
+            />
+          )}
+        </div>
+        <div aria-label="Text" className="items-start flex flex-col h-min justify-center absolute w-full left-[50%] bottom-0 gap-[16px] p-5 translate-x-[-50%] z-[3] shrink-[0]">
+          <div aria-label="Heading" className="items-center flex flex-col h-min justify-center relative w-full gap-[8px] shrink-[0]">
+            <div className="flex flex-col justify-start relative whitespace-pre-wrap w-full z-[2] shrink-[0]">
+              <h6 className="font-medium text-left text-white text-[28px] tracking-[-0.84px] leading-[29.4px]" style={{"fontFamily":"Ronzino, \"Ronzino Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>{project.title}</h6>
+            </div>
+          </div>
+          <div aria-label="Details" className="items-center flex h-min justify-start relative w-full gap-[8px] shrink-[0]">
+            <div aria-label="Service" className="items-center flex size-min justify-center overflow-clip relative bg-white/10 gap-[4px] pt-1 pr-3 pb-1 pl-3 rounded-[62.5rem] border-[0.8px] border-solid border-white/20 backdrop-blur-[10px] shrink-[0]">
+              <div aria-label="Label" className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
+                <p className="font-medium text-left uppercase text-white text-[11px] tracking-[-0.16px] leading-[16px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>{project.service}</p>
+              </div>
+            </div>
+            <div aria-label="Date" className="items-center flex size-min justify-center overflow-clip relative bg-white/10 gap-[4px] pt-1 pr-3 pb-1 pl-3 rounded-[62.5rem] border-[0.8px] border-solid border-white/20 backdrop-blur-[10px] shrink-[0]">
+              <div aria-label="Label" className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
+                <p className="font-medium text-left uppercase text-white text-[11px] tracking-[-0.16px] leading-[16px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>{formattedDate}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Link>
+
+      {/* Drag indicator overlay */}
+      {isOver && isEditMode && (
+        <div className="pointer-events-none absolute inset-0 rounded-lg ring-2 ring-blue-500 ring-offset-2 ring-offset-black" />
+      )}
+    </motion.div>
+  );
+}
+
+interface EditableProjectsSectionProps {
+  defaultProjects: Project[];
+}
+
+export function EditableProjectsSection({ defaultProjects = [] }: EditableProjectsSectionProps) {
+  const { isEditMode, content, updateContent, setSaveStatus } = useCMSStore();
+  const [modalProject, setModalProject] = useState<Project | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showGridSettings, setShowGridSettings] = useState(false);
+
+  // Get grid columns from store or use default - read directly from content object for reactivity
+  const gridColumns = parseInt(content['home.projectsGrid.columns'] || '3') || 3;
+
+  // Get projects from store or use defaults
+  const storedProjectsStr = content['home.projects'] || '';
+  
+  const projects = useMemo(() => {
+    // Parse stored projects safely
+    if (storedProjectsStr && storedProjectsStr.trim() !== '') {
+      try {
+        const parsed = JSON.parse(storedProjectsStr);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          console.log('Loaded projects from CMS:', parsed);
+          return parsed as Project[];
+        }
+      } catch (error) {
+        console.error('Failed to parse projects:', error);
+      }
+    }
+    
+    // Return default projects if no stored projects or parsing failed
+    console.log('Using default projects:', defaultProjects);
+    return Array.isArray(defaultProjects) ? defaultProjects : [];
+  }, [storedProjectsStr, defaultProjects]);
+
+  const saveProjects = async (updatedProjects: Project[]) => {
+    try {
+      setSaveStatus('saving');
+      const serialized = JSON.stringify(updatedProjects);
+      updateContent('home.projects', serialized);
+      await contentAPI.saveContent({ 'home.projects': serialized });
+      setSaveStatus('saved');
+      setTimeout(() => setSaveStatus('idle'), 2000);
+    } catch (error) {
+      console.error('Failed to save projects:', error);
+      setSaveStatus('error');
+    }
+  };
+
+  const handleAddProject = () => {
+    setModalProject(null);
+    setIsModalOpen(true);
+  };
+
+  const handleEditProject = (project: Project) => {
+    setModalProject(project);
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteProject = (id: string) => {
+    if (window.confirm('Are you sure you want to delete this project?')) {
+      const updated = projects.filter((p) => p.id !== id);
+      saveProjects(updated);
+    }
+  };
+
+  const handleSaveProject = (project: Project) => {
+    let updated: Project[];
+    if (modalProject) {
+      // Edit existing
+      updated = projects.map((p) => (p.id === project.id ? project : p));
+    } else {
+      // Add new
+      updated = [...projects, project];
+    }
+    saveProjects(updated);
+  };
+
+  const moveCard = (dragIndex: number, hoverIndex: number) => {
+    const updated = [...projects];
+    const [removed] = updated.splice(dragIndex, 1);
+    updated.splice(hoverIndex, 0, removed);
+    saveProjects(updated);
+  };
+
+  const handleResetToDefaults = async () => {
+    if (window.confirm('Reset projects to defaults? This will delete all custom changes.')) {
+      try {
+        setSaveStatus('saving');
+        // Clear from store
+        updateContent('home.projects', '');
+        // Clear from API/localStorage
+        await contentAPI.saveContent({ 'home.projects': '' });
+        setSaveStatus('saved');
+        setTimeout(() => setSaveStatus('idle'), 2000);
+        // Force page reload to show defaults
+        window.location.reload();
+      } catch (error) {
+        console.error('Failed to reset projects:', error);
+        setSaveStatus('error');
+      }
+    }
+  };
+
+  const handleGridColumnsChange = async (cols: number) => {
+    try {
+      setSaveStatus('saving');
+      updateContent('home.projectsGrid.columns', cols.toString());
+      await contentAPI.saveContent({ 'home.projectsGrid.columns': cols.toString() });
+      setSaveStatus('saved');
+      setTimeout(() => setSaveStatus('idle'), 2000);
+      setShowGridSettings(false);
+    } catch (error) {
+      console.error('Failed to save grid columns:', error);
+      setSaveStatus('error');
+    }
+  };
+
+  return (
+    <>
+      <div aria-label="Projects wrapper" className="grid h-min justify-center relative w-full gap-[20px] shrink-[0]" style={{ gridTemplateColumns: `repeat(${gridColumns}, minmax(50px, 1fr))` }}>
+        {/* Grid Settings Button (edit mode only) */}
+        {isEditMode && (
+          <button
+            onClick={() => setShowGridSettings(!showGridSettings)}
+            className="absolute -top-12 -right-2 z-[100] flex h-10 w-10 items-center justify-center rounded-full bg-blue-500 text-white shadow-lg hover:bg-blue-600 transition-all hover:scale-110"
+            title="Grid Settings"
+          >
+            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="3" />
+              <path d="M12 1v6m0 6v6m-5.196-13.196l4.243 4.243m4.243 4.243l4.243 4.243M1 12h6m6 0h6M2.804 19.196l4.243-4.243m4.243-4.243l4.243-4.243" />
+            </svg>
+          </button>
+        )}
+
+        {/* Grid Settings Modal */}
+        {showGridSettings && (
+          <>
+            {/* Backdrop */}
+            <div
+              className="fixed inset-0 bg-black/50 z-[9998]"
+              onClick={() => setShowGridSettings(false)}
+            />
+
+            {/* Modal */}
+            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#1a1a1a] rounded-2xl p-8 z-[9999] w-[520px] shadow-2xl">
+              {/* Header */}
+              <div className="flex items-center justify-between mb-8">
+                <h3 className="text-white text-xl font-medium">Grid Settings</h3>
+                <button
+                  onClick={() => setShowGridSettings(false)}
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Column Span Selector */}
+              <div className="mb-6">
+                <label className="text-gray-300 text-base mb-3 block">Number of Columns</label>
+                <div className="grid grid-cols-4 gap-2">
+                  {[2, 3, 4, 5].map((cols) => (
+                    <button
+                      key={cols}
+                      onClick={() => handleGridColumnsChange(cols)}
+                      className={`py-3 px-4 rounded-lg border transition-colors ${
+                        gridColumns === cols
+                          ? 'bg-blue-500 border-blue-600 text-white'
+                          : 'bg-[#2a2a2a] border-[#3a3a3a] text-white hover:bg-[#333]'
+                      }`}
+                    >
+                      {cols}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Projects */}
+        {projects.map((project, index) => (
+          <EditableGridItem
+            key={project.id}
+            contentKey={`home.projects.${project.id}`}
+            defaultSpan={1}
+            maxSpan={gridColumns}
+            className=""
+          >
+            <DraggableProjectCard
+              project={project}
+              index={index}
+              isEditMode={isEditMode}
+              onEdit={() => handleEditProject(project)}
+              onDelete={() => handleDeleteProject(project.id)}
+              moveCard={moveCard}
+            />
+          </EditableGridItem>
+        ))}
+
+        {/* Add New Button (only in edit mode) */}
+        {isEditMode && (
+          <div className="flex items-center justify-center" style={{ gridColumn: `span ${gridColumns}` }}>
+            <button
+              onClick={handleAddProject}
+              className="group flex w-full max-w-md items-center justify-center gap-3 rounded-lg border-2 border-dashed border-blue-500/30 bg-blue-500/5 px-6 py-6 text-blue-400 transition-all hover:border-blue-500/50 hover:bg-blue-500/10 active:scale-[0.98]"
+            >
+              <svg
+                className="h-6 w-6 transition-transform group-hover:scale-110"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M12 5v14M5 12h14" strokeLinecap="round" />
+              </svg>
+              <span className="text-lg font-medium">Add Project</span>
+            </button>
+          </div>
+        )}
+
+        {/* Reset to Defaults Button (only in edit mode) */}
+        {isEditMode && (
+          <div className="flex items-center justify-center" style={{ gridColumn: `span ${gridColumns}` }}>
+            <button
+              onClick={handleResetToDefaults}
+              className="group flex w-full max-w-md items-center justify-center gap-3 rounded-lg border-2 border-dashed border-red-500/30 bg-red-500/5 px-6 py-6 text-red-400 transition-all hover:border-red-500/50 hover:bg-red-500/10 active:scale-[0.98]"
+            >
+              <svg
+                className="h-6 w-6 transition-transform group-hover:rotate-180"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+                <path d="M21 3v5h-5" />
+                <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+                <path d="M3 21v-5h5" />
+              </svg>
+              <span className="text-lg font-medium">Reset to Defaults</span>
+            </button>
+          </div>
+        )}
+      </div>
+      
+      {/* Modal */}
+      <ProjectModal
+        project={modalProject}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSave={handleSaveProject}
+      />
+    </>
+  );
+}

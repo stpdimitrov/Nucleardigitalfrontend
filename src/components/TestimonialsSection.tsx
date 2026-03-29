@@ -1,9 +1,7 @@
-'use client';
-
 import React from 'react';
 import { motion } from 'motion/react';
-import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router';
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import svgPaths from '../imports/svg-gfkecmw87r';
 import { scrollFadeIn, viewport } from '../lib/animations';
 import type { Testimonial } from '@/types';
@@ -189,20 +187,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
                       aria-label="Previous testimonial"
                     >
                       <div className={`aspect-[28/28] bg-[#242424] content-stretch flex items-center justify-center overflow-clip py-[6px] relative rounded-[999px] shrink-0 cursor-pointer hover:opacity-100 transition-opacity ${currentIndex === 0 ? 'opacity-60' : 'opacity-100'}`} data-name="In-active">
-                        <div className="relative shrink-0 size-[16px]" data-name="Arrow:mask-group">
-                          <div className="-translate-x-1/2 -translate-y-1/2 absolute content-stretch flex flex-col items-start left-1/2 top-1/2 w-[16px]" data-name="Arrow:mask">
-                            <div className="content-stretch flex flex-col items-center justify-center overflow-clip relative shrink-0 size-[16px]" data-name="Component 5">
-                              <div className="relative shrink-0 size-[16px]" data-name="Component 1">
-                                <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 16 16">
-                                  <g>
-                                    <path d={svgPaths.p390123a0} fill="black" />
-                                  </g>
-                                </svg>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-white left-1/2 size-[16px] top-1/2" data-name="Arrow" />
-                        </div>
+                        <ChevronLeft className="w-4 h-4 text-white" strokeWidth={2} />
                       </div>
                     </button>
 
@@ -214,20 +199,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
                       aria-label="Next testimonial"
                     >
                       <div className={`bg-[#242424] content-stretch flex items-center justify-center overflow-clip relative rounded-[999px] shrink-0 size-[28px] cursor-pointer hover:opacity-100 transition-opacity ${currentIndex === testimonials.length - 1 ? 'opacity-60' : 'opacity-100'}`} data-name="Active">
-                        <div className="relative shrink-0 size-[16px]" data-name="Arrow:mask-group">
-                          <div className="-translate-x-1/2 -translate-y-1/2 absolute content-stretch flex flex-col items-start left-1/2 top-1/2 w-[16px]" data-name="Arrow:mask">
-                            <div className="content-stretch flex flex-col items-center justify-center overflow-clip relative shrink-0 size-[16px]" data-name="Component 5">
-                              <div className="relative shrink-0 size-[16px]" data-name="Component 1">
-                                <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 16 16">
-                                  <g>
-                                    <path d={svgPaths.p1b7f8f00} fill="black" />
-                                  </g>
-                                </svg>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-white left-1/2 size-[16px] top-1/2" data-name="Arrow" />
-                        </div>
+                        <ChevronRight className="w-4 h-4 text-white" strokeWidth={2} />
                       </div>
                     </button>
                   </div>

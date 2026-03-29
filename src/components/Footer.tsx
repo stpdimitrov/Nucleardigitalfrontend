@@ -1,9 +1,8 @@
-// Footer Component - Extracted from shared footer across all pages
-// CRITICAL: This returns the EXACT JSX structure from the original
-// DO NOT modify class names, inline styles, or structure
+// Footer Component
+// Contains site footer with logo, navigation links, copyright
 // Source: App.tsx lines ~2024-2217
 
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 export function Footer() {
   return (
@@ -191,11 +190,6 @@ export function Footer() {
               <div aria-label="Template owner" className="items-center self-start flex h-min justify-start justify-self-start overflow-clip relative w-full gap-[8px]" style={{"gridArea":"auto / span 2"}}>
                 <div className="flex flex-col grow justify-start relative whitespace-pre-wrap w-px basis-0 shrink-[0]">
                   <p className="font-medium text-center text-[rgb(221,_221,_221)] text-[16px] tracking-[-0.32px] leading-[24px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(221, 221, 221)"}}>Made with 🩷 by <a href="https://x.com/xmuhammadtalha" className="text-center text-white" style={{"textDecoration":"rgb(255, 255, 255)"}}>Muhammad talha</a></p>
-                </div>
-              </div>
-              <div aria-label="Made in framer" className="items-center self-start flex h-min justify-end justify-self-start overflow-clip relative w-full gap-[8px]" style={{"gridArea":"auto / span 2"}}>
-                <div className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
-                  <p className="font-medium text-center text-[rgb(221,_221,_221)] text-[16px] tracking-[-0.32px] leading-[24px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(221, 221, 221)"}}>Built in <a href="https://framer.link/mudasir-hussain" className="text-center text-white" style={{"textDecoration":"rgb(255, 255, 255)"}}>Framer</a></p>
                 </div>
               </div>
             </div>

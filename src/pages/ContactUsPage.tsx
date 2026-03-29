@@ -4,9 +4,9 @@ import { faqItems } from '../services/mock-data';
 import svgPaths from "../imports/svg-caky0u7ahw";
 import imgCoverImageSilhouetteOfACameraOperatorFilmingOnAProfessionalSetSurroundedByBrightStudioLightsTheSceneConveysFocusAndCreativeEnergy from "figma:asset/f0ab34e01eb7a68a97d2f698b486de3693299155.png";
 import imgCoverImageSilhouettedBandMembersPlayInstrumentsInASmokyWarehouseBacklitByVibrantOrangeAndTealLightsCreatingAMoodyDramaticAmbiance from "figma:asset/0103be52b0be1ee4c947007cec96aea7cc4137fe.png";
-import imgGlobe from "figma:asset/f3ab098c0cbb503931dd0b0e1bdd83742915214f.png";
+import imgGlobe from "figma:asset/e55f19621fc993b2cbf97f430d52ffb48c20a89a.png";
 import { imgDiv } from "../imports/svg-rh7ls";
-import DivFramer18Y2YvdContainer from "../imports/DivFramer18Y2YvdContainer";
+import { EditableCTASection } from '../src/cms';
 
 export function ContactUsPage() {
   const [formData, setFormData] = useState({
@@ -264,7 +264,7 @@ export function ContactUsPage() {
                   <div className="content-stretch flex items-center justify-center relative shrink-0 w-full" data-name="Text">
                     <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-h-px min-w-px relative" data-name="div.framer-b7jnuw">
                       <div className="content-stretch flex flex-col items-start pb-[0.8px] relative shrink-0 w-full" data-name="p.framer-text">
-                        <div className="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[20.8px] text-white tracking-[-0.44px] w-full" style={{fontFamily:"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}>
+                        <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[20.8px] text-white tracking-[-0.44px] w-full">
                           <p className="leading-[30.8px] whitespace-pre-wrap">Contact us</p>
                         </div>
                       </div>
@@ -285,7 +285,7 @@ export function ContactUsPage() {
                       </div>
                       <div className="content-stretch flex flex-col items-start min-w-[308px] opacity-60 group-hover:opacity-100 relative shrink-0 transition-opacity duration-200" data-name="div.framer-1jqims8">
                         <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
-                          <div className="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#ddd] text-[13.3px] tracking-[-0.32px] whitespace-nowrap" style={{fontFamily:"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}>
+                          <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#ddd] text-[13.3px] tracking-[-0.32px] whitespace-nowrap">
                             <p className="leading-[24px]">+1 (310) 458-9274</p>
                           </div>
                         </div>
@@ -306,7 +306,7 @@ export function ContactUsPage() {
                       </div>
                       <div className="content-stretch flex flex-col items-start min-w-[308px] opacity-60 group-hover:opacity-100 relative shrink-0 transition-opacity duration-200" data-name="div.framer-1jqims8">
                         <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
-                          <div className="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#ddd] text-[14.4px] text-left tracking-[-0.32px] whitespace-nowrap" style={{fontFamily:"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}} role="link" tabIndex={0}>
+                          <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#ddd] text-[14.4px] text-left tracking-[-0.32px] whitespace-nowrap" role="link" tabIndex={0}>
                             <p className="cursor-pointer leading-[24px]">name@email.com</p>
                           </div>
                         </div>
@@ -326,7 +326,7 @@ export function ContactUsPage() {
                       </div>
                       <div className="content-stretch flex flex-col items-start min-w-[308px] opacity-60 group-hover:opacity-100 relative shrink-0 transition-opacity duration-200" data-name="div.framer-1jqims8">
                         <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
-                          <div className="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#ddd] text-[14.1px] text-left tracking-[-0.32px] whitespace-nowrap" style={{fontFamily:"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}} role="link" tabIndex={0}>
+                          <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#ddd] text-[14.1px] text-left tracking-[-0.32px] whitespace-nowrap" role="link" tabIndex={0}>
                             <p className="cursor-pointer leading-[24px]">Los Angeles, CA</p>
                           </div>
                         </div>
@@ -345,7 +345,7 @@ export function ContactUsPage() {
                   <div className="content-stretch flex items-center justify-center relative shrink-0 w-full" data-name="Text">
                     <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-h-px min-w-px relative" data-name="div.framer-1tcqeed">
                       <div className="content-stretch flex flex-col items-start pb-[0.8px] relative shrink-0 w-full" data-name="p.framer-text">
-                        <div className="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[20.8px] text-white tracking-[-0.44px] w-full" style={{fontFamily:"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}>
+                        <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[20.8px] text-white tracking-[-0.44px] w-full">
                           <p className="leading-[30.8px] whitespace-pre-wrap">Follow us on</p>
                         </div>
                       </div>
@@ -357,7 +357,7 @@ export function ContactUsPage() {
                     <a className="content-stretch cursor-pointer flex items-center justify-between relative shrink-0 w-full group" data-name="Social link → Social link" href="https://dribbble.com/">
                       <div className="content-stretch flex flex-col items-start opacity-60 group-hover:opacity-100 relative shrink-0 transition-opacity duration-200" data-name="div.framer-immjyo">
                         <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
-                          <div className="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14.6px] text-left text-white tracking-[-0.32px] whitespace-nowrap" style={{fontFamily:"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}} role="link" tabIndex={0}>
+                          <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14.6px] text-left text-white tracking-[-0.32px] whitespace-nowrap" role="link" tabIndex={0}>
                             <p className="cursor-pointer leading-[24px]">Dribbble</p>
                           </div>
                         </div>
@@ -384,7 +384,7 @@ export function ContactUsPage() {
                     <a className="content-stretch cursor-pointer flex items-center justify-between relative shrink-0 w-full group" data-name="Social link → Social link" href="https://x.com/home">
                       <div className="content-stretch flex flex-col items-start opacity-60 group-hover:opacity-100 relative shrink-0 transition-opacity duration-200" data-name="div.framer-immjyo">
                         <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
-                          <div className="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14px] text-left text-white tracking-[-0.32px] whitespace-nowrap" style={{fontFamily:"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}} role="link" tabIndex={0}>
+                          <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14px] text-left text-white tracking-[-0.32px] whitespace-nowrap" role="link" tabIndex={0}>
                             <p className="cursor-pointer leading-[24px]">Twitter-X</p>
                           </div>
                         </div>
@@ -411,7 +411,7 @@ export function ContactUsPage() {
                     <a className="content-stretch cursor-pointer flex items-center justify-between relative shrink-0 w-full group" data-name="Social link → Social link" href="https://www.linkedin.com/">
                       <div className="content-stretch flex flex-col items-start opacity-60 group-hover:opacity-100 relative shrink-0 transition-opacity duration-200" data-name="div.framer-immjyo">
                         <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
-                          <div className="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14.6px] text-left text-white tracking-[-0.32px] whitespace-nowrap" style={{fontFamily:"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}} role="link" tabIndex={0}>
+                          <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14.6px] text-left text-white tracking-[-0.32px] whitespace-nowrap" role="link" tabIndex={0}>
                             <p className="cursor-pointer leading-[24px]">Linkedin</p>
                           </div>
                         </div>
@@ -445,7 +445,7 @@ export function ContactUsPage() {
                   <div className="content-stretch flex items-center justify-center relative shrink-0 w-full" data-name="Text">
                     <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-h-px min-w-px relative" data-name="div.framer-a4b5g0">
                       <div className="content-stretch flex flex-col items-start pb-[0.8px] relative shrink-0 w-full" data-name="p.framer-text">
-                        <div className="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[20.5px] text-white tracking-[-0.44px] w-full" style={{fontFamily:"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}>
+                        <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[20.5px] text-white tracking-[-0.44px] w-full">
                           <p className="leading-[30.8px] whitespace-pre-wrap">Visit our Office</p>
                         </div>
                       </div>
@@ -480,7 +480,7 @@ export function ContactUsPage() {
       />
 
       {/* Let's Work Together Section */}
-      <DivFramer18Y2YvdContainer />
+      <EditableCTASection contentKey="contact.cta" />
     </div>
   );
 }

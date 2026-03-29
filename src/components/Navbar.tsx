@@ -1,9 +1,9 @@
-// Navbar Component - Extracted from shared navigation across all pages
-// CRITICAL: This returns the EXACT JSX structure from the original
-// DO NOT modify class names, inline styles, or structure
+// Navbar Component
+// Contains site navigation and logo
+// Source: App.tsx lines ~39-156
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

@@ -1,8 +1,10 @@
-'use client';
+import React from 'react';
 
 import { ArrowRight } from 'lucide-react';
 import { LetsConnectSection } from '../components/LetsConnectSection';
 import { HowWeWorkSection } from '../components/HowWeWorkSection';
+import { EditableText, EditableImage, EditableLink, useCMSStore } from '../src/cms';
+import svgPaths from '../imports/svg-hytnsfvgzh';
 
 export function ServicesPageNew() {
   return (
@@ -176,81 +178,114 @@ export function ServicesPageNew() {
       {/* Inside the Process Section */}
       <HowWeWorkSection />
 
-      {/* CTA Section - "Ready to bring your vision to life" */}
-      <section className="w-full">
-        <div className="relative w-full flex items-center justify-center overflow-clip py-[463.19px]">
-          {/* Background Image */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <img 
-              alt="" 
-              className="absolute h-[160%] left-0 max-w-none top-[-30%] w-full object-cover" 
-              src="https://images.unsplash.com/photo-1579729056041-cd1e4a13a13f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYW1lcmElMjB0cmlwb2QlMjBwcm9kdWN0aW9uJTIwb3JhbmdlJTIwbGlnaHRpbmd8ZW58MXx8fHwxNzcwNTUwNjQ3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-            />
-          </div>
-          
-          {/* Overlay */}
-          <div className="absolute bg-black inset-0 opacity-30" />
-          
-          {/* Container */}
-          <div className="content-stretch flex items-center justify-center max-w-[1240px] overflow-clip px-[24px] relative shrink-0 w-[1240px]">
-            {/* Wrapper */}
-            <div className="content-stretch flex flex-col gap-[22.9px] items-center justify-center max-w-[790px] overflow-clip relative shrink-0 w-[790px]">
-              {/* Section Tag */}
-              <div className="content-stretch flex flex-col items-start relative shrink-0">
-                <div className="content-stretch flex h-[22.41px] items-center justify-center overflow-clip pb-px relative shrink-0">
-                  <div className="content-stretch flex flex-col items-start relative shrink-0">
-                    <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
-                      <div className="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14.1px] text-white tracking-[-0.16px] uppercase whitespace-nowrap" style={{fontFamily: '"Apfel Grotezk", "Apfel Grotezk Placeholder", sans-serif'}}>
-                        <p className="leading-[22.4px]">Lets work together</p>
-                      </div>
-                    </div>
+      {/* CTA Section - "Lets work together" */}
+      <EditableServicesPageCTASection />
+    </div>
+  );
+}
+
+/**
+ * Editable CTA Section for Services Page - 100% Visually Identical
+ */
+function EditableServicesPageCTASection() {
+  const { isEditMode } = useCMSStore();
+  
+  return (
+    <section className="content-stretch flex flex-col items-start justify-center relative size-full" data-name="CTA Section">
+      <div className="relative w-full flex items-center justify-center overflow-clip py-[463.19px]">
+        {/* Background Image */}
+        <div className={`absolute inset-0 overflow-hidden ${isEditMode ? '' : 'pointer-events-none'}`}>
+          <EditableImage
+            contentKey="services.cta.backgroundImage"
+            defaultSrc="https://images.unsplash.com/photo-1579729056041-cd1e4a13a13f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYW1lcmElMjB0cmlwb2QlMjBwcm9kdWN0aW9uJTIwb3JhbmdlJTIwbGlnaHRpbmd8ZW58MXx8fHwxNzcwNTUwNjQ3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+            alt="Camera tripod in moody production setting with orange lighting"
+            className="absolute h-[160%] left-0 max-w-none top-[-30%] w-full object-cover"
+          />
+        </div>
+        
+        {/* Overlay */}
+        <div className="absolute bg-black inset-0 opacity-30" />
+        
+        {/* Container */}
+        <div className="content-stretch flex items-center justify-center max-w-[1240px] overflow-clip px-[24px] relative shrink-0 w-[1240px]" data-name="Container">
+          {/* Wrapper */}
+          <div className="content-stretch flex flex-col gap-[22.9px] items-center justify-center max-w-[790px] overflow-clip relative shrink-0 w-[790px]" data-name="Wrapper">
+            {/* Section Tag */}
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-name="Section tag">
+              <div className="content-stretch flex h-[22.41px] items-center justify-center overflow-clip pb-px relative shrink-0" data-name="Section tag">
+                <div className="content-stretch flex flex-col items-start relative shrink-0" data-name="Description">
+                  <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
+                    <EditableText
+                      contentKey="services.cta.tag"
+                      defaultValue='<div class="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14.1px] text-white tracking-[-0.16px] uppercase whitespace-nowrap" style="font-family: &quot;Apfel Grotezk&quot;, &quot;Apfel Grotezk Placeholder&quot;, sans-serif"><p class="leading-[22.4px]">Lets work together</p></div>'
+                      as="div"
+                      className=""
+                    />
                   </div>
                 </div>
               </div>
-              
-              {/* Heading */}
-              <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
-                <div className="content-stretch flex flex-col items-center relative shrink-0 w-full">
-                  <div className="flex flex-col font-medium justify-center leading-[50.4px] not-italic relative shrink-0 text-[45.4px] text-center text-white tracking-[-1.44px] whitespace-nowrap" style={{fontFamily: 'Ronzino, "Ronzino Placeholder", sans-serif'}}>
-                    <p className="mb-0">Ready to bring your vision to life?</p>
-                    <p className="mb-0">Let's create stunning visuals that</p>
-                    <p>captivate, inspire, and deliver results.</p>
-                  </div>
-                </div>
+            </div>
+            
+            {/* Heading */}
+            <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="div.framer-sfb8j">
+              <div className="content-stretch flex flex-col items-center relative shrink-0 w-full" data-name="h2.framer-text">
+                <EditableText
+                  contentKey="services.cta.heading"
+                  defaultValue='<div class="flex flex-col font-medium justify-center leading-[50.4px] not-italic relative shrink-0 text-[45.4px] text-center text-white tracking-[-1.44px] whitespace-nowrap" style="font-family: Ronzino, &quot;Ronzino Placeholder&quot;, sans-serif"><p class="mb-0">Ready to bring your vision to life?</p><p class="mb-0">Let\'s create stunning visuals that</p><p>captivate, inspire, and deliver results.</p></div>'
+                  as="div"
+                  className=""
+                  multiline
+                />
               </div>
-              
-              {/* Button Wrapper */}
-              <div className="content-stretch flex items-center justify-center pt-[9.1px] relative shrink-0 w-full">
-                <div className="content-stretch flex flex-col items-start relative shrink-0">
-                  <a 
-                    className="bg-[#fdc500] content-stretch cursor-pointer flex gap-[14px] items-center overflow-clip pl-[16px] pr-[6px] py-[6px] relative rounded-[1000px] shrink-0 hover:bg-[#edb800] transition-colors" 
-                    href="/contact-us"
-                  >
-                    {/* Description */}
-                    <div className="content-stretch flex flex-col items-start relative shrink-0">
-                      <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
-                        <div className="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14.1px] text-black text-left tracking-[-0.16px] uppercase whitespace-nowrap" style={{fontFamily: '"Apfel Grotezk", "Apfel Grotezk Placeholder", sans-serif'}}>
-                          <p className="leading-[22.4px]">contact us</p>
+            </div>
+            
+            {/* Button Wrapper */}
+            <div className="content-stretch flex items-center justify-center pt-[9.1px] relative shrink-0 w-full" data-name="Button wrapper">
+              <div className="content-stretch flex flex-col items-start relative shrink-0" data-name="Button">
+                <EditableLink
+                  contentKey="services.cta.buttonLink"
+                  defaultValue="/contact-us"
+                  className="bg-[#fdc500] content-stretch cursor-pointer flex gap-[14px] items-center overflow-clip pl-[16px] pr-[6px] py-[6px] relative rounded-[1000px] shrink-0 hover:bg-[#edb800] transition-colors"
+                  data-name="Button"
+                >
+                  {/* Description */}
+                  <div className="content-stretch flex flex-col items-start relative shrink-0" data-name="Description">
+                    <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
+                      <EditableText
+                        contentKey="services.cta.buttonText"
+                        defaultValue='<div class="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14.1px] text-black text-left tracking-[-0.16px] uppercase whitespace-nowrap" style="font-family: &quot;Apfel Grotezk&quot;, &quot;Apfel Grotezk Placeholder&quot;, sans-serif" role="link" tabindex="0"><p class="cursor-pointer leading-[22.4px]">contact us</p></div>'
+                        as="div"
+                        className=""
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* Icon Wrapper */}
+                  <div className="bg-black content-stretch flex flex-col items-center justify-center overflow-clip relative rounded-[1000px] shrink-0 size-[32px]" data-name="Icon wrapper">
+                    {/* Icons */}
+                    <div className="overflow-clip relative shrink-0 size-[15px]" data-name="Icons">
+                      <div className="-translate-x-1/2 -translate-y-1/2 absolute content-stretch flex flex-col items-start left-1/2 top-1/2 w-[15px]" data-name="Icon:mask">
+                        <div className="content-stretch flex flex-col items-center justify-center overflow-clip relative shrink-0 size-[15px]" data-name="Component 6">
+                          <div className="relative shrink-0 size-[20px]" data-name="Component 1">
+                            <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 20 20">
+                              <g>
+                                <path d={svgPaths.p3b6ad300} stroke="black" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.66667" />
+                              </g>
+                            </svg>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    
-                    {/* Icon Wrapper */}
-                    <div className="bg-black content-stretch flex flex-col items-center justify-center overflow-clip relative rounded-[1000px] shrink-0 size-[32px]">
-                      {/* Icons */}
-                      <div className="overflow-clip relative shrink-0 size-[15px]">
-                        <div className="-translate-x-1/2 -translate-y-1/2 absolute left-1/2 size-[15px] top-1/2 flex items-center justify-center">
-                          <ArrowRight className="w-full h-full text-white" strokeWidth={2} />
-                        </div>
+                      <div className="-translate-x-1/2 -translate-y-1/2 absolute left-1/2 size-[15px] top-1/2 flex items-center justify-center" data-name="Icon">
+                        <ArrowRight className="w-full h-full text-white" strokeWidth={2} />
                       </div>
                     </div>
-                  </a>
-                </div>
+                  </div>
+                </EditableLink>
               </div>
             </div>
           </div>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   );
 }

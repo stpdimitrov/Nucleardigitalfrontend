@@ -6,7 +6,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from "motion/react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { slideInTop } from "@/lib/animations";
 
 export function NavbarAnimated() {

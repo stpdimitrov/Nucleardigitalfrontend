@@ -1,8 +1,6 @@
-'use client';
-
 import React from 'react';
 import { motion } from 'motion/react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { ArrowRight } from 'lucide-react';
 import svgPaths from '../imports/svg-c96gl1ahfs';
 import { scrollFadeIn, viewport } from '../lib/animations';
