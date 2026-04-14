@@ -352,7 +352,7 @@ interface EditableProjectsSectionProps {
 }
 
 export function EditableProjectsSection({ defaultProjects = [] }: EditableProjectsSectionProps) {
-  const { isEditMode, content, updateContent, setSaveStatus } = useCMSStore();
+  const { isEditMode, content, updateContent, setSaveStatus, persistContent } = useCMSStore();
   const [modalProject, setModalProject] = useState<Project | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showGridSettings, setShowGridSettings] = useState(false);
@@ -384,12 +384,9 @@ export function EditableProjectsSection({ defaultProjects = [] }: EditableProjec
 
   const saveProjects = async (updatedProjects: Project[]) => {
     try {
-      setSaveStatus('saving');
       const serialized = JSON.stringify(updatedProjects);
       updateContent('home.projects', serialized);
-      await contentAPI.saveContent({ 'home.projects': serialized });
-      setSaveStatus('saved');
-      setTimeout(() => setSaveStatus('idle'), 2000);
+      await persistContent();
     } catch (error) {
       console.error('Failed to save projects:', error);
       setSaveStatus('error');

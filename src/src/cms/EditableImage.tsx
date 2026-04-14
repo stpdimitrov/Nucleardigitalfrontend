@@ -19,7 +19,7 @@ export function EditableImage({
   className = '',
   style,
 }: EditableImageProps) {
-  const { isEditMode, updateContent, setSaveStatus, adminToken } = useCMSStore();
+  const { isEditMode, updateContent, setSaveStatus, adminToken, persistContent } = useCMSStore();
   const [isHovered, setIsHovered] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [activeTab, setActiveTab] = useState<'upload' | 'url'>('upload');
@@ -35,6 +35,8 @@ export function EditableImage({
 
   const saveMediaSrc = (newSrc: string) => {
     updateContent(contentKey, newSrc);
+    // Explicitly persist to backend immediately (don't rely solely on debounced sync)
+    persistContent();
     setShowModal(false);
     setUrlValue('');
     setUploadError('');

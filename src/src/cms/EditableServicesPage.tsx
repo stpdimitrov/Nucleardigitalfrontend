@@ -57,7 +57,7 @@ const DEFAULT_SERVICES: ServiceCard[] = [
 ];
 
 export function EditableServicesPage({ contentKey = 'servicesPage' }: EditableServicesPageProps) {
-  const { isEditMode, getContent, updateContent, setSaveStatus } = useCMSStore();
+  const { isEditMode, getContent, updateContent, setSaveStatus, persistContent } = useCMSStore();
   const { services: backendServices } = useBackendData();
 
   // Map backend services to ServiceCard format as fallback defaults
@@ -84,12 +84,9 @@ export function EditableServicesPage({ contentKey = 'servicesPage' }: EditableSe
   // Save services
   const saveServices = async (newServices: ServiceCard[]) => {
     try {
-      setSaveStatus('saving');
       const servicesString = JSON.stringify(newServices);
       updateContent(`${contentKey}.services`, servicesString);
-      await contentAPI.saveContent({ [`${contentKey}.services`]: servicesString });
-      setSaveStatus('saved');
-      setTimeout(() => setSaveStatus('idle'), 2000);
+      await persistContent();
     } catch (error) {
       console.error('Failed to save services:', error);
       setSaveStatus('error');

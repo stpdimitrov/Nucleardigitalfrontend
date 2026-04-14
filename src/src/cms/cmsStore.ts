@@ -19,6 +19,9 @@ interface CMSState {
   batchUpdateContent: (updates: ContentRegistry) => void;
   resetContent: () => void;
 
+  // Explicit backend persistence (skips debounce — call after critical saves)
+  persistContent: () => Promise<void>;
+
   // Save status
   saveStatus: SaveStatus;
   setSaveStatus: (status: SaveStatus) => void;
@@ -86,6 +89,29 @@ export const useCMSStore = create<CMSState>()(
       },
       resetContent: () => {
         set({ content: {} });
+      },
+
+      // Immediate backend persistence — bypasses the debounce timer
+      persistContent: async () => {
+        const { adminToken, content, setSaveStatus } = get();
+        if (!adminToken) {
+          console.warn('[CMS] persistContent: no adminToken, skipping');
+          return;
+        }
+        setSaveStatus('saving');
+        try {
+          const { adminUpdateSiteSetting } = await import('../../services/api');
+          const json = JSON.stringify(content);
+          console.log('[CMS] persistContent: saving', Object.keys(content).length, 'keys to backend');
+          await adminUpdateSiteSetting(adminToken, 'cms_frontend_content', json, json);
+          setSaveStatus('saved');
+          // Cancel any pending debounced sync since we just saved
+          if (syncTimer) { clearTimeout(syncTimer); syncTimer = null; }
+          setTimeout(() => setSaveStatus('idle'), 2000);
+        } catch (err) {
+          console.error('[CMS] persistContent failed:', err);
+          setSaveStatus('error');
+        }
       },
 
       // Save status
