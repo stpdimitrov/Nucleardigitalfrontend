@@ -23,7 +23,8 @@ export function EditableText({
   placeholder = '',
 }: EditableTextProps) {
   const { isEditMode, getContent, updateContent } = useCMSStore();
-  const [localValue, setLocalValue] = useState('');
+  const content = getContent(contentKey, defaultValue);
+  const [localValue, setLocalValue] = useState(content);
   const [isEditing, setIsEditing] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
@@ -31,13 +32,11 @@ export function EditableText({
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const Tag = as;
 
-  // Get content from store or use default
-  const content = getContent(contentKey, defaultValue);
-
   // Sync local value when content changes externally
   useEffect(() => {
     setLocalValue(content);
   }, [content]);
+
 
   // Auto-save with debounce
   const saveContent = async (value: string) => {

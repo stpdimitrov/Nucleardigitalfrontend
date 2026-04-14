@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router';
 import { motion, AnimatePresence } from 'motion/react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { EditModeProvider } from './contexts/EditModeContext';
+import { BackendDataProvider } from './contexts/BackendDataContext';
 import { EditModeToggle } from './src/cms/EditModeToggle';
 import { NavbarAnimated } from './components/NavbarAnimated';
 import { Footer } from './components/Footer';
@@ -23,7 +25,7 @@ function AnimatedRoutes() {
     <AnimatePresence mode="wait">
       <motion.div
         key={location.pathname}
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 1, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
         transition={{
@@ -52,6 +54,8 @@ function AnimatedRoutes() {
 export default function App() {
   return (
     <BrowserRouter>
+      <BackendDataProvider>
+      <EditModeProvider>
       <DndProvider backend={HTML5Backend}>
         <div className="text-black text-[16px] leading-[normal]" style={{"fontFamily":"\"Times New Roman\""}}>
           <div className="bg-black text-[12px]" style={{"fontFamily":"sans-serif"}}>
@@ -70,6 +74,8 @@ export default function App() {
           </div>
         </div>
       </DndProvider>
+      </EditModeProvider>
+      </BackendDataProvider>
     </BrowserRouter>
   );
 }

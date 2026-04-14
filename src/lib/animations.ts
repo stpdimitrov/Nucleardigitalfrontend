@@ -177,7 +177,7 @@ export const staggerItem: Variants = {
  * Slide in from top (for navbar)
  */
 export const slideInTop: Variants = {
-  hidden: { y: -100, opacity: 0 },
+  hidden: { y: 0, opacity: 1 },
   visible: { 
     y: 0, 
     opacity: 1,

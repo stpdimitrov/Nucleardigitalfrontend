@@ -15,19 +15,18 @@ import { EditableWhyChooseUsSection } from '../src/cms/EditableWhyChooseUsSectio
 import { EditableHowWeWorkSection } from '../src/cms/EditableHowWeWorkSection';
 import { EditableTestimonialsSection } from '../src/cms/EditableTestimonialsSection';
 import { scrollFadeIn, staggerContainer, staggerItem, viewport } from '../lib/animations';
-import { 
-  clientLogos, 
-  projects,
-  services, 
-  whyChooseUsItems, 
-  pricingPlans, 
-  testimonials, 
-  faqItems 
+import {
+  clientLogos,
+  whyChooseUsItems,
+  pricingPlans,
+  faqItems,
+  heroContent,
 } from '../services/mock-data';
+import { useBackendData } from '../contexts/BackendDataContext';
 
 // Animation variants
 const heroAnimation = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 1, y: 30 },
   visible: {
     opacity: 1,
     y: 0,
@@ -40,16 +39,17 @@ const heroAnimation = {
 
 export function HomePage() {
   const { isEditMode } = useCMSStore();
-  
+  const { projects, services, testimonials } = useBackendData();
+
   // Transform projects data to match EditableProjectsSection interface
   const transformedProjects = projects.map(p => ({
     id: p.id,
     title: p.title,
     slug: p.slug,
     shortDescription: p.description,
-    date: new Date(p.date).toISOString().split('T')[0], // Convert to YYYY-MM-DD
+    date: p.date,
     service: p.service,
-    clientName: '', // Not in original data
+    clientName: '',
     thumbnailUrl: p.image,
     videoUrl: p.videoUrl,
   }));
@@ -60,7 +60,7 @@ export function HomePage() {
         <div className={`absolute left-0 top-0 right-0 bottom-0 ${isEditMode ? '' : 'pointer-events-none'}`}>
           <EditableImage
             contentKey="home.hero.backgroundImage"
-            defaultSrc="https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F90322362c9ba13d2653aa3ef4d89e79643dc092d.png%3Fwidth=1536&amp;height=1024?generation=1768843022421906&amp;alt=media"
+            defaultSrc={heroContent.imageUrl}
             alt="Silhouette of a person with a camera walking towards vibrant orange light under dim blue streetlights on a misty road at night. Mysterious and atmospheric."
             className="block size-full object-cover overflow-clip aspect-[auto_1536_/_1024]"
           />

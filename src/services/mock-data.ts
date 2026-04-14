@@ -84,6 +84,10 @@ export const projects: Project[] = [
     service: "Video Production",
     category: "Video Production",
     date: "Nov 4, 2025",
+    client: "Lumen Coffee Co.",
+    overview: "Lumen Coffee Co. wanted to express the artistry and care that define their brewing process. We developed a concept centered on storytelling through motion — from the first bean roast to the final pour. Using natural light, close-up cinematography, and ambient soundscapes, the film communicates the brand's dedication to slow, thoughtful craftsmanship. Every detail, from color tone to pacing, was designed to evoke warmth, community, and authenticity. The video became the brand's core marketing asset, setting a new visual standard for their online and retail presence.",
+    process: "Our process began with pre-production planning, where we storyboarded the visual flow and mood. Filming took place across two days in the café's ambient setting, capturing organic moments of coffee brewing, customer interactions, and brand lifestyle. During post-production, we emphasized cinematic tone and texture through color grading and sound design. The pacing was intentionally slow, mirroring the rhythm of artisanal brewing. Collaborating closely with the client ensured every visual aligned with their story — celebrating detail, patience, and authenticity. The result was a piece that felt as handcrafted as the coffee itself.",
+    result: "The final film became a centerpiece for Lumen Coffee Co.'s online presence, featured across their website and social campaigns. The cinematic storytelling approach increased viewer engagement and helped strengthen the emotional connection with their audience. Sales rose following the campaign launch, and the brand received strong praise for its elevated visual identity. The video was later showcased in local creative exhibitions, highlighting its artistry and effectiveness in brand communication. Lumen Brew not only captured the beauty of the product but also redefined how handcrafted experiences could be told through motion.",
   },
   {
     id: "project-2",

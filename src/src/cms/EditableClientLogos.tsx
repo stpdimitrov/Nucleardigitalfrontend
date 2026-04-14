@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useCMSStore } from './cmsStore';
-import { contentAPI } from './contentApi';
 import { motion } from 'motion/react';
 import { useDrag, useDrop } from 'react-dnd';
 import { Trash2, Plus, X, Edit2 } from 'lucide-react';
@@ -248,54 +247,43 @@ function EditableLogoCard({ logo, index, moveLogo, deleteLogo, editLogo }: {
 }
 
 export function EditableClientLogos({ defaultLogos }: EditableClientLogosProps) {
-  const { isEditMode } = useCMSStore();
-  const [logos, setLogos] = useState<ClientLogo[]>(defaultLogos);
+  const { isEditMode, getContent, updateContent } = useCMSStore();
+  const [logos, setLogos] = useState<ClientLogo[]>(() => {
+    const stored = getContent('home.clientLogos', '');
+    try { return stored ? JSON.parse(stored) : defaultLogos; }
+    catch { return defaultLogos; }
+  });
   const [showAddModal, setShowAddModal] = useState(false);
   const [newLogo, setNewLogo] = useState({ name: '', logoUrl: '', aspectRatio: 'auto 1 / 1' });
 
-  // Debug: Track when isEditMode changes
-  React.useEffect(() => {
-    console.log('EditableClientLogos - isEditMode changed to:', isEditMode);
-  }, [isEditMode]);
+  const saveLogos = (newLogos: ClientLogo[]) => {
+    setLogos(newLogos);
+    updateContent('home.clientLogos', JSON.stringify(newLogos));
+  };
 
   const moveLogo = (dragIndex: number, hoverIndex: number) => {
     const draggedLogo = logos[dragIndex];
     const newLogos = [...logos];
     newLogos.splice(dragIndex, 1);
     newLogos.splice(hoverIndex, 0, draggedLogo);
-    setLogos(newLogos);
-    contentAPI.saveContent('home.clientLogos', newLogos);
+    saveLogos(newLogos);
   };
 
   const deleteLogo = (id: string) => {
-    const newLogos = logos.filter(logo => logo.id !== id);
-    setLogos(newLogos);
-    contentAPI.saveContent('home.clientLogos', newLogos);
+    saveLogos(logos.filter(logo => logo.id !== id));
   };
 
   const editLogo = (id: string, updatedLogo: Omit<ClientLogo, 'id'>) => {
-    const newLogos = logos.map(logo => logo.id === id ? { ...logo, ...updatedLogo } : logo);
-    setLogos(newLogos);
-    contentAPI.saveContent('home.clientLogos', newLogos);
+    saveLogos(logos.map(logo => logo.id === id ? { ...logo, ...updatedLogo } : logo));
   };
 
   const addLogo = () => {
     if (!newLogo.name || !newLogo.logoUrl) return;
-    
-    const logo: ClientLogo = {
-      id: `logo-${Date.now()}`,
-      ...newLogo,
-    };
-    
-    const newLogos = [...logos, logo];
-    setLogos(newLogos);
-    contentAPI.saveContent('home.clientLogos', newLogos);
+    const logo: ClientLogo = { id: `logo-${Date.now()}`, ...newLogo };
+    saveLogos([...logos, logo]);
     setNewLogo({ name: '', logoUrl: '', aspectRatio: 'auto 1 / 1' });
     setShowAddModal(false);
   };
-
-  console.log('EditableClientLogos render - isEditMode:', isEditMode);
-  console.log('EditableClientLogos render - logos count:', logos.length);
 
   return (
     <>

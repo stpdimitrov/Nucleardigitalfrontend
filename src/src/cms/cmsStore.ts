@@ -27,6 +27,31 @@ interface CMSState {
   pendingSaves: Set<string>;
   addPendingSave: (key: string) => void;
   removePendingSave: (key: string) => void;
+
+  // Admin auth token (not persisted — session only)
+  adminToken: string | null;
+  setAdminToken: (token: string | null) => void;
+}
+
+// Module-level debounce timer for backend sync
+let syncTimer: ReturnType<typeof setTimeout> | null = null;
+
+function scheduleSyncToBackend(content: ContentRegistry, token: string, setSaveStatus: (s: SaveStatus) => void) {
+  if (syncTimer) clearTimeout(syncTimer);
+  syncTimer = setTimeout(async () => {
+    setSaveStatus('saving');
+    try {
+      // Lazy import to avoid circular deps
+      const { adminUpdateSiteSetting } = await import('../../services/api');
+      const json = JSON.stringify(content);
+      await adminUpdateSiteSetting(token, 'cms_frontend_content', json, json);
+      setSaveStatus('saved');
+      setTimeout(() => setSaveStatus('idle'), 2000);
+    } catch (err) {
+      console.warn('[CMS] Backend sync failed:', err);
+      setSaveStatus('error');
+    }
+  }, 1500);
 }
 
 export const useCMSStore = create<CMSState>()(
@@ -47,6 +72,12 @@ export const useCMSStore = create<CMSState>()(
         set((state) => ({
           content: { ...state.content, [key]: value },
         }));
+        // Sync to backend if we have an admin token
+        const { adminToken, setSaveStatus, content } = get();
+        if (adminToken) {
+          const updated = { ...content, [key]: value };
+          scheduleSyncToBackend(updated, adminToken, setSaveStatus);
+        }
       },
       batchUpdateContent: (updates: ContentRegistry) => {
         set((state) => ({
@@ -73,9 +104,14 @@ export const useCMSStore = create<CMSState>()(
         pendingSaves.delete(key);
         set({ pendingSaves });
       },
+
+      // Admin token (session only — not persisted)
+      adminToken: null,
+      setAdminToken: (token: string | null) => set({ adminToken: token }),
     }),
     {
       name: 'flixen-cms-content',
+      // Only persist content, not auth token or transient state
       partialize: (state) => ({ content: state.content }),
     }
   )

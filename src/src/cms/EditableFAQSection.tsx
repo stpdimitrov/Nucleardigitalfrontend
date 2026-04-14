@@ -113,12 +113,17 @@ interface EditableFAQSectionProps {
   defaultFaqs: FAQ[];
   coverImageUrl?: string;
   coverImageAlt?: string;
+  contentKey?: string;
 }
 
-export function EditableFAQSection({ defaultFaqs, coverImageUrl, coverImageAlt }: EditableFAQSectionProps) {
-  const { isEditMode } = useCMSStore();
+export function EditableFAQSection({ defaultFaqs, coverImageUrl, coverImageAlt, contentKey = 'home.faqs' }: EditableFAQSectionProps) {
+  const { isEditMode, getContent, updateContent } = useCMSStore();
   const [openIndex, setOpenIndex] = useState<number>(0);
-  const [faqs, setFaqs] = useState<FAQ[]>(defaultFaqs);
+  const [faqs, setFaqs] = useState<FAQ[]>(() => {
+    const stored = getContent(contentKey, '');
+    try { return stored ? JSON.parse(stored) : defaultFaqs; }
+    catch { return defaultFaqs; }
+  });
   const [editingFaq, setEditingFaq] = useState<FAQ | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -165,23 +170,24 @@ export function EditableFAQSection({ defaultFaqs, coverImageUrl, coverImageAlt }
   const handleDeleteFaq = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     if (confirm('Are you sure you want to delete this FAQ?')) {
-      setFaqs((prev) => prev.filter((f) => f.id !== id));
-      if (openIndex >= faqs.length - 1) {
-        setOpenIndex(Math.max(0, faqs.length - 2));
+      const updated = faqs.filter((f) => f.id !== id);
+      setFaqs(updated);
+      updateContent(contentKey, JSON.stringify(updated));
+      if (openIndex >= updated.length) {
+        setOpenIndex(Math.max(0, updated.length - 1));
       }
     }
   };
 
   const handleSaveFaq = (faq: FAQ) => {
+    let updated: FAQ[];
     if (editingFaq) {
-      // Update existing
-      setFaqs((prev) =>
-        prev.map((f) => (f.id === faq.id ? faq : f))
-      );
+      updated = faqs.map((f) => (f.id === faq.id ? faq : f));
     } else {
-      // Add new
-      setFaqs((prev) => [...prev, faq]);
+      updated = [...faqs, faq];
     }
+    setFaqs(updated);
+    updateContent(contentKey, JSON.stringify(updated));
   };
 
   return (

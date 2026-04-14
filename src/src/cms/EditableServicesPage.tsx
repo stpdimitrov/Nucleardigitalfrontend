@@ -8,6 +8,7 @@ import { EditableLetsConnectSection } from './EditableLetsConnectSection';
 import { EditableHowWeWorkSection } from './EditableHowWeWorkSection';
 import { useDrag, useDrop } from 'react-dnd';
 import { scrollFadeIn, staggerContainer, staggerItem, viewport } from '../../lib/animations';
+import { useBackendData } from '../../contexts/BackendDataContext';
 
 // Service Card Types
 interface ServiceCard {
@@ -56,9 +57,27 @@ const DEFAULT_SERVICES: ServiceCard[] = [
 
 export function EditableServicesPage({ contentKey = 'servicesPage' }: EditableServicesPageProps) {
   const { isEditMode, getContent, updateContent, setSaveStatus } = useCMSStore();
+  const { services: backendServices } = useBackendData();
 
-  // Get services from CMS
-  const servicesData = getContent(`${contentKey}.services`, JSON.stringify(DEFAULT_SERVICES));
+  // Map backend services to ServiceCard format as fallback defaults
+  const backendDefaults: ServiceCard[] = backendServices.length > 0
+    ? backendServices.map((s, i) => ({
+        id: s.id,
+        title: s.title,
+        description: s.description,
+        imageUrl: s.image || DEFAULT_SERVICES[i % DEFAULT_SERVICES.length]?.imageUrl || '',
+        imageAlt: s.title,
+        tags: Array.isArray(s.features)
+          ? (s.features as Array<string | { name?: string; text?: string }>).map(f =>
+              typeof f === 'string' ? f : (f.name || f.text || '')
+            ).filter(Boolean)
+          : [],
+        layout: i === 0 ? 'large' : 'small',
+      }))
+    : DEFAULT_SERVICES;
+
+  // Get services from CMS (falls back to backend-mapped defaults)
+  const servicesData = getContent(`${contentKey}.services`, JSON.stringify(backendDefaults));
   const services: ServiceCard[] = JSON.parse(servicesData);
 
   // Save services

@@ -5,6 +5,7 @@ import { EditableFAQSection } from '../src/cms/EditableFAQSection';
 import { EditableCTASection } from '../src/cms';
 import { EditableImage } from '../src/cms/EditableImage';
 import { faqItems } from '../services/mock-data';
+import { submitAppointment } from '../services/api';
 import svgPaths from "../imports/svg-caky0u7ahw";
 import imgCoverImageSilhouetteOfACameraOperatorFilmingOnAProfessionalSetSurroundedByBrightStudioLightsTheSceneConveysFocusAndCreativeEnergy from "figma:asset/f0ab34e01eb7a68a97d2f698b486de3693299155.png";
 import imgCoverImageSilhouettedBandMembersPlayInstrumentsInASmokyWarehouseBacklitByVibrantOrangeAndTealLightsCreatingAMoodyDramaticAmbiance from "figma:asset/0103be52b0be1ee4c947007cec96aea7cc4137fe.png";
@@ -18,14 +19,35 @@ export function ContactUsPageCMS() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     service: '',
     message: ''
   });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [submitMessage, setSubmitMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('Form submitted! (This is a demo)');
+    setSubmitting(true);
+    setSubmitStatus('idle');
+    try {
+      await submitAppointment({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone || undefined,
+        service: formData.service || undefined,
+        message: formData.message || undefined,
+      });
+      setSubmitStatus('success');
+      setSubmitMessage('Thank you! We will be in touch shortly.');
+      setFormData({ name: '', email: '', phone: '', service: '', message: '' });
+    } catch (err) {
+      setSubmitStatus('error');
+      setSubmitMessage('Something went wrong. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -209,6 +231,31 @@ export function ContactUsPageCMS() {
                     </div>
                   </div>
 
+                  {/* Phone Field */}
+                  <div className="content-stretch flex flex-col gap-[4px] items-start relative shrink-0 w-full" data-name="Form label">
+                    <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
+                      <div className="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#ddd] text-[14.4px] tracking-[-0.32px] w-full" style={{fontFamily:"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}>
+                        <p className="leading-[24px] whitespace-pre-wrap">
+                          <EditableText contentKey="contactUs.form.phoneLabel" defaultValue="Phone Number" as="span" />
+                        </p>
+                      </div>
+                    </div>
+                    <div className="content-stretch flex flex-col h-[40px] items-start justify-center overflow-clip relative shrink-0 w-full">
+                      <div className="content-stretch flex flex-[1_0_0] items-start justify-center min-h-px min-w-px overflow-clip py-[10px] relative w-full">
+                        <input
+                          type="tel"
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleChange}
+                          placeholder="+1 (310) 000-0000"
+                          className="content-stretch flex flex-[1_0_0] flex-col items-start min-h-px min-w-px overflow-clip pb-px relative w-full bg-transparent border-none outline-none font-normal text-[#ddd] text-[14.6px] placeholder:text-[#ddd]"
+                          style={{fontFamily:"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}
+                        />
+                      </div>
+                      <div aria-hidden="true" className="absolute border-[#444] border-b border-solid inset-0 pointer-events-none" />
+                    </div>
+                  </div>
+
                   {/* Select Services */}
                   <div className="content-stretch flex flex-col gap-[4px] items-start relative shrink-0 w-full" data-name="Form label">
                     <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
@@ -280,18 +327,27 @@ export function ContactUsPageCMS() {
                     </div>
                   </div>
 
+                  {/* Status message */}
+                  {submitStatus !== 'idle' && (
+                    <div className={`w-full px-4 py-3 rounded-lg text-sm font-medium ${submitStatus === 'success' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+                      {submitMessage}
+                    </div>
+                  )}
+
                   {/* Submit Button */}
                   <div className="content-stretch flex flex-col h-[48px] items-start justify-center relative shrink-0 w-full" data-name="Form button">
-                    <button type="submit" className="bg-[#fdc500] content-stretch flex flex-[1_0_0] items-center justify-center min-h-px min-w-px relative rounded-[1000px] w-full hover:bg-[#fdd520] transition-colors cursor-pointer">
+                    <button type="submit" disabled={submitting} className="bg-[#fdc500] disabled:opacity-60 disabled:cursor-not-allowed content-stretch flex flex-[1_0_0] items-center justify-center min-h-px min-w-px relative rounded-[1000px] w-full hover:bg-[#fdd520] transition-colors cursor-pointer">
                       <div className="content-stretch flex flex-col items-start relative shrink-0">
                         <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
                           <div className="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14.6px] text-black tracking-[-0.32px] whitespace-nowrap uppercase" style={{fontFamily:"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}>
                             <p className="leading-[24px]">
-                              <EditableText
-                                contentKey="contactUs.form.submitButtonText"
-                                defaultValue="Submit"
-                                as="span"
-                              />
+                              {submitting ? 'Sending...' : (
+                                <EditableText
+                                  contentKey="contactUs.form.submitButtonText"
+                                  defaultValue="Submit"
+                                  as="span"
+                                />
+                              )}
                             </p>
                           </div>
                         </div>

@@ -187,12 +187,17 @@ function TestimonialModal({ testimonial, isOpen, onClose, onSave }: TestimonialM
 
 interface EditableTestimonialsSectionProps {
   defaultTestimonials: Testimonial[];
+  contentKey?: string;
 }
 
-export function EditableTestimonialsSection({ defaultTestimonials }: EditableTestimonialsSectionProps) {
-  const { isEditMode } = useCMSStore();
+export function EditableTestimonialsSection({ defaultTestimonials, contentKey = 'home.testimonials' }: EditableTestimonialsSectionProps) {
+  const { isEditMode, getContent, updateContent } = useCMSStore();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [testimonials, setTestimonials] = useState<Testimonial[]>(defaultTestimonials);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>(() => {
+    const stored = getContent(contentKey, '');
+    try { return stored ? JSON.parse(stored) : defaultTestimonials; }
+    catch { return defaultTestimonials; }
+  });
   const [editingTestimonial, setEditingTestimonial] = useState<Testimonial | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -245,23 +250,24 @@ export function EditableTestimonialsSection({ defaultTestimonials }: EditableTes
 
   const handleDeleteTestimonial = (id: string) => {
     if (confirm('Are you sure you want to delete this testimonial?')) {
-      setTestimonials((prev) => prev.filter((t) => t.id !== id));
-      if (currentIndex >= testimonials.length - 1) {
-        setCurrentIndex(Math.max(0, testimonials.length - 2));
+      const updated = testimonials.filter((t) => t.id !== id);
+      setTestimonials(updated);
+      updateContent(contentKey, JSON.stringify(updated));
+      if (currentIndex >= updated.length) {
+        setCurrentIndex(Math.max(0, updated.length - 1));
       }
     }
   };
 
   const handleSaveTestimonial = (testimonial: Testimonial) => {
+    let updated: Testimonial[];
     if (editingTestimonial) {
-      // Update existing
-      setTestimonials((prev) =>
-        prev.map((t) => (t.id === testimonial.id ? testimonial : t))
-      );
+      updated = testimonials.map((t) => (t.id === testimonial.id ? testimonial : t));
     } else {
-      // Add new
-      setTestimonials((prev) => [...prev, testimonial]);
+      updated = [...testimonials, testimonial];
     }
+    setTestimonials(updated);
+    updateContent(contentKey, JSON.stringify(updated));
   };
 
   const currentTestimonial = testimonials[currentIndex];
