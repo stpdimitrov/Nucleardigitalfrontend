@@ -21,7 +21,7 @@ import {
 // ============================================
 
 const SUPABASE_URL = 'https://nwpbhznbvrmcoyzeywvk.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_nlqfUc63Ecg6IpJvZGPf5w_0kPVagL6';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53cGJoem5idnJtY295emV5d3ZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAxODUzODcsImV4cCI6MjA3NTc2MTM4N30.g40Gd2H7XxOxwSccQkZpxINKcshfIGfSHx-F2KGm-30';
 const TENANT_ID = '00000000-0000-0000-0000-000000000005';
 
 // All requests go through Edge Functions
