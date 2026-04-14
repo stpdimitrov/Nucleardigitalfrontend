@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useCMSStore } from './cmsStore';
@@ -28,19 +28,27 @@ interface ProjectModalProps {
 }
 
 function ProjectModal({ project, isOpen, onClose, onSave }: ProjectModalProps) {
-  const [formData, setFormData] = useState<Project>(
-    project || {
-      id: Date.now().toString(),
-      title: '',
-      slug: '',
-      shortDescription: '',
-      date: new Date().toISOString().split('T')[0],
-      service: 'Video Production',
-      clientName: '',
-      thumbnailUrl: '',
-      videoUrl: '',
+  const emptyProject = (): Project => ({
+    id: Date.now().toString(),
+    title: '',
+    slug: '',
+    shortDescription: '',
+    date: new Date().toISOString().split('T')[0],
+    service: 'Video Production',
+    clientName: '',
+    thumbnailUrl: '',
+    videoUrl: '',
+  });
+
+  const [formData, setFormData] = useState<Project>(project || emptyProject());
+
+  // Reset form whenever the modal opens or the target project changes
+  useEffect(() => {
+    if (isOpen) {
+      setFormData(project || emptyProject());
     }
-  );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, project?.id]);
 
   if (!isOpen) return null;
 
@@ -88,7 +96,7 @@ function ProjectModal({ project, isOpen, onClose, onSave }: ProjectModalProps) {
                 type="text"
                 required
                 value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
                 className="w-full rounded-lg border border-white/10 bg-[#2a2a2a] px-4 py-3 text-white outline-none transition-colors focus:border-blue-500 focus:bg-[#333]"
                 placeholder="e.g. Lumen Brew"
               />
@@ -103,7 +111,7 @@ function ProjectModal({ project, isOpen, onClose, onSave }: ProjectModalProps) {
                 type="text"
                 required
                 value={formData.slug}
-                onChange={(e) => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') })}
+                onChange={(e) => setFormData((prev) => ({ ...prev, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') }))}
                 className="w-full rounded-lg border border-white/10 bg-[#2a2a2a] px-4 py-3 text-white outline-none transition-colors focus:border-blue-500 focus:bg-[#333]"
                 placeholder="e.g. lumen-brew"
               />
@@ -118,7 +126,7 @@ function ProjectModal({ project, isOpen, onClose, onSave }: ProjectModalProps) {
                 type="text"
                 required
                 value={formData.shortDescription}
-                onChange={(e) => setFormData({ ...formData, shortDescription: e.target.value })}
+                onChange={(e) => setFormData((prev) => ({ ...prev, shortDescription: e.target.value }))}
                 className="w-full rounded-lg border border-white/10 bg-[#2a2a2a] px-4 py-3 text-white outline-none transition-colors focus:border-blue-500 focus:bg-[#333]"
                 placeholder="Brief project description"
               />
@@ -133,7 +141,7 @@ function ProjectModal({ project, isOpen, onClose, onSave }: ProjectModalProps) {
                 type="date"
                 required
                 value={formData.date}
-                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                onChange={(e) => setFormData((prev) => ({ ...prev, date: e.target.value }))}
                 className="w-full rounded-lg border border-white/10 bg-[#2a2a2a] px-4 py-3 text-white outline-none transition-colors focus:border-blue-500 focus:bg-[#333]"
               />
             </div>
@@ -146,7 +154,7 @@ function ProjectModal({ project, isOpen, onClose, onSave }: ProjectModalProps) {
               <select
                 required
                 value={formData.service}
-                onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+                onChange={(e) => setFormData((prev) => ({ ...prev, service: e.target.value }))}
                 className="w-full rounded-lg border border-white/10 bg-[#2a2a2a] px-4 py-3 text-white outline-none transition-colors focus:border-blue-500 focus:bg-[#333]"
               >
                 <option value="Video Production">Video Production</option>
@@ -165,7 +173,7 @@ function ProjectModal({ project, isOpen, onClose, onSave }: ProjectModalProps) {
               <input
                 type="text"
                 value={formData.clientName}
-                onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
+                onChange={(e) => setFormData((prev) => ({ ...prev, clientName: e.target.value }))}
                 className="w-full rounded-lg border border-white/10 bg-[#2a2a2a] px-4 py-3 text-white outline-none transition-colors focus:border-blue-500 focus:bg-[#333]"
                 placeholder="Client or company name"
               />
@@ -175,14 +183,14 @@ function ProjectModal({ project, isOpen, onClose, onSave }: ProjectModalProps) {
             <ImageUploadField
               label="Thumbnail Image"
               value={formData.thumbnailUrl}
-              onChange={(url) => setFormData({ ...formData, thumbnailUrl: url })}
+              onChange={(url) => setFormData((prev) => ({ ...prev, thumbnailUrl: url }))}
             />
 
             {/* Video (Optional) */}
             <ImageUploadField
               label="Video (Optional)"
               value={formData.videoUrl || ''}
-              onChange={(url) => setFormData({ ...formData, videoUrl: url })}
+              onChange={(url) => setFormData((prev) => ({ ...prev, videoUrl: url }))}
               acceptVideo
             />
           </div>
