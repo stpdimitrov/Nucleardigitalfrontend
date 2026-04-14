@@ -27,13 +27,17 @@ const TENANT_ID = '00000000-0000-0000-0000-000000000005';
 // All requests go through Edge Functions
 const FN_URL = `${SUPABASE_URL}/functions/v1`;
 
-function anonHeaders(token?: string): Record<string, string> {
-  return {
+function anonHeaders(adminToken?: string): Record<string, string> {
+  const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     'apikey': SUPABASE_ANON_KEY,
-    'Authorization': `Bearer ${token || SUPABASE_ANON_KEY}`,
+    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
     'x-tenant-id': TENANT_ID,
   };
+  if (adminToken) {
+    headers['x-admin-token'] = adminToken;
+  }
+  return headers;
 }
 
 // ============================================
