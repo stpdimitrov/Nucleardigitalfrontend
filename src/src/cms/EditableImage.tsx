@@ -1,9 +1,8 @@
 import { useState, useRef } from 'react';
 import { useCMSStore } from './cmsStore';
-import { contentAPI } from './contentApi';
-import { X } from 'lucide-react';
+import { X, Upload, Link, ImageIcon } from 'lucide-react';
+import { uploadImage } from '../../services/api';
 
-// Editable Image Component with Framer-style glow effect
 interface EditableImageProps {
   contentKey: string;
   defaultSrc: string;
@@ -20,154 +19,199 @@ export function EditableImage({
   className = '',
   style,
 }: EditableImageProps) {
-  const { isEditMode, getContent, updateContent, setSaveStatus } = useCMSStore();
+  const { isEditMode, getContent, updateContent, setSaveStatus, adminToken } = useCMSStore();
   const [isHovered, setIsHovered] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [activeTab, setActiveTab] = useState<'url' | 'upload'>('url');
+  const [activeTab, setActiveTab] = useState<'upload' | 'url'>('upload');
   const [urlValue, setUrlValue] = useState('');
+  const [isDragging, setIsDragging] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Get current image src
   const currentSrc = getContent(contentKey, defaultSrc);
+  const isVideo = currentSrc.match(/\.(mp4|webm|ogg)(\?|$)/i);
 
-  // Save new image URL
-  const saveImageSrc = async (newSrc: string) => {
+  const saveMediaSrc = (newSrc: string) => {
+    updateContent(contentKey, newSrc);
+    setShowModal(false);
+    setUrlValue('');
+    setUploadError('');
+  };
+
+  const handleUrlSave = () => {
+    if (urlValue.trim()) saveMediaSrc(urlValue.trim());
+  };
+
+  const handleFile = async (file: File) => {
+    if (!adminToken) {
+      setUploadError('Not logged in as admin.');
+      return;
+    }
+    setUploading(true);
+    setUploadError('');
     try {
       setSaveStatus('saving');
-      updateContent(contentKey, newSrc);
-      await contentAPI.saveContent({ [contentKey]: newSrc });
+      const url = await uploadImage(adminToken, file);
+      saveMediaSrc(url);
       setSaveStatus('saved');
       setTimeout(() => setSaveStatus('idle'), 2000);
-    } catch (error) {
-      console.error('Failed to save image:', error);
+    } catch (err: any) {
+      setUploadError(err.message || 'Upload failed. Please try again.');
       setSaveStatus('error');
+    } finally {
+      setUploading(false);
     }
   };
 
-  // Handle URL save
-  const handleUrlSave = () => {
-    if (urlValue.trim()) {
-      saveImageSrc(urlValue.trim());
-      setShowModal(false);
-      setUrlValue('');
-    }
-  };
-
-  // Handle file upload
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
-
-    // Convert to base64 for demo (in production, upload to cloud storage)
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const base64 = event.target?.result as string;
-      saveImageSrc(base64);
-      setShowModal(false);
-    };
-    reader.readAsDataURL(file);
+    if (file) handleFile(file);
   };
 
-  // Open modal
-  const handleImageClick = () => {
-    if (isEditMode) {
-      setUrlValue(currentSrc);
-      setShowModal(true);
-    }
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) handleFile(file);
   };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => setIsDragging(false);
+
+  const editStyle = isEditMode ? {
+    transition: 'box-shadow 0.2s ease-out, outline 0.2s ease-out',
+    outline: showModal ? '2px solid #0099FF' : 'none',
+    outlineOffset: '2px',
+    boxShadow: showModal
+      ? '0 0 0 3px rgba(0, 153, 255, 0.3)'
+      : isHovered
+        ? '0 0 0 3px rgba(0, 153, 255, 0.4), 0 0 20px rgba(0, 153, 255, 0.6)'
+        : 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+  } : {};
 
   return (
     <>
-      {/* Image with hover wrapper */}
       <div
         className="contents"
         onMouseEnter={isEditMode ? () => setIsHovered(true) : undefined}
         onMouseLeave={isEditMode ? () => setIsHovered(false) : undefined}
       >
-        <img
-          src={currentSrc}
-          alt={alt}
-          className={className}
-          style={{
-            ...style,
-            ...(isEditMode && {
-              transition: 'box-shadow 0.2s ease-out, outline 0.2s ease-out',
-              outline: showModal
-                ? '2px solid #0099FF'
-                : 'none',
-              outlineOffset: '2px',
-              boxShadow: showModal
-                ? '0 0 0 3px rgba(0, 153, 255, 0.3)'
-                : isHovered
-                  ? '0 0 0 3px rgba(0, 153, 255, 0.4), 0 0 20px rgba(0, 153, 255, 0.6)'
-                  : 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-            }),
-          }}
-          onClick={isEditMode ? handleImageClick : undefined}
-          data-content-key={contentKey}
-        />
+        {isVideo ? (
+          <video
+            src={currentSrc}
+            className={className}
+            style={{ ...style, ...editStyle }}
+            onClick={isEditMode ? () => setShowModal(true) : undefined}
+            autoPlay
+            muted
+            loop
+            playsInline
+            data-content-key={contentKey}
+          />
+        ) : (
+          <img
+            src={currentSrc}
+            alt={alt}
+            className={className}
+            style={{ ...style, ...editStyle }}
+            onClick={isEditMode ? () => setShowModal(true) : undefined}
+            data-content-key={contentKey}
+          />
+        )}
+
+        {/* Edit overlay badge */}
+        {isEditMode && isHovered && !showModal && (
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <div className="rounded-lg bg-black/70 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm">
+              <ImageIcon className="mr-1.5 inline-block size-3" />
+              Click to change
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Modal */}
       {isEditMode && showModal && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
           onClick={() => setShowModal(false)}
         >
           <div
-            className="w-full max-w-md rounded-lg border border-white/10 bg-[#1a1a1a] shadow-2xl"
+            className="w-full max-w-md rounded-xl border border-white/10 bg-[#1a1a1a] shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
             <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
-              <h3 className="font-['Inter:Medium',sans-serif] text-sm font-medium text-white">Image</h3>
-              <button
-                onClick={() => setShowModal(false)}
-                className="text-gray-400 transition-colors hover:text-white"
-              >
+              <h3 className="text-sm font-semibold text-white">Change Image / Video</h3>
+              <button onClick={() => setShowModal(false)} className="text-white/40 transition-colors hover:text-white">
                 <X className="size-4" />
               </button>
             </div>
 
-            {/* Content */}
             <div className="p-4 space-y-4">
-              {/* Source Section */}
-              <div className="space-y-2">
-                <label className="block font-['Inter:Medium',sans-serif] text-xs font-medium text-gray-400">
-                  Source
-                </label>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setActiveTab('url')}
-                    className={`flex-1 rounded px-3 py-1.5 text-xs font-medium transition-colors ${
-                      activeTab === 'url'
-                        ? 'bg-blue-500 text-white'
-                        : 'bg-white/5 text-gray-400 hover:bg-white/10'
-                    }`}
-                  >
-                    URL
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('upload')}
-                    className={`flex-1 rounded px-3 py-1.5 text-xs font-medium transition-colors ${
-                      activeTab === 'upload'
-                        ? 'bg-blue-500 text-white'
-                        : 'bg-white/5 text-gray-400 hover:bg-white/10'
-                    }`}
-                  >
-                    Upload
-                  </button>
-                </div>
+              {/* Tabs */}
+              <div className="flex gap-2 rounded-lg bg-white/5 p-1">
+                <button
+                  onClick={() => setActiveTab('upload')}
+                  className={`flex-1 flex items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+                    activeTab === 'upload' ? 'bg-[#0099FF] text-white' : 'text-white/50 hover:text-white'
+                  }`}
+                >
+                  <Upload className="size-3" /> Upload
+                </button>
+                <button
+                  onClick={() => setActiveTab('url')}
+                  className={`flex-1 flex items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+                    activeTab === 'url' ? 'bg-[#0099FF] text-white' : 'text-white/50 hover:text-white'
+                  }`}
+                >
+                  <Link className="size-3" /> URL
+                </button>
               </div>
+
+              {/* Upload Tab */}
+              {activeTab === 'upload' && (
+                <div
+                  onDrop={handleDrop}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onClick={() => !uploading && fileInputRef.current?.click()}
+                  className={`relative flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed px-4 py-10 text-center transition-colors cursor-pointer ${
+                    isDragging
+                      ? 'border-[#0099FF] bg-[#0099FF]/10'
+                      : uploading
+                        ? 'border-white/10 bg-white/5 cursor-wait'
+                        : 'border-white/20 bg-white/5 hover:border-[#0099FF]/60 hover:bg-[#0099FF]/5'
+                  }`}
+                >
+                  {uploading ? (
+                    <>
+                      <div className="size-8 animate-spin rounded-full border-2 border-white/20 border-t-[#0099FF]" />
+                      <p className="text-sm text-white/60">Uploading...</p>
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="size-8 text-white/30" />
+                      <div>
+                        <p className="text-sm font-medium text-white">Drop file here or click to browse</p>
+                        <p className="mt-1 text-xs text-white/40">JPG, PNG, WebP, GIF, SVG up to 5MB · MP4, WebM up to 50MB</p>
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
 
               {/* URL Tab */}
               {activeTab === 'url' && (
                 <div className="space-y-2">
-                  <label className="block font-['Inter:Medium',sans-serif] text-xs font-medium text-gray-400">
-                    URL
-                  </label>
+                  <label className="block text-xs font-medium text-white/60">Image or video URL</label>
                   <input
                     type="text"
                     value={urlValue}
@@ -176,52 +220,56 @@ export function EditableImage({
                       if (e.key === 'Enter') handleUrlSave();
                       if (e.key === 'Escape') setShowModal(false);
                     }}
-                    placeholder="Enter image URL..."
-                    className="w-full rounded border border-white/20 bg-white/5 px-3 py-2 font-['Inter:Medium',sans-serif] text-sm text-white outline-none placeholder:text-gray-500 focus:border-blue-500"
+                    placeholder="https://..."
+                    className="w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-sm text-white outline-none placeholder:text-white/30 focus:border-[#0099FF]/60"
                     autoFocus
                   />
                 </div>
               )}
 
-              {/* Upload Tab */}
-              {activeTab === 'upload' && (
-                <div className="space-y-2">
-                  <label className="block font-['Inter:Medium',sans-serif] text-xs font-medium text-gray-400">
-                    Image
-                  </label>
-                  <button
-                    onClick={() => fileInputRef.current?.click()}
-                    className="w-full rounded border border-dashed border-white/20 bg-white/5 px-4 py-8 font-['Inter:Medium',sans-serif] text-sm text-gray-400 transition-colors hover:border-blue-500 hover:bg-white/10 hover:text-white"
-                  >
-                    Click to upload image
-                  </button>
+              {/* Current preview */}
+              {currentSrc && (
+                <div className="space-y-1">
+                  <p className="text-xs text-white/40">Current</p>
+                  <div className="overflow-hidden rounded-lg bg-black/30 h-20 flex items-center justify-center">
+                    {currentSrc.match(/\.(mp4|webm|ogg)(\?|$)/i) ? (
+                      <video src={currentSrc} className="h-full w-full object-cover" muted />
+                    ) : (
+                      <img src={currentSrc} alt="current" className="h-full w-full object-contain" />
+                    )}
+                  </div>
                 </div>
               )}
 
+              {uploadError && (
+                <p className="rounded-lg bg-red-500/10 px-3 py-2 text-xs text-red-400">{uploadError}</p>
+              )}
+
               {/* Actions */}
-              <div className="flex gap-2 pt-2">
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="flex-1 rounded bg-white/10 px-4 py-2 font-['Inter:Medium',sans-serif] text-sm font-medium text-white transition-colors hover:bg-white/20"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleUrlSave}
-                  disabled={activeTab === 'url' && !urlValue.trim()}
-                  className="flex-1 rounded bg-blue-500 px-4 py-2 font-['Inter:Medium',sans-serif] text-sm font-medium text-white transition-colors hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Save
-                </button>
-              </div>
+              {activeTab === 'url' && (
+                <div className="flex gap-2 pt-1">
+                  <button
+                    onClick={() => setShowModal(false)}
+                    className="flex-1 rounded-lg bg-white/10 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/20"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleUrlSave}
+                    disabled={!urlValue.trim()}
+                    className="flex-1 rounded-lg bg-[#0099FF] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#0088ee] disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    Save
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Hidden file input */}
           <input
             ref={fileInputRef}
             type="file"
-            accept="image/*"
+            accept="image/*,video/mp4,video/webm,video/ogg"
             onChange={handleFileChange}
             className="hidden"
           />

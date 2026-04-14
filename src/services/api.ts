@@ -293,6 +293,34 @@ export async function fetchRawSiteSettings(): Promise<BackendSiteSetting[]> {
 }
 
 // ============================================
+// FILE UPLOAD — Edge Function
+// ============================================
+
+export async function uploadImage(token: string, file: File): Promise<string> {
+  const formData = new FormData();
+  formData.append('image', file);
+
+  const res = await fetch(`${FN_URL}/upload`, {
+    method: 'POST',
+    headers: {
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+      'x-tenant-id': TENANT_ID,
+      'x-admin-token': token,
+    },
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const err = await res.text().catch(() => '');
+    throw new Error(err || `Upload failed: ${res.status}`);
+  }
+
+  const data = await res.json() as { image_url: string };
+  return data.image_url;
+}
+
+// ============================================
 // CONTACT FORM — Edge Function
 // ============================================
 
