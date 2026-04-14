@@ -24,18 +24,32 @@ export function EditableText({
 }: EditableTextProps) {
   const { isEditMode, getContent, updateContent } = useCMSStore();
   const content = getContent(contentKey, defaultValue);
-  const [localValue, setLocalValue] = useState(content);
   const [isEditing, setIsEditing] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const elementRef = useRef<HTMLElement>(null);
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastExternalContent = useRef(content);
   const Tag = as;
 
-  // Sync local value when content changes externally
+  // Set content on mount
   useEffect(() => {
-    setLocalValue(content);
-  }, [content]);
+    if (elementRef.current) {
+      elementRef.current.innerHTML = content;
+    }
+    lastExternalContent.current = content;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Sync external content changes only when not actively editing
+  useEffect(() => {
+    if (content !== lastExternalContent.current) {
+      lastExternalContent.current = content;
+      if (elementRef.current && !isEditing) {
+        elementRef.current.innerHTML = content;
+      }
+    }
+  }, [content, isEditing]);
 
 
   // Auto-save with debounce
@@ -62,11 +76,10 @@ export function EditableText({
     }, 600);
   };
 
-  // Handle content changes
+  // Handle content changes — do NOT call setState here to avoid re-render that resets cursor
   const handleInput = () => {
     if (!elementRef.current) return;
     const newValue = elementRef.current.innerHTML || '';
-    setLocalValue(newValue);
     saveContent(newValue);
   };
 
@@ -143,8 +156,6 @@ export function EditableText({
       onMouseLeave={isEditMode ? handleMouseLeave : undefined}
       data-content-key={contentKey}
       data-placeholder={placeholder}
-      // Prevent layout shift by preserving whitespace
-      dangerouslySetInnerHTML={{ __html: localValue || placeholder || '' }}
     />
   );
 }
