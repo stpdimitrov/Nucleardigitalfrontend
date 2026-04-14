@@ -98,7 +98,6 @@ export function EditableText({
       e.preventDefault();
       if (elementRef.current) {
         elementRef.current.innerHTML = content;
-        setLocalValue(content);
       }
       elementRef.current?.blur();
     }

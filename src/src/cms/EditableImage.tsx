@@ -19,7 +19,7 @@ export function EditableImage({
   className = '',
   style,
 }: EditableImageProps) {
-  const { isEditMode, getContent, updateContent, setSaveStatus, adminToken } = useCMSStore();
+  const { isEditMode, updateContent, setSaveStatus, adminToken } = useCMSStore();
   const [isHovered, setIsHovered] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [activeTab, setActiveTab] = useState<'upload' | 'url'>('upload');
@@ -29,7 +29,8 @@ export function EditableImage({
   const [uploadError, setUploadError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const currentSrc = getContent(contentKey, defaultSrc);
+  // Use direct selector so component re-renders when content[contentKey] changes
+  const currentSrc = useCMSStore((s) => s.content[contentKey] ?? defaultSrc);
   const isVideo = currentSrc.match(/\.(mp4|webm|ogg)(\?|$)/i);
 
   const saveMediaSrc = (newSrc: string) => {

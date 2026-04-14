@@ -6,6 +6,7 @@ import { contentAPI } from './contentApi';
 import { motion } from 'motion/react';
 import { Link } from 'react-router';
 import { EditableGridItem } from './EditableGridItem';
+import { ImageUploadField } from './ImageUploadField';
 
 export interface Project {
   id: string;
@@ -170,41 +171,20 @@ function ProjectModal({ project, isOpen, onClose, onSave }: ProjectModalProps) {
               />
             </div>
 
-            {/* Thumbnail URL */}
-            <div>
-              <label className="mb-2 block text-sm font-medium text-white">
-                Thumbnail Image URL
-              </label>
-              <input
-                type="url"
-                required
-                value={formData.thumbnailUrl}
-                onChange={(e) => setFormData({ ...formData, thumbnailUrl: e.target.value })}
-                className="w-full rounded-lg border border-white/10 bg-[#2a2a2a] px-4 py-3 text-white outline-none transition-colors focus:border-blue-500 focus:bg-[#333]"
-                placeholder="https://..."
-              />
-              {formData.thumbnailUrl && (
-                <img
-                  src={formData.thumbnailUrl}
-                  alt="Preview"
-                  className="mt-2 h-32 w-full rounded-lg object-cover"
-                />
-              )}
-            </div>
+            {/* Thumbnail Image */}
+            <ImageUploadField
+              label="Thumbnail Image"
+              value={formData.thumbnailUrl}
+              onChange={(url) => setFormData({ ...formData, thumbnailUrl: url })}
+            />
 
-            {/* Video URL (Optional) */}
-            <div>
-              <label className="mb-2 block text-sm font-medium text-white">
-                Video URL (Optional)
-              </label>
-              <input
-                type="url"
-                value={formData.videoUrl || ''}
-                onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
-                className="w-full rounded-lg border border-white/10 bg-[#2a2a2a] px-4 py-3 text-white outline-none transition-colors focus:border-blue-500 focus:bg-[#333]"
-                placeholder="https://..."
-              />
-            </div>
+            {/* Video (Optional) */}
+            <ImageUploadField
+              label="Video (Optional)"
+              value={formData.videoUrl || ''}
+              onChange={(url) => setFormData({ ...formData, videoUrl: url })}
+              acceptVideo
+            />
           </div>
 
           {/* Actions */}

@@ -9,6 +9,7 @@ import { EditableHowWeWorkSection } from './EditableHowWeWorkSection';
 import { useDrag, useDrop } from 'react-dnd';
 import { scrollFadeIn, staggerContainer, staggerItem, viewport } from '../../lib/animations';
 import { useBackendData } from '../../contexts/BackendDataContext';
+import { ImageUploadField } from './ImageUploadField';
 
 // Service Card Types
 interface ServiceCard {
@@ -452,16 +453,11 @@ function ServiceSettingsModal({ service, onClose, onSave }: ServiceSettingsModal
           {/* Image Tab */}
           {activeTab === 'image' && (
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">Image URL</label>
-                <input
-                  type="text"
-                  value={editedService.imageUrl}
-                  onChange={(e) => setEditedService({ ...editedService, imageUrl: e.target.value })}
-                  className="w-full bg-white/5 text-white rounded px-3 py-2 border border-white/20 text-sm focus:outline-none focus:border-[#0099FF]"
-                  placeholder="https://..."
-                />
-              </div>
+              <ImageUploadField
+                label="Service Image"
+                value={editedService.imageUrl}
+                onChange={(url) => setEditedService({ ...editedService, imageUrl: url })}
+              />
               <div>
                 <label className="block text-sm font-medium text-gray-400 mb-2">Image Alt Text</label>
                 <input
@@ -472,12 +468,6 @@ function ServiceSettingsModal({ service, onClose, onSave }: ServiceSettingsModal
                   placeholder="Describe the image..."
                 />
               </div>
-              {editedService.imageUrl && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-2">Preview</label>
-                  <img src={editedService.imageUrl} alt={editedService.imageAlt} className="w-full h-48 object-cover rounded" />
-                </div>
-              )}
             </div>
           )}
 
