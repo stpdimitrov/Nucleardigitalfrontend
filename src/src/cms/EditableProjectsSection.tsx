@@ -465,7 +465,7 @@ export function EditableProjectsSection({ defaultProjects = [] }: EditableProjec
   };
 
   return (
-    <>
+    <DndProvider backend={HTML5Backend}>
       <div aria-label="Projects wrapper" className="grid h-min justify-center relative w-full gap-[20px] shrink-[0]" style={{ gridTemplateColumns: `repeat(${gridColumns}, minmax(50px, 1fr))` }}>
         {/* Grid Settings Button (edit mode only) */}
         {isEditMode && (
@@ -602,6 +602,6 @@ export function EditableProjectsSection({ defaultProjects = [] }: EditableProjec
         onClose={() => setIsModalOpen(false)}
         onSave={handleSaveProject}
       />
-    </>
+    </DndProvider>
   );
 }
