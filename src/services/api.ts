@@ -20,22 +20,16 @@ import {
 // CONFIG
 // ============================================
 
-const SUPABASE_URL = 'https://nwpbhznbvrmcoyzeywvk.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53cGJoem5idnJtY295emV5d3ZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAxODUzODcsImV4cCI6MjA3NTc2MTM4N30.g40Gd2H7XxOxwSccQkZpxINKcshfIGfSHx-F2KGm-30';
+const BASE_URL = 'https://energypointbackend.onrender.com';
 const TENANT_ID = '00000000-0000-0000-0000-000000000005';
-
-// All requests go through Edge Functions
-const FN_URL = `${SUPABASE_URL}/functions/v1`;
 
 function anonHeaders(adminToken?: string): Record<string, string> {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    'apikey': SUPABASE_ANON_KEY,
-    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
     'x-tenant-id': TENANT_ID,
   };
   if (adminToken) {
-    headers['x-admin-token'] = adminToken;
+    headers['Authorization'] = `Bearer ${adminToken}`;
   }
   return headers;
 }
@@ -136,7 +130,7 @@ function parseData<T>(raw: string | T): T {
 }
 
 async function fnGet<T>(path: string, token?: string): Promise<T> {
-  const res = await fetch(`${FN_URL}/${path}`, {
+  const res = await fetch(`${BASE_URL}/${path}`, {
     method: 'GET',
     headers: anonHeaders(token),
   });
@@ -148,7 +142,7 @@ async function fnGet<T>(path: string, token?: string): Promise<T> {
 }
 
 async function fnPost<T>(path: string, body: object, token?: string): Promise<T> {
-  const res = await fetch(`${FN_URL}/${path}`, {
+  const res = await fetch(`${BASE_URL}/${path}`, {
     method: 'POST',
     headers: anonHeaders(token),
     body: JSON.stringify(body),
@@ -161,7 +155,7 @@ async function fnPost<T>(path: string, body: object, token?: string): Promise<T>
 }
 
 async function fnPut<T>(path: string, body: object, token?: string): Promise<T> {
-  const res = await fetch(`${FN_URL}/${path}`, {
+  const res = await fetch(`${BASE_URL}/${path}`, {
     method: 'PUT',
     headers: anonHeaders(token),
     body: JSON.stringify(body),
@@ -174,7 +168,7 @@ async function fnPut<T>(path: string, body: object, token?: string): Promise<T> 
 }
 
 async function fnDelete(path: string, token?: string): Promise<void> {
-  const res = await fetch(`${FN_URL}/${path}`, {
+  const res = await fetch(`${BASE_URL}/${path}`, {
     method: 'DELETE',
     headers: anonHeaders(token),
   });
@@ -307,13 +301,11 @@ export async function uploadImage(token: string, file: File): Promise<string> {
   const formData = new FormData();
   formData.append('image', file);
 
-  const res = await fetch(`${FN_URL}/upload`, {
+  const res = await fetch(`${BASE_URL}/admin/upload`, {
     method: 'POST',
     headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
       'x-tenant-id': TENANT_ID,
-      'x-admin-token': token,
+      'Authorization': `Bearer ${token}`,
     },
     body: formData,
   });
@@ -372,27 +364,27 @@ export async function adminLogin(email: string, password: string): Promise<strin
 // ============================================
 
 export async function adminCreateService(token: string, payload: { slug: string; data: object }): Promise<BackendService> {
-  return fnPost<BackendService>('api/admin/services', { ...payload, tenant_id: TENANT_ID }, token);
+  return fnPost<BackendService>('admin/services', { ...payload, tenant_id: TENANT_ID }, token);
 }
 
 export async function adminUpdateService(token: string, id: string, payload: { slug?: string; data?: object }): Promise<BackendService> {
-  return fnPut<BackendService>(`api/admin/services/${id}`, { ...payload, tenant_id: TENANT_ID }, token);
+  return fnPut<BackendService>(`admin/services/${id}`, { ...payload, tenant_id: TENANT_ID }, token);
 }
 
 export async function adminDeleteService(token: string, id: string): Promise<void> {
-  return fnDelete(`api/admin/services/${id}`, token);
+  return fnDelete(`admin/services/${id}`, token);
 }
 
 export async function adminCreateProject(token: string, payload: { slug: string; data: object; service_id?: string }): Promise<BackendProject> {
-  return fnPost<BackendProject>('api/admin/projects', { ...payload, tenant_id: TENANT_ID }, token);
+  return fnPost<BackendProject>('admin/projects', { ...payload, tenant_id: TENANT_ID }, token);
 }
 
 export async function adminUpdateProject(token: string, id: string, payload: { slug?: string; data?: object }): Promise<BackendProject> {
-  return fnPut<BackendProject>(`api/admin/projects/${id}`, { ...payload, tenant_id: TENANT_ID }, token);
+  return fnPut<BackendProject>(`admin/projects/${id}`, { ...payload, tenant_id: TENANT_ID }, token);
 }
 
 export async function adminDeleteProject(token: string, id: string): Promise<void> {
-  return fnDelete(`api/admin/projects/${id}`, token);
+  return fnDelete(`admin/projects/${id}`, token);
 }
 
 export async function adminCreateTestimonial(token: string, payload: {
@@ -402,7 +394,7 @@ export async function adminCreateTestimonial(token: string, payload: {
   date_published?: string;
   data?: { role?: string; company?: string; image_url?: string };
 }): Promise<BackendTestimonial> {
-  return fnPost<BackendTestimonial>('api/admin/testimonials', { ...payload, tenant_id: TENANT_ID }, token);
+  return fnPost<BackendTestimonial>('admin/testimonials', { ...payload, tenant_id: TENANT_ID }, token);
 }
 
 export async function adminUpdateTestimonial(token: string, id: string, payload: {
@@ -412,15 +404,15 @@ export async function adminUpdateTestimonial(token: string, id: string, payload:
   date_published?: string;
   data?: { role?: string; company?: string; image_url?: string };
 }): Promise<BackendTestimonial> {
-  return fnPut<BackendTestimonial>(`api/admin/testimonials/${id}`, { ...payload, tenant_id: TENANT_ID }, token);
+  return fnPut<BackendTestimonial>(`admin/testimonials/${id}`, { ...payload, tenant_id: TENANT_ID }, token);
 }
 
 export async function adminDeleteTestimonial(token: string, id: string): Promise<void> {
-  return fnDelete(`api/admin/testimonials/${id}`, token);
+  return fnDelete(`admin/testimonials/${id}`, token);
 }
 
 export async function adminUpdateSiteSetting(token: string, key: string, value_en: string, value_bg?: string): Promise<void> {
-  await fnPut(`api/admin/site-settings/${key}`, {
+  await fnPut(`admin/site-settings/${key}`, {
     value_en,
     value_bg: value_bg ?? value_en,
     category: 'cms',
