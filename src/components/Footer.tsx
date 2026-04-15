@@ -154,7 +154,7 @@ export function Footer() {
               <div aria-label="Icon" className="aspect-square relative w-[200px] shrink-[0]">
                 <div className="absolute left-0 top-0 right-0 bottom-0">
                   <EditableImage
-                    contentKey="footer.logoUrl"
+                    contentKey="site.logoUrl"
                     defaultSrc={siteSettings.logoUrl}
                     alt="Logo"
                     className="block size-full object-cover overflow-clip aspect-[auto_42_/_42]"
