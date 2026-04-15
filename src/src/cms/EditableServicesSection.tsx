@@ -352,10 +352,9 @@ export function EditableServicesSection({ defaultServices, serviceImages }: Edit
 
   // Seed from defaultServices on first load
   useEffect(() => {
-    if (defaultServices.length > 0 && services.length === 0) {
+    if (defaultServices.length > 0) {
       setServices(defaultServices);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultServices]);
 
   // Handle drag and drop — local only, no backend reorder endpoint
