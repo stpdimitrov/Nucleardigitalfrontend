@@ -4,6 +4,7 @@ import { useDrag, useDrop } from 'react-dnd';
 import { X, GripVertical, Pencil, Trash2 } from 'lucide-react';
 import type { Service } from '@/types';
 import { adminCreateService, adminUpdateService, adminDeleteService } from '../../services/api';
+import { ImageUploadField } from './ImageUploadField';
 
 function generateSlug(title: string): string {
   return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -265,17 +266,12 @@ function ServiceModal({ service, isOpen, onClose, onSave }: ServiceModalProps) {
             />
           </div>
 
-          {/* Image URL */}
-          <div>
-            <label className="text-gray-300 text-sm mb-2 block">Image URL (optional)</label>
-            <input
-              type="text"
-              value={formData.image || ''}
-              onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-              className="w-full bg-[#2a2a2a] text-white rounded-lg px-4 py-3 border border-[#3a3a3a] focus:border-blue-500 focus:outline-none transition-colors"
-              placeholder="https://example.com/image.jpg"
-            />
-          </div>
+          {/* Image */}
+          <ImageUploadField
+            label="Image (optional)"
+            value={formData.image || ''}
+            onChange={(url) => setFormData({ ...formData, image: url })}
+          />
 
           {/* Features */}
           <div>
