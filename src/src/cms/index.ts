@@ -9,6 +9,7 @@ export { EditableTeamSection, type TeamMember } from './EditableTeamSection';
 export { EditableProjectsSection, type Project } from './EditableProjectsSection';
 export { EditableServicesSection } from './EditableServicesSection';
 export { EditableAwardsContainer } from './EditableAwardsContainer';
+export { EditableStorySection } from './EditableStorySection';
 export { EditableClientLogos, type ClientLogo } from './EditableClientLogos';
 export { EditableAboutUsSection } from './EditableAboutUsSection';
 export { EditableWhyChooseUsSection } from './EditableWhyChooseUsSection';

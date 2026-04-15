@@ -4,6 +4,7 @@ import {
   EditableLink,
   EditableTeamSection,
   EditableAwardsContainer,
+  EditableStorySection,
   EditableOverlay,
   type TeamMember,
   useCMSStore,
@@ -177,70 +178,9 @@ function EditableHeroSection() {
           </div>
         </div>
 
-        {/* Wrapper - Story and Mission (EDITABLE) */}
-        <div className="content-stretch flex flex-col gap-[32px] items-center justify-center relative shrink-0 w-full" data-name="Wrapper">
-          
-          {/* Our Story */}
-          <div className="h-[120px] overflow-clip relative shrink-0 w-full" data-name="About us text → Desktop">
-            <div className="absolute content-stretch flex flex-col items-start left-0 pr-[164.7px] right-[999.3px] top-0" data-name="Description">
-              <EditableText
-                contentKey="about.story.number"
-                defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#ddd] text-[14.1px] tracking-[-0.32px] whitespace-nowrap'><p class='leading-[24px]'>001.</p></div>"
-                as="div"
-                className=""
-              />
-            </div>
-            <div className="absolute content-stretch flex flex-col items-start left-[200px] pb-[0.59px] pr-[257.75px] right-[599.25px] top-[-1px]" data-name="h5.framer-text">
-              <EditableText
-                contentKey="about.story.title"
-                defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[30.4px] text-white tracking-[-0.64px] whitespace-nowrap'><p class='leading-[33.6px]'>Our Story</p></div>"
-                as="div"
-                className=""
-              />
-            </div>
-            <div className="absolute content-stretch flex flex-col items-start left-[600px] opacity-80 pr-[9.55px] right-[-3.55px] top-0" data-name="p.framer-text">
-              <EditableText
-                contentKey="about.story.description"
-                defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[24px] not-italic relative shrink-0 text-[#ddd] text-[14.4px] tracking-[-0.32px] whitespace-nowrap'><p class='mb-0'>Flixen™ began with a simple yet powerful vision — to transform creative ideas into </p><p class='mb-0'>cinematic stories that inspire and connect people everywhere. From our humble </p><p class='mb-0'>beginnings as a small, passionate production team, we've grown into a full-scale creative </p><p class='mb-0'>agency trusted by global brands. Today, we continue crafting visuals that spark emotion, </p><p>build connection, and elevate every story we tell.</p></div>"
-                as="div"
-                className=""
-                multiline
-              />
-            </div>
-          </div>
-
-          <div className="bg-[#b0b0b0] h-px opacity-30 shrink-0 w-full" data-name="Line" />
-
-          {/* Our Mission */}
-          <div className="h-[120px] overflow-clip relative shrink-0 w-full" data-name="About us text → Desktop">
-            <div className="absolute content-stretch flex flex-col items-start left-0 pr-[161.77px] right-[999.23px] top-0" data-name="Description">
-              <EditableText
-                contentKey="about.mission.number"
-                defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#ddd] text-[14.3px] tracking-[-0.32px] whitespace-nowrap'><p class='leading-[24px]'>002.</p></div>"
-                as="div"
-                className=""
-              />
-            </div>
-            <div className="absolute content-stretch flex flex-col items-start left-[200px] pb-[0.59px] pr-[226.61px] right-[600.39px] top-[-1px]" data-name="h5.framer-text">
-              <EditableText
-                contentKey="about.mission.title"
-                defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[30.1px] text-white tracking-[-0.64px] whitespace-nowrap'><p class='leading-[33.6px]'>Our Mission</p></div>"
-                as="div"
-                className=""
-              />
-            </div>
-            <div className="absolute content-stretch flex flex-col items-start left-[600px] opacity-80 pr-[3.42px] right-[-3.42px] top-0" data-name="p.framer-text">
-              <EditableText
-                contentKey="about.mission.description"
-                defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[24px] not-italic relative shrink-0 text-[#ddd] text-[14.4px] tracking-[-0.32px] whitespace-nowrap'><p class='mb-0'>Our mission is to deliver powerful, emotion-driven videos that deeply engage audiences, </p><p class='mb-0'>strengthen brands, and create lasting impressions. We believe every story deserves to be </p><p class='mb-0'>told with passion, precision, and creativity — transforming ideas into visuals that inspire, </p><p class='mb-0'>connect, and endure. At Flixen™, we turn every client's vision into an unforgettable </p><p>cinematic experience that truly stands out.</p></div>"
-                as="div"
-                className=""
-                multiline
-              />
-            </div>
-          </div>
-
-          <div className="bg-[#b0b0b0] h-px opacity-30 shrink-0 w-full" data-name="Line" />
+        {/* Wrapper - Story rows (EDITABLE with CRUD) */}
+        <div className="content-stretch flex flex-col gap-[0px] items-center justify-center relative shrink-0 w-full" data-name="Wrapper">
+          <EditableStorySection />
         </div>
 
         {/* Grid 2x - Images */}
