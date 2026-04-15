@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router';
 import { useCMSStore } from './cmsStore';
-import { contentAPI } from './contentApi';
 
 interface EditableLinkProps {
   contentKey: string;
@@ -22,7 +21,7 @@ export function EditableLink({
   external = false,
   dataName,
 }: EditableLinkProps) {
-  const { isEditMode, getContent, updateContent } = useCMSStore();
+  const { isEditMode, getContent, updateContent, persistContent } = useCMSStore();
   const [currentHref, setCurrentHref] = useState(defaultValue);
   const [showEditor, setShowEditor] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -54,11 +53,7 @@ export function EditableLink({
     try {
       setSaveStatus('saving');
       updateContent(contentKey, currentHref);
-      await contentAPI.saveContent({
-        [contentKey]: currentHref,
-      });
-      setSaveStatus('saved');
-      setTimeout(() => setSaveStatus('idle'), 2000);
+      await persistContent();
       setShowEditor(false);
     } catch (error) {
       console.error('Failed to save link:', error);

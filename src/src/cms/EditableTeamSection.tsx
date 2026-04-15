@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { useDrag, useDrop } from 'react-dnd';
 import { useCMSStore } from './cmsStore';
-import { contentAPI } from './contentApi';
 import { EditableGridItem } from './EditableGridItem';
 import { EditableGridContainer } from './EditableGridContainer';
 import { EditableText } from './EditableText';
@@ -47,7 +47,7 @@ function TeamMemberModal({ member, isOpen, onClose, onSave }: TeamMemberModalPro
     onClose();
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[9999] flex items-center justify-center">
       {/* Backdrop */}
       <div
@@ -182,7 +182,8 @@ function TeamMemberModal({ member, isOpen, onClose, onSave }: TeamMemberModalPro
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -360,7 +361,7 @@ interface EditableTeamSectionProps {
 }
 
 export function EditableTeamSection({ defaultMembers = [] }: EditableTeamSectionProps) {
-  const { isEditMode, getContent, updateContent, setSaveStatus } = useCMSStore();
+  const { isEditMode, getContent, updateContent, setSaveStatus, persistContent } = useCMSStore();
   const [modalMember, setModalMember] = useState<TeamMember | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -391,9 +392,7 @@ export function EditableTeamSection({ defaultMembers = [] }: EditableTeamSection
       setSaveStatus('saving');
       const serialized = JSON.stringify(updatedMembers);
       updateContent('team.members', serialized);
-      await contentAPI.saveContent({ 'team.members': serialized });
-      setSaveStatus('saved');
-      setTimeout(() => setSaveStatus('idle'), 2000);
+      await persistContent();
     } catch (error) {
       console.error('Failed to save team members:', error);
       setSaveStatus('error');
@@ -442,10 +441,7 @@ export function EditableTeamSection({ defaultMembers = [] }: EditableTeamSection
         setSaveStatus('saving');
         // Clear from store
         updateContent('team.members', '');
-        // Clear from API/localStorage
-        await contentAPI.saveContent({ 'team.members': '' });
-        setSaveStatus('saved');
-        setTimeout(() => setSaveStatus('idle'), 2000);
+        await persistContent();
         // Force page reload to show defaults
         window.location.reload();
       } catch (error) {

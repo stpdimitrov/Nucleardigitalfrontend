@@ -1,12 +1,13 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useCMSStore } from './cmsStore';
-import { contentAPI } from './contentApi';
 import { motion } from 'motion/react';
 import { Link } from 'react-router';
 import { EditableGridItem } from './EditableGridItem';
 import { ImageUploadField } from './ImageUploadField';
+import { adminCreateProject, adminUpdateProject, adminDeleteProject } from '../../services/api';
 
 export interface Project {
   id: string;
@@ -58,7 +59,7 @@ function ProjectModal({ project, isOpen, onClose, onSave }: ProjectModalProps) {
     onClose();
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[9999] flex items-center justify-center">
       {/* Backdrop */}
       <div
@@ -213,7 +214,8 @@ function ProjectModal({ project, isOpen, onClose, onSave }: ProjectModalProps) {
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -352,7 +354,8 @@ interface EditableProjectsSectionProps {
 }
 
 export function EditableProjectsSection({ defaultProjects = [] }: EditableProjectsSectionProps) {
-  const { isEditMode, content, updateContent, setSaveStatus, persistContent } = useCMSStore();
+  const { isEditMode, content, updateContent, setSaveStatus, adminToken } = useCMSStore();
+  const [projects, setProjects] = useState<Project[]>([]);
   const [modalProject, setModalProject] = useState<Project | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showGridSettings, setShowGridSettings] = useState(false);
@@ -360,37 +363,75 @@ export function EditableProjectsSection({ defaultProjects = [] }: EditableProjec
   // Get grid columns from store or use default - read directly from content object for reactivity
   const gridColumns = parseInt(content['home.projectsGrid.columns'] || '3') || 3;
 
-  // Get projects from store or use defaults
-  const storedProjectsStr = content['home.projects'] || '';
-  
-  const projects = useMemo(() => {
-    // Parse stored projects safely
-    if (storedProjectsStr && storedProjectsStr.trim() !== '') {
-      try {
-        const parsed = JSON.parse(storedProjectsStr);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          console.log('Loaded projects from CMS:', parsed);
-          return parsed as Project[];
-        }
-      } catch (error) {
-        console.error('Failed to parse projects:', error);
-      }
+  // Sync from backend data whenever it updates
+  useEffect(() => {
+    if (defaultProjects.length > 0) {
+      setProjects(defaultProjects);
     }
-    
-    // Return default projects if no stored projects or parsing failed
-    console.log('Using default projects:', defaultProjects);
-    return Array.isArray(defaultProjects) ? defaultProjects : [];
-  }, [storedProjectsStr, defaultProjects]);
+  }, [defaultProjects]);
 
-  const saveProjects = async (updatedProjects: Project[]) => {
+  const handleDeleteProject = (id: string) => {
+    if (!adminToken) return;
+    if (window.confirm('Are you sure you want to delete this project?')) {
+      const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+      if (isUUID) {
+        adminDeleteProject(adminToken, id).catch((err) => {
+          console.error('Failed to delete project:', err);
+          setSaveStatus('error');
+        });
+      }
+      setProjects((prev) => prev.filter((p) => p.id !== id));
+    }
+  };
+
+  const handleSaveProject = async (project: Project) => {
+    console.log('[CMS] handleSaveProject called, adminToken:', adminToken ? 'SET' : 'NULL');
+    if (!adminToken) { console.warn('[CMS] Aborted — not logged in as admin'); setSaveStatus('error'); return; }
+    setSaveStatus('saving');
     try {
-      const serialized = JSON.stringify(updatedProjects);
-      updateContent('home.projects', serialized);
-      await persistContent();
-    } catch (error) {
-      console.error('Failed to save projects:', error);
+      const payload = {
+        slug: project.slug,
+        data: {
+          title: project.title,
+          description: project.shortDescription,
+          image: project.thumbnailUrl,
+          videoUrl: project.videoUrl || undefined,
+          date: project.date,
+          service: project.service,
+          client: project.clientName,
+        },
+      };
+
+      const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(project.id);
+
+      if (modalProject && isUUID) {
+        // Update existing backend record
+        await adminUpdateProject(adminToken, project.id, payload);
+        setProjects((prev) => prev.map((p) => (p.id === project.id ? project : p)));
+      } else {
+        // Create new — either a brand-new project or a mock placeholder being persisted for the first time
+        const created = await adminCreateProject(adminToken, payload);
+        setProjects((prev) => [
+          ...prev.filter((p) => p.id !== project.id),
+          { ...project, id: created.id },
+        ]);
+      }
+      setSaveStatus('saved');
+      setTimeout(() => setSaveStatus('idle'), 2000);
+    } catch (err) {
+      console.error('Failed to save project:', err);
       setSaveStatus('error');
     }
+  };
+
+  const moveCard = (dragIndex: number, hoverIndex: number) => {
+    setProjects((prev) => {
+      const updated = [...prev];
+      const [removed] = updated.splice(dragIndex, 1);
+      updated.splice(hoverIndex, 0, removed);
+      return updated;
+    });
+    // Note: reorder is local only — no backend reorder endpoint
   };
 
   const handleAddProject = () => {
@@ -403,48 +444,9 @@ export function EditableProjectsSection({ defaultProjects = [] }: EditableProjec
     setIsModalOpen(true);
   };
 
-  const handleDeleteProject = (id: string) => {
-    if (window.confirm('Are you sure you want to delete this project?')) {
-      const updated = projects.filter((p) => p.id !== id);
-      saveProjects(updated);
-    }
-  };
-
-  const handleSaveProject = (project: Project) => {
-    let updated: Project[];
-    if (modalProject) {
-      // Edit existing
-      updated = projects.map((p) => (p.id === project.id ? project : p));
-    } else {
-      // Add new
-      updated = [...projects, project];
-    }
-    saveProjects(updated);
-  };
-
-  const moveCard = (dragIndex: number, hoverIndex: number) => {
-    const updated = [...projects];
-    const [removed] = updated.splice(dragIndex, 1);
-    updated.splice(hoverIndex, 0, removed);
-    saveProjects(updated);
-  };
-
-  const handleResetToDefaults = async () => {
-    if (window.confirm('Reset projects to defaults? This will delete all custom changes.')) {
-      try {
-        setSaveStatus('saving');
-        // Clear from store
-        updateContent('home.projects', '');
-        // Clear from API/localStorage
-        await contentAPI.saveContent({ 'home.projects': '' });
-        setSaveStatus('saved');
-        setTimeout(() => setSaveStatus('idle'), 2000);
-        // Force page reload to show defaults
-        window.location.reload();
-      } catch (error) {
-        console.error('Failed to reset projects:', error);
-        setSaveStatus('error');
-      }
+  const handleResetToDefaults = () => {
+    if (window.confirm('Reset projects to defaults? This will show backend data.')) {
+      setProjects(defaultProjects);
     }
   };
 
@@ -452,7 +454,7 @@ export function EditableProjectsSection({ defaultProjects = [] }: EditableProjec
     try {
       setSaveStatus('saving');
       updateContent('home.projectsGrid.columns', cols.toString());
-      await contentAPI.saveContent({ 'home.projectsGrid.columns': cols.toString() });
+      // Grid column preference stays in CMS store
       setSaveStatus('saved');
       setTimeout(() => setSaveStatus('idle'), 2000);
       setShowGridSettings(false);
@@ -480,7 +482,7 @@ export function EditableProjectsSection({ defaultProjects = [] }: EditableProjec
         )}
 
         {/* Grid Settings Modal */}
-        {showGridSettings && (
+        {showGridSettings && createPortal(
           <>
             {/* Backdrop */}
             <div
@@ -523,7 +525,8 @@ export function EditableProjectsSection({ defaultProjects = [] }: EditableProjec
                 </div>
               </div>
             </div>
-          </>
+          </>,
+          document.body
         )}
 
         {/* Projects */}

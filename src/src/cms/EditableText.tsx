@@ -1,6 +1,5 @@
 import { useRef, useEffect, useState, KeyboardEvent } from 'react';
 import { useCMSStore } from './cmsStore';
-import { contentAPI } from './contentApi';
 
 interface EditableTextProps {
   contentKey: string;
@@ -22,7 +21,7 @@ export function EditableText({
   multiline = false,
   placeholder = '',
 }: EditableTextProps) {
-  const { isEditMode, getContent, updateContent } = useCMSStore();
+  const { isEditMode, getContent, updateContent, persistContent } = useCMSStore();
   const content = getContent(contentKey, defaultValue);
   const [isEditing, setIsEditing] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -62,13 +61,7 @@ export function EditableText({
       try {
         setSaveStatus('saving');
         updateContent(contentKey, value);
-        await contentAPI.saveContent({ [contentKey]: value });
-        setSaveStatus('saved');
-        
-        // Clear "saved" status after 2s
-        setTimeout(() => {
-          setSaveStatus('idle');
-        }, 2000);
+        await persistContent();
       } catch (error) {
         console.error('Failed to save content:', error);
         setSaveStatus('error');

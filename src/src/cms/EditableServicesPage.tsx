@@ -1,8 +1,9 @@
 import React, { useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion } from 'motion/react';
 import { ArrowRight, Settings, Plus, Trash2 } from 'lucide-react';
 import { useCMSStore } from './cmsStore';
-import { contentAPI } from './contentApi';
+import { adminCreateService, adminUpdateService, adminDeleteService } from '../../services/api';
 import { EditableText } from './EditableText';
 import { EditableLetsConnectSection } from './EditableLetsConnectSection';
 import { EditableHowWeWorkSection } from './EditableHowWeWorkSection';
@@ -10,6 +11,10 @@ import { useDrag, useDrop } from 'react-dnd';
 import { scrollFadeIn, staggerContainer, staggerItem, viewport } from '../../lib/animations';
 import { useBackendData } from '../../contexts/BackendDataContext';
 import { ImageUploadField } from './ImageUploadField';
+
+function generateSlug(title: string): string {
+  return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
 
 // Service Card Types
 interface ServiceCard {
@@ -57,7 +62,7 @@ const DEFAULT_SERVICES: ServiceCard[] = [
 ];
 
 export function EditableServicesPage({ contentKey = 'servicesPage' }: EditableServicesPageProps) {
-  const { isEditMode, getContent, updateContent, setSaveStatus, persistContent } = useCMSStore();
+  const { isEditMode, getContent, updateContent, setSaveStatus, adminToken } = useCMSStore();
   const { services: backendServices } = useBackendData();
 
   // Map backend services to ServiceCard format as fallback defaults
@@ -81,20 +86,16 @@ export function EditableServicesPage({ contentKey = 'servicesPage' }: EditableSe
   const servicesData = getContent(`${contentKey}.services`, JSON.stringify(backendDefaults));
   const services: ServiceCard[] = JSON.parse(servicesData);
 
-  // Save services
-  const saveServices = async (newServices: ServiceCard[]) => {
-    try {
-      const servicesString = JSON.stringify(newServices);
-      updateContent(`${contentKey}.services`, servicesString);
-      await persistContent();
-    } catch (error) {
-      console.error('Failed to save services:', error);
-      setSaveStatus('error');
-    }
+  // Save services — local state only (ordering/DnD is local, individual ops call backend)
+  const saveServices = (newServices: ServiceCard[]) => {
+    const servicesString = JSON.stringify(newServices);
+    updateContent(`${contentKey}.services`, servicesString);
   };
 
   // Add service
-  const addService = () => {
+  const addService = async () => {
+    if (!adminToken) return;
+    setSaveStatus('saving');
     const newService: ServiceCard = {
       id: `service-${Date.now()}`,
       title: 'New Service',
@@ -104,19 +105,65 @@ export function EditableServicesPage({ contentKey = 'servicesPage' }: EditableSe
       tags: ['Tag 1', 'Tag 2'],
       layout: 'small',
     };
-    saveServices([...services, newService]);
+    try {
+      const created = await adminCreateService(adminToken, {
+        slug: generateSlug(newService.title),
+        data: {
+          title: newService.title,
+          name: newService.title,
+          description: newService.description,
+          image: newService.imageUrl,
+          features: newService.tags,
+          layout: newService.layout,
+          is_active: true,
+        },
+      });
+      const serviceWithId = { ...newService, id: created.id };
+      saveServices([...services, serviceWithId]);
+      setSaveStatus('saved');
+      setTimeout(() => setSaveStatus('idle'), 2000);
+    } catch (error) {
+      console.error('Failed to create service:', error);
+      setSaveStatus('error');
+    }
   };
 
   // Delete service
   const deleteService = (id: string) => {
+    if (!adminToken) return;
+    adminDeleteService(adminToken, id).catch((err) => {
+      console.error('Failed to delete service:', err);
+      setSaveStatus('error');
+    });
     saveServices(services.filter(s => s.id !== id));
   };
 
   // Update service
-  const updateService = (index: number, updatedService: ServiceCard) => {
-    const newServices = [...services];
-    newServices[index] = updatedService;
-    saveServices(newServices);
+  const updateService = async (index: number, updatedService: ServiceCard) => {
+    if (!adminToken) return;
+    setSaveStatus('saving');
+    try {
+      await adminUpdateService(adminToken, updatedService.id, {
+        slug: generateSlug(updatedService.title),
+        data: {
+          title: updatedService.title,
+          name: updatedService.title,
+          description: updatedService.description,
+          image: updatedService.imageUrl,
+          features: updatedService.tags,
+          layout: updatedService.layout,
+          is_active: true,
+        },
+      });
+      const newServices = [...services];
+      newServices[index] = updatedService;
+      saveServices(newServices);
+      setSaveStatus('saved');
+      setTimeout(() => setSaveStatus('idle'), 2000);
+    } catch (error) {
+      console.error('Failed to update service:', error);
+      setSaveStatus('error');
+    }
   };
 
   return (
@@ -330,8 +377,8 @@ function ServiceCardComponent({
         </div>
       </motion.div>
 
-      {/* Settings Modal */}
-      {showSettings && (
+      {/* Settings Modal — portal so fixed positioning isn't broken by ancestor transforms */}
+      {showSettings && createPortal(
         <ServiceSettingsModal
           service={service}
           onClose={() => setShowSettings(false)}
@@ -339,7 +386,8 @@ function ServiceCardComponent({
             updateService(index, updatedService);
             setShowSettings(false);
           }}
-        />
+        />,
+        document.body
       )}
     </>
   );

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion } from 'motion/react';
 import { ArrowRight, Plus, Edit2, Trash2, X } from 'lucide-react';
 import { useCMSStore } from './cmsStore';
@@ -334,12 +335,15 @@ export function EditableFAQSection({ defaultFaqs, coverImageUrl, coverImageAlt, 
       </motion.div>
 
       {/* Modal */}
-      <FAQModal
-        faq={editingFaq}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSave={handleSaveFaq}
-      />
+      {isModalOpen && createPortal(
+        <FAQModal
+          faq={editingFaq}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSave={handleSaveFaq}
+        />,
+        document.body
+      )}
     </>
   );
 }

@@ -102,6 +102,12 @@ interface BackendTestimonial {
   role?: string;
   company?: string;
   imageUrl?: string;
+  data?: {
+    role?: string;
+    company?: string;
+    image_url?: string;
+    [key: string]: unknown;
+  };
 }
 
 interface BackendSiteSetting {
@@ -222,13 +228,14 @@ function mapProject(p: BackendProject): Project {
 }
 
 function mapTestimonial(t: BackendTestimonial): Testimonial {
+  const d = t.data || {};
   return {
     id: t.id,
     name: t.customer_name,
-    role: t.role || '',
-    company: t.company || '',
+    role: d.role || t.role || '',
+    company: d.company || t.company || '',
     quote: t.quote,
-    imageUrl: t.imageUrl,
+    imageUrl: d.image_url || t.imageUrl,
     rating: t.rating,
   };
 }
@@ -393,8 +400,19 @@ export async function adminCreateTestimonial(token: string, payload: {
   quote: string;
   rating: number;
   date_published?: string;
+  data?: { role?: string; company?: string; image_url?: string };
 }): Promise<BackendTestimonial> {
   return fnPost<BackendTestimonial>('api/admin/testimonials', { ...payload, tenant_id: TENANT_ID }, token);
+}
+
+export async function adminUpdateTestimonial(token: string, id: string, payload: {
+  customer_name?: string;
+  quote?: string;
+  rating?: number;
+  date_published?: string;
+  data?: { role?: string; company?: string; image_url?: string };
+}): Promise<BackendTestimonial> {
+  return fnPut<BackendTestimonial>(`api/admin/testimonials/${id}`, { ...payload, tenant_id: TENANT_ID }, token);
 }
 
 export async function adminDeleteTestimonial(token: string, id: string): Promise<void> {
@@ -469,7 +487,7 @@ export const api = {
   submitAppointment, adminLogin,
   adminCreateService, adminUpdateService, adminDeleteService,
   adminCreateProject, adminUpdateProject, adminDeleteProject,
-  adminCreateTestimonial, adminDeleteTestimonial, adminUpdateSiteSetting,
+  adminCreateTestimonial, adminUpdateTestimonial, adminDeleteTestimonial, adminUpdateSiteSetting,
   seedTenantServices,
   getClientLogos, getWhyChooseUsItems, getProcessSteps, getPricingPlans,
   getFAQItems, getMainNavLinks, getCMSNavLinks, getSocialLinks, submitContactForm,

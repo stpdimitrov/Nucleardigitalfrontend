@@ -38,6 +38,7 @@ export function EditModeToggle() {
     setLoginError('');
     try {
       const token = await adminLogin(email, password);
+      console.log('[CMS] Login successful, token stored, length:', token.length);
       setAdminToken(token);
       setShowLoginModal(false);
       setEditMode(true);

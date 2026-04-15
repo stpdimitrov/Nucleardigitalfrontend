@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useCMSStore } from './cmsStore';
 import { X, Upload, Link, ImageIcon } from 'lucide-react';
 import { uploadImage } from '../../services/api';
@@ -33,13 +34,13 @@ export function EditableImage({
   const currentSrc = useCMSStore((s) => s.content[contentKey] ?? defaultSrc);
   const isVideo = currentSrc.match(/\.(mp4|webm|ogg)(\?|$)/i);
 
-  const saveMediaSrc = (newSrc: string) => {
+  const saveMediaSrc = async (newSrc: string) => {
     updateContent(contentKey, newSrc);
-    // Explicitly persist to backend immediately (don't rely solely on debounced sync)
-    persistContent();
     setShowModal(false);
     setUrlValue('');
     setUploadError('');
+    // Persist to backend immediately (don't rely on debounced sync)
+    await persistContent();
   };
 
   const handleUrlSave = () => {
@@ -47,6 +48,7 @@ export function EditableImage({
   };
 
   const handleFile = async (file: File) => {
+    console.log('[CMS] EditableImage.handleFile called, contentKey:', contentKey, 'adminToken:', adminToken ? 'SET' : 'NULL');
     if (!adminToken) {
       setUploadError('Not logged in as admin.');
       return;
@@ -56,8 +58,7 @@ export function EditableImage({
     try {
       setSaveStatus('saving');
       const url = await uploadImage(adminToken, file);
-      saveMediaSrc(url);
-      setSaveStatus('saved');
+      await saveMediaSrc(url);
       setTimeout(() => setSaveStatus('idle'), 2000);
     } catch (err: any) {
       setUploadError(err.message || 'Upload failed. Please try again.');
@@ -129,7 +130,7 @@ export function EditableImage({
           />
         )}
 
-        {/* Edit overlay badge */}
+        {/* Edit overlay badge — shown on hover */}
         {isEditMode && isHovered && !showModal && (
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
             <div className="rounded-lg bg-black/70 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm">
@@ -138,10 +139,22 @@ export function EditableImage({
             </div>
           </div>
         )}
+
+        {/* Always-visible edit button in edit mode — ensures the image is reachable even when covered by content */}
+        {isEditMode && !showModal && (
+          <button
+            onClick={(e) => { e.stopPropagation(); setShowModal(true); }}
+            className="absolute top-3 left-3 z-[100] flex items-center gap-1.5 rounded-lg bg-black/70 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm hover:bg-black/90 transition-colors"
+            title="Change background image"
+          >
+            <ImageIcon className="size-3" />
+            Change Image
+          </button>
+        )}
       </div>
 
-      {/* Modal */}
-      {isEditMode && showModal && (
+      {/* Modal — rendered via portal so CSS transforms on ancestors don't break fixed positioning */}
+      {isEditMode && showModal && createPortal(
         <div
           className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
           onClick={() => setShowModal(false)}
@@ -269,14 +282,19 @@ export function EditableImage({
             </div>
           </div>
 
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*,video/mp4,video/webm,video/ogg"
-            onChange={handleFileChange}
-            className="hidden"
-          />
-        </div>
+        </div>,
+        document.body
+      )}
+
+      {/* File input outside portal — stays mounted to avoid onChange race condition with modal unmount */}
+      {isEditMode && (
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*,video/mp4,video/webm,video/ogg"
+          onChange={handleFileChange}
+          className="hidden"
+        />
       )}
     </>
   );

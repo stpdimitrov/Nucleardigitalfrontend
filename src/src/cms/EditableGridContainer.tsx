@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useCMSStore } from './cmsStore';
-import { contentAPI } from './contentApi';
 import { Settings, X, ChevronDown } from 'lucide-react';
 
 interface GridConfig {
@@ -28,7 +27,7 @@ export function EditableGridContainer({
   children,
   onConfigChange,
 }: EditableGridContainerProps) {
-  const { isEditMode, getContent, updateContent, setSaveStatus } = useCMSStore();
+  const { isEditMode, getContent, updateContent, setSaveStatus, persistContent } = useCMSStore();
   const [isHovered, setIsHovered] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showVariantDropdown, setShowVariantDropdown] = useState(false);
@@ -53,16 +52,11 @@ export function EditableGridContainer({
       setSaveStatus('saving');
       const configString = JSON.stringify(newConfig);
       updateContent(configKey, configString);
-      await contentAPI.saveContent({ [configKey]: configString });
-      setSaveStatus('saved');
+      await persistContent();
 
       if (onConfigChange) {
         onConfigChange(newConfig);
       }
-
-      setTimeout(() => {
-        setSaveStatus('idle');
-      }, 2000);
     } catch (error) {
       console.error('Failed to save grid config:', error);
       setSaveStatus('error');

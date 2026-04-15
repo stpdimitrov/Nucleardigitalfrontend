@@ -1,9 +1,13 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useCMSStore } from './cmsStore';
-import { contentAPI } from './contentApi';
 import { useDrag, useDrop } from 'react-dnd';
 import { X, GripVertical, Pencil, Trash2 } from 'lucide-react';
 import type { Service } from '@/types';
+import { adminCreateService, adminUpdateService, adminDeleteService } from '../../services/api';
+
+function generateSlug(title: string): string {
+  return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
 
 interface DraggableServiceCardProps {
   service: Service;
@@ -345,49 +349,29 @@ interface EditableServicesSectionProps {
 }
 
 export function EditableServicesSection({ defaultServices, serviceImages }: EditableServicesSectionProps) {
-  const { isEditMode, getContent, updateContent, setSaveStatus } = useCMSStore();
+  const { isEditMode, setSaveStatus, adminToken } = useCMSStore();
   const [services, setServices] = useState<Service[]>(defaultServices);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalService, setModalService] = useState<Service | null>(null);
 
-  // Load services from CMS
+  // Seed from defaultServices on first load
   useEffect(() => {
-    const savedServices = getContent('home.services', JSON.stringify(defaultServices));
-    try {
-      setServices(JSON.parse(savedServices));
-    } catch (e) {
-      console.error('Failed to parse services:', e);
+    if (defaultServices.length > 0 && services.length === 0) {
       setServices(defaultServices);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultServices]);
 
-  // Save services to CMS
-  const saveServices = useCallback(async (newServices: Service[]) => {
-    try {
-      setSaveStatus('saving');
-      const servicesString = JSON.stringify(newServices);
-      updateContent('home.services', servicesString);
-      await contentAPI.saveContent({ 'home.services': servicesString });
-      setSaveStatus('saved');
-      setTimeout(() => setSaveStatus('idle'), 2000);
-    } catch (error) {
-      console.error('Failed to save services:', error);
-      setSaveStatus('error');
-    }
-  }, [updateContent, setSaveStatus]);
-
-  // Handle drag and drop
+  // Handle drag and drop — local only, no backend reorder endpoint
   const moveCard = useCallback((dragIndex: number, hoverIndex: number) => {
     setServices((prevServices) => {
       const newServices = [...prevServices];
       const draggedService = newServices[dragIndex];
       newServices.splice(dragIndex, 1);
       newServices.splice(hoverIndex, 0, draggedService);
-      saveServices(newServices);
       return newServices;
     });
-  }, [saveServices]);
+  }, []);
 
   // Handle add service
   const handleAddService = () => {
@@ -403,25 +387,50 @@ export function EditableServicesSection({ defaultServices, serviceImages }: Edit
 
   // Handle delete service
   const handleDeleteService = (serviceId: string) => {
+    if (!adminToken) return;
     if (window.confirm('Are you sure you want to delete this service?')) {
-      const newServices = services.filter((s) => s.id !== serviceId);
-      setServices(newServices);
-      saveServices(newServices);
+      adminDeleteService(adminToken, serviceId).catch((err) => {
+        console.error('Failed to delete service:', err);
+        setSaveStatus('error');
+      });
+      setServices((prev) => prev.filter((s) => s.id !== serviceId));
     }
   };
 
   // Handle save service
-  const handleSaveService = (service: Service) => {
-    let newServices: Service[];
-    if (modalService) {
-      // Update existing service
-      newServices = services.map((s) => (s.id === service.id ? service : s));
-    } else {
-      // Add new service
-      newServices = [...services, service];
+  const handleSaveService = async (service: Service) => {
+    console.log('[CMS] handleSaveService called, adminToken:', adminToken ? 'SET' : 'NULL');
+    if (!adminToken) { console.warn('[CMS] Aborted — not logged in as admin'); setSaveStatus('error'); return; }
+    setSaveStatus('saving');
+    try {
+      const payload = {
+        slug: generateSlug(service.title),
+        data: {
+          title: service.title,
+          name: service.title,
+          description: service.description,
+          image: service.image,
+          videoUrl: service.videoUrl,
+          features: service.features,
+          is_active: true,
+        },
+      };
+
+      if (modalService) {
+        // Update existing service
+        await adminUpdateService(adminToken, service.id, payload);
+        setServices((prev) => prev.map((s) => (s.id === service.id ? service : s)));
+      } else {
+        // Add new service
+        const created = await adminCreateService(adminToken, payload);
+        setServices((prev) => [...prev, { ...service, id: created.id }]);
+      }
+      setSaveStatus('saved');
+      setTimeout(() => setSaveStatus('idle'), 2000);
+    } catch (error) {
+      console.error('Failed to save service:', error);
+      setSaveStatus('error');
     }
-    setServices(newServices);
-    saveServices(newServices);
     setIsModalOpen(false);
   };
 
@@ -429,7 +438,6 @@ export function EditableServicesSection({ defaultServices, serviceImages }: Edit
   const handleResetToDefaults = () => {
     if (window.confirm('Are you sure you want to reset all services to defaults? This cannot be undone.')) {
       setServices(defaultServices);
-      saveServices(defaultServices);
     }
   };
 

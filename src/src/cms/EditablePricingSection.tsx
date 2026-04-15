@@ -1,10 +1,10 @@
 import { useState, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { motion } from 'motion/react';
 import { Link } from 'react-router';
 import { ArrowRight } from 'lucide-react';
 import { useDrag, useDrop } from 'react-dnd';
 import { useCMSStore } from './cmsStore';
-import { contentAPI } from './contentApi';
 import { EditableText } from './EditableText';
 import svgPaths from '../../imports/svg-c96gl1ahfs';
 import { scrollFadeIn, viewport } from '../../lib/animations';
@@ -73,7 +73,7 @@ function PricingPlanModal({ plan, isOpen, onClose, onSave }: PricingPlanModalPro
     });
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto">
       {/* Backdrop */}
       <div
@@ -284,7 +284,8 @@ function PricingPlanModal({ plan, isOpen, onClose, onSave }: PricingPlanModalPro
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -472,7 +473,7 @@ interface EditablePricingSectionProps {
 }
 
 export function EditablePricingSection({ defaultPlans = [] }: EditablePricingSectionProps) {
-  const { isEditMode, getContent, updateContent, setSaveStatus } = useCMSStore();
+  const { isEditMode, getContent, updateContent, setSaveStatus, persistContent } = useCMSStore();
   const [modalPlan, setModalPlan] = useState<PricingPlan | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -501,9 +502,7 @@ export function EditablePricingSection({ defaultPlans = [] }: EditablePricingSec
       setSaveStatus('saving');
       const serialized = JSON.stringify(updatedPlans);
       updateContent('pricing.plans', serialized);
-      await contentAPI.saveContent({ 'pricing.plans': serialized });
-      setSaveStatus('saved');
-      setTimeout(() => setSaveStatus('idle'), 2000);
+      await persistContent();
     } catch (error) {
       console.error('Failed to save pricing plans:', error);
       setSaveStatus('error');
@@ -551,9 +550,7 @@ export function EditablePricingSection({ defaultPlans = [] }: EditablePricingSec
       try {
         setSaveStatus('saving');
         updateContent('pricing.plans', '');
-        await contentAPI.saveContent({ 'pricing.plans': '' });
-        setSaveStatus('saved');
-        setTimeout(() => setSaveStatus('idle'), 2000);
+        await persistContent();
         window.location.reload();
       } catch (error) {
         console.error('Failed to reset pricing plans:', error);

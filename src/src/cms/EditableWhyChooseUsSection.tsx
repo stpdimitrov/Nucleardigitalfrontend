@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion } from 'motion/react';
 import { useCMSStore } from './cmsStore';
-import { contentAPI } from './contentApi';
 import { scrollFadeIn, staggerContainer, staggerItem, viewport } from '../../lib/animations';
 import { EditableText } from './EditableText';
 import { Settings, Plus, Trash2, GripVertical } from 'lucide-react';
@@ -73,7 +73,7 @@ export function EditableWhyChooseUsSection({
   defaultButtonHref = '/contact-us',
   defaultCards = DEFAULT_CARDS,
 }: EditableWhyChooseUsSectionProps) {
-  const { isEditMode, getContent, updateContent, setSaveStatus } = useCMSStore();
+  const { isEditMode, getContent, updateContent, setSaveStatus, persistContent } = useCMSStore();
 
   // Get cards from CMS
   const cardsData = getContent(`${contentKey}.cards`, JSON.stringify(defaultCards));
@@ -85,9 +85,7 @@ export function EditableWhyChooseUsSection({
       setSaveStatus('saving');
       const cardsString = JSON.stringify(newCards);
       updateContent(`${contentKey}.cards`, cardsString);
-      await contentAPI.saveContent({ [`${contentKey}.cards`]: cardsString });
-      setSaveStatus('saved');
-      setTimeout(() => setSaveStatus('idle'), 2000);
+      await persistContent();
     } catch (error) {
       console.error('Failed to save cards:', error);
       setSaveStatus('error');
@@ -445,7 +443,7 @@ function CardSettingsModal({ card, onClose, onSave }: CardSettingsModalProps) {
   const [editedCard, setEditedCard] = useState({ ...card });
   const [activeTab, setActiveTab] = useState<'type' | 'style' | 'content'>('type');
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={onClose}>
       <div className="w-full max-w-2xl rounded-lg border border-white/10 bg-[#1a1a1a] shadow-2xl max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
@@ -640,6 +638,7 @@ function CardSettingsModal({ card, onClose, onSave }: CardSettingsModalProps) {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

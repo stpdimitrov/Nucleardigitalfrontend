@@ -1,8 +1,10 @@
-import { useState, useMemo, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion } from 'motion/react';
 import { Link } from 'react-router';
 import { ArrowRight, ChevronLeft, ChevronRight, Plus, Edit2, Trash2, X } from 'lucide-react';
 import { useCMSStore } from './cmsStore';
+import { adminCreateTestimonial, adminUpdateTestimonial, adminDeleteTestimonial } from '../../services/api';
 import svgPaths from '../../imports/svg-gfkecmw87r';
 import { scrollFadeIn, viewport } from '../../lib/animations';
 import type { Testimonial } from '@/types';
@@ -191,13 +193,9 @@ interface EditableTestimonialsSectionProps {
 }
 
 export function EditableTestimonialsSection({ defaultTestimonials, contentKey = 'home.testimonials' }: EditableTestimonialsSectionProps) {
-  const { isEditMode, getContent, updateContent } = useCMSStore();
+  const { isEditMode, setSaveStatus, adminToken } = useCMSStore();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [testimonials, setTestimonials] = useState<Testimonial[]>(() => {
-    const stored = getContent(contentKey, '');
-    try { return stored ? JSON.parse(stored) : defaultTestimonials; }
-    catch { return defaultTestimonials; }
-  });
+  const [testimonials, setTestimonials] = useState<Testimonial[]>(defaultTestimonials);
   const [editingTestimonial, setEditingTestimonial] = useState<Testimonial | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -249,25 +247,52 @@ export function EditableTestimonialsSection({ defaultTestimonials, contentKey = 
   };
 
   const handleDeleteTestimonial = (id: string) => {
+    if (!adminToken) return;
     if (confirm('Are you sure you want to delete this testimonial?')) {
-      const updated = testimonials.filter((t) => t.id !== id);
-      setTestimonials(updated);
-      updateContent(contentKey, JSON.stringify(updated));
-      if (currentIndex >= updated.length) {
-        setCurrentIndex(Math.max(0, updated.length - 1));
-      }
+      adminDeleteTestimonial(adminToken, id).catch((err) => {
+        console.error('Failed to delete testimonial:', err);
+        setSaveStatus('error');
+      });
+      setTestimonials((prev) => {
+        const updated = prev.filter((t) => t.id !== id);
+        if (currentIndex >= updated.length) {
+          setCurrentIndex(Math.max(0, updated.length - 1));
+        }
+        return updated;
+      });
     }
   };
 
-  const handleSaveTestimonial = (testimonial: Testimonial) => {
-    let updated: Testimonial[];
-    if (editingTestimonial) {
-      updated = testimonials.map((t) => (t.id === testimonial.id ? testimonial : t));
-    } else {
-      updated = [...testimonials, testimonial];
+  const handleSaveTestimonial = async (testimonial: Testimonial) => {
+    console.log('[CMS] handleSaveTestimonial called, adminToken:', adminToken ? 'SET' : 'NULL');
+    if (!adminToken) { console.warn('[CMS] Aborted — not logged in as admin'); setSaveStatus('error'); return; }
+    setSaveStatus('saving');
+    try {
+      const rating = parseInt(String(testimonial.rating)) || 5;
+      const payload = {
+        customer_name: testimonial.name,
+        quote: testimonial.quote,
+        rating,
+        data: {
+          role: testimonial.role,
+          company: testimonial.company,
+          image_url: testimonial.imageUrl,
+        },
+      };
+
+      if (editingTestimonial) {
+        await adminUpdateTestimonial(adminToken, testimonial.id, payload);
+        setTestimonials((prev) => prev.map((t) => (t.id === testimonial.id ? testimonial : t)));
+      } else {
+        const created = await adminCreateTestimonial(adminToken, payload);
+        setTestimonials((prev) => [...prev, { ...testimonial, id: created.id }]);
+      }
+      setSaveStatus('saved');
+      setTimeout(() => setSaveStatus('idle'), 2000);
+    } catch (err) {
+      console.error('Failed to save testimonial:', err);
+      setSaveStatus('error');
     }
-    setTestimonials(updated);
-    updateContent(contentKey, JSON.stringify(updated));
   };
 
   const currentTestimonial = testimonials[currentIndex];
@@ -631,12 +656,15 @@ export function EditableTestimonialsSection({ defaultTestimonials, contentKey = 
       </motion.section>
 
       {/* Modal */}
-      <TestimonialModal
-        testimonial={editingTestimonial}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSave={handleSaveTestimonial}
-      />
+      {isModalOpen && createPortal(
+        <TestimonialModal
+          testimonial={editingTestimonial}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSave={handleSaveTestimonial}
+        />,
+        document.body
+      )}
     </>
   );
 }

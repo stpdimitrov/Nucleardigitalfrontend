@@ -1,9 +1,10 @@
 import React, { useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion } from 'motion/react';
 import { Link } from 'react-router';
 import { ArrowRight, Settings, Plus, Trash2, Image as ImageIcon, Palette, Layout, Type, Upload, Search, X } from 'lucide-react';
 import { useCMSStore } from './cmsStore';
-import { contentAPI } from './contentApi';
+import { uploadImage } from '../../services/api';
 import { EditableText } from './EditableText';
 import { useDrag, useDrop } from 'react-dnd';
 import { scrollFadeIn, viewport } from '../../lib/animations';
@@ -112,7 +113,7 @@ const DEFAULT_SECTION_SETTINGS: SectionSettings = {
 };
 
 export function EditableHowWeWorkSection({ contentKey = 'howWeWorkSection' }: EditableHowWeWorkSectionProps) {
-  const { isEditMode, getContent, updateContent, setSaveStatus } = useCMSStore();
+  const { isEditMode, getContent, updateContent, setSaveStatus, persistContent } = useCMSStore();
   const [activeTab, setActiveTab] = useState(0);
   const [showSectionSettings, setShowSectionSettings] = useState(false);
 
@@ -129,12 +130,9 @@ export function EditableHowWeWorkSection({ contentKey = 'howWeWorkSection' }: Ed
   // Save steps
   const saveSteps = async (newSteps: ProcessStep[]) => {
     try {
-      setSaveStatus('saving');
       const stepsString = JSON.stringify(newSteps);
       updateContent(`${contentKey}.steps`, stepsString);
-      await contentAPI.saveContent({ [`${contentKey}.steps`]: stepsString });
-      setSaveStatus('saved');
-      setTimeout(() => setSaveStatus('idle'), 2000);
+      await persistContent();
     } catch (error) {
       console.error('Failed to save steps:', error);
       setSaveStatus('error');
@@ -144,12 +142,9 @@ export function EditableHowWeWorkSection({ contentKey = 'howWeWorkSection' }: Ed
   // Save section settings
   const saveSectionSettings = async (newSettings: SectionSettings) => {
     try {
-      setSaveStatus('saving');
       const settingsString = JSON.stringify(newSettings);
       updateContent(`${contentKey}.settings`, settingsString);
-      await contentAPI.saveContent({ [`${contentKey}.settings`]: settingsString });
-      setSaveStatus('saved');
-      setTimeout(() => setSaveStatus('idle'), 2000);
+      await persistContent();
     } catch (error) {
       console.error('Failed to save section settings:', error);
       setSaveStatus('error');
@@ -327,7 +322,7 @@ export function EditableHowWeWorkSection({ contentKey = 'howWeWorkSection' }: Ed
         </div>
 
         {/* Section Settings Modal */}
-        {showSectionSettings && (
+        {showSectionSettings && createPortal(
           <SectionSettingsModal
             settings={sectionSettings}
             onClose={() => setShowSectionSettings(false)}
@@ -335,7 +330,8 @@ export function EditableHowWeWorkSection({ contentKey = 'howWeWorkSection' }: Ed
               saveSectionSettings(newSettings);
               setShowSectionSettings(false);
             }}
-          />
+          />,
+          document.body
         )}
       </motion.section>
   );
@@ -468,7 +464,7 @@ function ProcessTabButton({
       </div>
 
       {/* Step Settings Modal */}
-      {showSettings && (
+      {showSettings && createPortal(
         <ProcessStepSettingsModal
           step={step}
           onClose={() => setShowSettings(false)}
@@ -476,7 +472,8 @@ function ProcessTabButton({
             updateStep(index, updatedStep);
             setShowSettings(false);
           }}
-        />
+        />,
+        document.body
       )}
     </>
   );
@@ -492,20 +489,24 @@ interface ProcessStepContentProps {
 }
 
 function ProcessStepContent({ step, stepIndex, contentKey, updateStep, sectionSettings }: ProcessStepContentProps) {
-  const { isEditMode } = useCMSStore();
+  const { isEditMode, adminToken } = useCMSStore();
   const [showImageControls, setShowImageControls] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Quick upload image
-  const handleQuickUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleQuickUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        updateStep(stepIndex, { ...step, coverImage: reader.result as string });
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+    if (!adminToken) {
+      console.warn('[HowWeWork] No adminToken — cannot upload');
+      return;
+    }
+    try {
+      const url = await uploadImage(adminToken, file);
+      updateStep(stepIndex, { ...step, coverImage: url });
+    } catch (err: any) {
+      console.error('Upload failed:', err);
     }
   };
 
@@ -647,7 +648,7 @@ function ProcessStepContent({ step, stepIndex, contentKey, updateStep, sectionSe
       </div>
 
       {/* Image Management Modal */}
-      {showImageModal && (
+      {showImageModal && createPortal(
         <ImageManagementModal
           step={step}
           onClose={() => setShowImageModal(false)}
@@ -655,7 +656,8 @@ function ProcessStepContent({ step, stepIndex, contentKey, updateStep, sectionSe
             updateStep(stepIndex, { ...step, coverImage: updatedImage, imageAlt: updatedAlt });
             setShowImageModal(false);
           }}
-        />
+        />,
+        document.body
       )}
     </div>
   );
@@ -669,12 +671,15 @@ interface ProcessStepSettingsModalProps {
 }
 
 function ProcessStepSettingsModal({ step, onClose, onSave }: ProcessStepSettingsModalProps) {
+  const { adminToken } = useCMSStore();
   const [editedStep, setEditedStep] = useState({ ...step });
   const [activeTab, setActiveTab] = useState<'content' | 'image' | 'button' | 'colors'>('content');
   const [imageSource, setImageSource] = useState<'url' | 'upload' | 'search'>('url');
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Search images using Unsplash
@@ -700,21 +705,29 @@ function ProcessStepSettingsModal({ step, onClose, onSave }: ProcessStepSettings
   };
 
   // Handle file upload
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setEditedStep({ ...editedStep, coverImage: reader.result as string });
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+    if (!adminToken) {
+      setUploadError('Not logged in as admin.');
+      return;
+    }
+    setUploading(true);
+    setUploadError('');
+    try {
+      const url = await uploadImage(adminToken, file);
+      setEditedStep((prev) => ({ ...prev, coverImage: url }));
+    } catch (err: any) {
+      setUploadError(err.message || 'Upload failed. Please try again.');
+    } finally {
+      setUploading(false);
     }
   };
 
   // Delete image
   const handleDeleteImage = () => {
     if (confirm('Are you sure you want to remove this image?')) {
-      setEditedStep({ ...editedStep, coverImage: imgCoverImageConnect });
+      setEditedStep((prev) => ({ ...prev, coverImage: imgCoverImageConnect }));
     }
   };
 
@@ -1120,10 +1133,13 @@ interface ImageManagementModalProps {
 }
 
 function ImageManagementModal({ step, onClose, onSave }: ImageManagementModalProps) {
+  const { adminToken } = useCMSStore();
   const [imageSource, setImageSource] = useState<'url' | 'upload' | 'search'>('url');
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Search images using Unsplash
@@ -1149,14 +1165,23 @@ function ImageManagementModal({ step, onClose, onSave }: ImageManagementModalPro
   };
 
   // Handle file upload
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        onSave(reader.result as string, step.imageAlt);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+    if (!adminToken) {
+      setUploadError('Not logged in as admin.');
+      return;
+    }
+    setUploading(true);
+    setUploadError('');
+    try {
+      const url = await uploadImage(adminToken, file);
+      onSave(url, step.imageAlt);
+      onClose();
+    } catch (err: any) {
+      setUploadError(err.message || 'Upload failed. Please try again.');
+    } finally {
+      setUploading(false);
     }
   };
 

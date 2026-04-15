@@ -98,6 +98,8 @@ export const useCMSStore = create<CMSState>()(
           console.warn('[CMS] persistContent: no adminToken, skipping');
           return;
         }
+        // Cancel any pending debounced sync before we start our own save
+        if (syncTimer) { clearTimeout(syncTimer); syncTimer = null; }
         setSaveStatus('saving');
         try {
           const { adminUpdateSiteSetting } = await import('../../services/api');
@@ -105,8 +107,6 @@ export const useCMSStore = create<CMSState>()(
           console.log('[CMS] persistContent: saving', Object.keys(content).length, 'keys to backend');
           await adminUpdateSiteSetting(adminToken, 'cms_frontend_content', json, json);
           setSaveStatus('saved');
-          // Cancel any pending debounced sync since we just saved
-          if (syncTimer) { clearTimeout(syncTimer); syncTimer = null; }
           setTimeout(() => setSaveStatus('idle'), 2000);
         } catch (err) {
           console.error('[CMS] persistContent failed:', err);

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useCMSStore } from './cmsStore';
-import { contentAPI } from './contentApi';
 import { Settings, X } from 'lucide-react';
 
 interface OverlayConfig {
@@ -26,7 +25,7 @@ export function EditableOverlay({
   className = '',
   children,
 }: EditableOverlayProps) {
-  const { isEditMode, getContent, updateContent, setSaveStatus } = useCMSStore();
+  const { isEditMode, getContent, updateContent, setSaveStatus, persistContent } = useCMSStore();
   const [isHovered, setIsHovered] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -49,12 +48,7 @@ export function EditableOverlay({
       setSaveStatus('saving');
       const configString = JSON.stringify(newConfig);
       updateContent(configKey, configString);
-      await contentAPI.saveContent({ [configKey]: configString });
-      setSaveStatus('saved');
-
-      setTimeout(() => {
-        setSaveStatus('idle');
-      }, 2000);
+      await persistContent();
     } catch (error) {
       console.error('Failed to save overlay config:', error);
       setSaveStatus('error');

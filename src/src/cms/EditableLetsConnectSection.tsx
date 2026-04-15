@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
-import { Upload, ImageIcon, Trash2, Search, X } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { Upload, ImageIcon, Trash2, X, Search } from 'lucide-react';
 import { useCMSStore } from './cmsStore';
-import { contentAPI } from './contentApi';
+import { uploadImage } from '../../services/api';
 import { EditableText } from './EditableText';
 import svgPaths from '../../imports/svg-caky0u7ahw';
 
@@ -10,7 +11,7 @@ interface EditableLetsConnectSectionProps {
 }
 
 export function EditableLetsConnectSection({ contentKey = 'letsConnectSection' }: EditableLetsConnectSectionProps) {
-  const { isEditMode, getContent, updateContent, setSaveStatus } = useCMSStore();
+  const { isEditMode, getContent, updateContent, setSaveStatus, adminToken, persistContent } = useCMSStore();
   const [showImageControls, setShowImageControls] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -26,11 +27,8 @@ export function EditableLetsConnectSection({ contentKey = 'letsConnectSection' }
   // Save background image
   const saveBackgroundImage = async (image: string) => {
     try {
-      setSaveStatus('saving');
       updateContent(`${contentKey}.backgroundImage`, image);
-      await contentAPI.saveContent({ [`${contentKey}.backgroundImage`]: image });
-      setSaveStatus('saved');
-      setTimeout(() => setSaveStatus('idle'), 2000);
+      await persistContent();
     } catch (error) {
       console.error('Failed to save background image:', error);
       setSaveStatus('error');
@@ -40,11 +38,8 @@ export function EditableLetsConnectSection({ contentKey = 'letsConnectSection' }
   // Save background color
   const saveBackgroundColor = async (color: string) => {
     try {
-      setSaveStatus('saving');
       updateContent(`${contentKey}.backgroundColor`, color);
-      await contentAPI.saveContent({ [`${contentKey}.backgroundColor`]: color });
-      setSaveStatus('saved');
-      setTimeout(() => setSaveStatus('idle'), 2000);
+      await persistContent();
     } catch (error) {
       console.error('Failed to save background color:', error);
       setSaveStatus('error');
@@ -52,14 +47,20 @@ export function EditableLetsConnectSection({ contentKey = 'letsConnectSection' }
   };
 
   // Quick upload image
-  const handleQuickUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleQuickUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        saveBackgroundImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+    if (!adminToken) {
+      console.warn('[LetsConnect] No adminToken — cannot upload');
+      return;
+    }
+    try {
+      setSaveStatus('saving');
+      const url = await uploadImage(adminToken, file);
+      await saveBackgroundImage(url);
+    } catch (err: any) {
+      console.error('Upload failed:', err);
+      setSaveStatus('error');
     }
   };
 
@@ -205,14 +206,15 @@ export function EditableLetsConnectSection({ contentKey = 'letsConnectSection' }
       </div>
 
       {/* Background Management Modal */}
-      {showImageModal && (
+      {showImageModal && createPortal(
         <BackgroundImageModal
           currentImage={backgroundImage}
           currentColor={backgroundColor}
           onClose={() => setShowImageModal(false)}
           onSaveImage={saveBackgroundImage}
           onSaveColor={saveBackgroundColor}
-        />
+        />,
+        document.body
       )}
     </section>
   );
@@ -227,19 +229,22 @@ interface BackgroundImageModalProps {
   onSaveColor: (color: string) => void;
 }
 
-function BackgroundImageModal({ 
-  currentImage, 
-  currentColor, 
-  onClose, 
-  onSaveImage, 
-  onSaveColor 
+function BackgroundImageModal({
+  currentImage,
+  currentColor,
+  onClose,
+  onSaveImage,
+  onSaveColor
 }: BackgroundImageModalProps) {
+  const { adminToken } = useCMSStore();
   const [imageSource, setImageSource] = useState<'url' | 'upload' | 'search' | 'color'>('url');
   const [imageUrl, setImageUrl] = useState(currentImage);
   const [backgroundColor, setBackgroundColor] = useState(currentColor);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Search images using Unsplash
@@ -266,15 +271,23 @@ function BackgroundImageModal({
   };
 
   // Handle file upload
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        onSaveImage(reader.result as string);
-        onClose();
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+    if (!adminToken) {
+      setUploadError('Not logged in as admin.');
+      return;
+    }
+    setUploading(true);
+    setUploadError('');
+    try {
+      const url = await uploadImage(adminToken, file);
+      onSaveImage(url);
+      onClose();
+    } catch (err: any) {
+      setUploadError(err.message || 'Upload failed. Please try again.');
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -360,10 +373,13 @@ function BackgroundImageModal({
                   type="file"
                   ref={fileInputRef}
                   onChange={handleFileUpload}
-                  className="w-full bg-white/5 text-white rounded px-3 py-2 border border-white/20 text-sm focus:outline-none focus:border-[#0099FF] file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-medium file:bg-[#0099FF] file:text-white hover:file:bg-[#0088EE] file:cursor-pointer"
+                  className="w-full bg-white/5 text-white rounded px-3 py-2 border border-white/20 text-sm focus:outline-none focus:border-[#0099FF] file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-medium file:bg-[#0099FF] file:text-white hover:file:bg-[#0088EE] file:cursor-pointer disabled:opacity-50"
                   accept="image/*"
+                  disabled={uploading}
                 />
-                <p className="mt-2 text-xs text-gray-400">Recommended: 1920x1080px or larger for best quality</p>
+                {uploading && <p className="mt-2 text-xs text-blue-400">Uploading...</p>}
+                {uploadError && <p className="mt-2 text-xs text-red-400">{uploadError}</p>}
+                {!uploading && !uploadError && <p className="mt-2 text-xs text-gray-400">Recommended: 1920x1080px or larger for best quality</p>}
               </div>
             </div>
           )}
