@@ -385,10 +385,13 @@ export function EditableServicesSection({ defaultServices, serviceImages }: Edit
   const handleDeleteService = (serviceId: string) => {
     if (!adminToken) return;
     if (window.confirm('Are you sure you want to delete this service?')) {
-      adminDeleteService(adminToken, serviceId).catch((err) => {
-        console.error('Failed to delete service:', err);
-        setSaveStatus('error');
-      });
+      const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(serviceId);
+      if (isUUID) {
+        adminDeleteService(adminToken, serviceId).catch((err) => {
+          console.error('Failed to delete service:', err);
+          setSaveStatus('error');
+        });
+      }
       setServices((prev) => prev.filter((s) => s.id !== serviceId));
     }
   };
@@ -412,14 +415,19 @@ export function EditableServicesSection({ defaultServices, serviceImages }: Edit
         },
       };
 
-      if (modalService) {
-        // Update existing service
+      const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(service.id);
+
+      if (modalService && isUUID) {
+        // Update existing backend record
         await adminUpdateService(adminToken, service.id, payload);
         setServices((prev) => prev.map((s) => (s.id === service.id ? service : s)));
       } else {
-        // Add new service
+        // Create new — either a brand-new service or a mock placeholder being persisted for the first time
         const created = await adminCreateService(adminToken, payload);
-        setServices((prev) => [...prev, { ...service, id: created.id }]);
+        setServices((prev) => [
+          ...prev.filter((s) => s.id !== service.id),
+          { ...service, id: created.id },
+        ]);
       }
       setSaveStatus('saved');
       setTimeout(() => setSaveStatus('idle'), 2000);
