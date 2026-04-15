@@ -18,6 +18,14 @@ import { BlogsPage } from './pages/BlogsPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { ProjectDetailPage } from './pages/ProjectDetailPage';
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
 function AnimatedRoutes() {
   const location = useLocation();
 
@@ -61,8 +69,9 @@ export default function App() {
           <div className="bg-black text-[12px]" style={{"fontFamily":"sans-serif"}}>
             <div>
               <div className="items-center flex flex-col h-min justify-start overflow-clip relative bg-black gap-[0px] min-h-[640px]">
+                <ScrollToTop />
                 <NavbarAnimated />
-                
+
                 <AnimatedRoutes />
 
                 <Footer />
