@@ -21,7 +21,7 @@ export function Footer() {
                 className="size-full object-cover overflow-clip"
               />
             </div>
-            <div aria-label="Grid 4x" className="self-start grid h-min justify-center justify-self-start relative w-full grid-rows-[repeat(1,min-content)] gap-[8px]" style={{"gridTemplateColumns":"repeat(4, minmax(50px, 1fr))","gridArea":"auto / span 2"}}>
+            <div aria-label="Grid 3x" className="self-start grid h-min justify-center justify-self-start relative w-full grid-rows-[repeat(1,min-content)] gap-[8px]" style={{"gridTemplateColumns":"repeat(3, minmax(50px, 1fr))","gridArea":"auto / span 2"}}>
               {/* Main Pages */}
               <div aria-label="Footer links wrapper" className="items-start self-start flex flex-col h-min justify-start justify-self-start overflow-clip relative w-full gap-[20px]">
                 <div className="flex flex-col justify-start relative whitespace-pre-wrap w-full shrink-[0]">
@@ -95,7 +95,7 @@ export function Footer() {
               </div>
 
               {/* Social Links */}
-              <div aria-label="Social links wrapper" className="items-start self-start flex flex-col h-min justify-start justify-self-start overflow-clip relative w-full gap-[20px]" style={{"gridArea":"auto / span 2"}}>
+              <div aria-label="Social links wrapper" className="items-start self-start flex flex-col h-min justify-start justify-self-start overflow-clip relative w-full gap-[20px]">
                 <div className="flex flex-col justify-start relative whitespace-pre-wrap w-full shrink-[0]">
                   <EditableText
                     contentKey="footer.heading.social"
