@@ -6,6 +6,7 @@ import { scrollFadeIn, staggerContainer, staggerItem, viewport } from '../../lib
 import { EditableText } from './EditableText';
 import { Settings, Plus, Trash2, GripVertical } from 'lucide-react';
 import { useDrag, useDrop } from 'react-dnd';
+import { ImageUploadField } from './ImageUploadField';
 
 // Card Types
 type CardType = 'logo' | 'text' | 'image-text' | 'profile';
@@ -561,16 +562,11 @@ function CardSettingsModal({ card, onClose, onSave }: CardSettingsModalProps) {
 
               {(editedCard.type === 'logo' || editedCard.type === 'image-text') && (
                 <>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-400 mb-2">Background Image URL</label>
-                    <input
-                      type="text"
-                      value={editedCard.backgroundImage || ''}
-                      onChange={(e) => setEditedCard({ ...editedCard, backgroundImage: e.target.value })}
-                      className="w-full bg-white/5 text-white rounded px-3 py-2 border border-white/20 text-sm focus:outline-none focus:border-[#0099FF]"
-                      placeholder="https://..."
-                    />
-                  </div>
+                  <ImageUploadField
+                    label="Background Image"
+                    value={editedCard.backgroundImage || ''}
+                    onChange={(url) => setEditedCard({ ...editedCard, backgroundImage: url })}
+                  />
                   <div>
                     <label className="block text-sm font-medium text-gray-400 mb-2">Image Alt Text</label>
                     <input
@@ -585,16 +581,11 @@ function CardSettingsModal({ card, onClose, onSave }: CardSettingsModalProps) {
               )}
 
               {editedCard.type === 'profile' && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-2">Profile Image URL</label>
-                  <input
-                    type="text"
-                    value={editedCard.profileImage || ''}
-                    onChange={(e) => setEditedCard({ ...editedCard, profileImage: e.target.value })}
-                    className="w-full bg-white/5 text-white rounded px-3 py-2 border border-white/20 text-sm focus:outline-none focus:border-[#0099FF]"
-                    placeholder="https://..."
-                  />
-                </div>
+                <ImageUploadField
+                  label="Profile Image"
+                  value={editedCard.profileImage || ''}
+                  onChange={(url) => setEditedCard({ ...editedCard, profileImage: url })}
+                />
               )}
             </div>
           )}
