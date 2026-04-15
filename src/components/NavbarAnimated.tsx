@@ -43,10 +43,8 @@ export function NavbarAnimated() {
                 className="items-center flex size-min justify-center relative text-[rgb(0,_0,_238)] gap-[4px]"
                 style={{"textDecoration":"rgb(0, 0, 238)"}}
               >
-                <div aria-label="Icon" className="relative w-[30px] h-[30px] shrink-[0]">
-                  <div className="absolute left-0 top-0 right-0 bottom-0">
-                    <img src={logoUrl} className="block size-full object-cover overflow-clip aspect-[auto_42_/_42]" alt="Logo" />
-                  </div>
+                <div aria-label="Icon" className="relative h-[30px] w-auto shrink-[0]">
+                  <img src={logoUrl} className="h-full w-auto object-contain" alt="Logo" />
                 </div>
                 <div className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
                   <EditableText

@@ -151,15 +151,13 @@ export function Footer() {
           {/* Bottom Section */}
           <div aria-label="Wrapper" className="items-center flex flex-col h-min justify-center relative w-full gap-[32px] shrink-[0]">
             <div aria-label="Logo" className="items-center flex h-min justify-center relative w-full gap-[8px] shrink-[0]">
-              <div aria-label="Icon" className="aspect-square relative w-[200px] shrink-[0]">
-                <div className="absolute left-0 top-0 right-0 bottom-0">
-                  <EditableImage
-                    contentKey="site.logoUrl"
-                    defaultSrc={siteSettings.logoUrl}
-                    alt="Logo"
-                    className="block size-full object-cover overflow-clip aspect-[auto_42_/_42]"
-                  />
-                </div>
+              <div aria-label="Icon" className="relative h-[48px] w-auto shrink-[0]">
+                <EditableImage
+                  contentKey="site.logoUrl"
+                  defaultSrc={siteSettings.logoUrl}
+                  alt="Logo"
+                  className="h-full w-auto object-contain"
+                />
               </div>
               <div className="flex flex-col grow justify-start overflow-hidden relative whitespace-pre w-px basis-0 shrink-[0]">
                 <img src="https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2Fe90c0b6198c4a04d7cdff16579b4a2e6ffcc4b31.svg?generation=1768843023516998&amp;alt=media" className="flex size-full" alt="" />
