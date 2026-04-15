@@ -310,11 +310,11 @@ function DraggableProjectCard({
       >
         <div aria-label="BG blur" className="absolute w-full h-[175px] left-[0%] bottom-0 backdrop-blur-[10px] z-[2] shrink-[0]"></div>
         <div aria-label="Video" className="size-full pointer-events-none absolute left-[0%] top-[0%] z-[1] shrink-[0]">
-          {project.videoUrl ? (
-            <video src={project.videoUrl} className="size-full object-cover overflow-clip pointer-events-none"></video>
+          {project.videoUrl && /\.(mp4|webm|ogg)(\?|$)/i.test(project.videoUrl) ? (
+            <video src={project.videoUrl} className="size-full object-cover overflow-clip pointer-events-none" autoPlay muted loop playsInline></video>
           ) : (
-            <img 
-              src={project.thumbnailUrl} 
+            <img
+              src={project.thumbnailUrl || project.videoUrl}
               alt={project.title}
               className="size-full object-cover overflow-clip pointer-events-none"
             />
