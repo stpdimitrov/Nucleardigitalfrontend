@@ -2,6 +2,7 @@
 // Contains site footer with logo, navigation links, copyright
 
 import { Link } from 'react-router';
+import { ArrowRight } from 'lucide-react';
 import { useCMSStore, EditableText, EditableImage } from '../src/cms';
 import { siteSettings, mainNavLinks, cmsNavLinks, socialLinks } from '../services/mock-data';
 
@@ -106,28 +107,25 @@ export function Footer() {
                   />
                 </div>
                 <div aria-label="Wrapper" className="items-start flex flex-col h-min justify-start relative w-full gap-[12px] shrink-[0] opacity-[0.9]">
-                  {socialLinks.map((social, index) => {
+                  {socialLinks.map((social) => {
                     const label = getContent(`footer.social.${social.id}`, social.label);
                     const url = getContent(`footer.socialUrl.${social.id}`, social.url);
                     return (
-                      <div key={social.id}>
-                        <div aria-label="Social link" className="relative w-full shrink-[0]">
-                          <a href={url} aria-label="Social link" className="items-center flex h-min justify-between relative w-full text-[rgb(0,_0,_238)]" style={{"textDecoration":"rgb(0, 0, 238)"}}>
-                            <div className="flex flex-col justify-start relative whitespace-pre shrink-[0] opacity-[0.6]">
-                              <EditableText
-                                contentKey={`footer.social.${social.id}`}
-                                defaultValue={social.label}
-                                as="p"
-                                className="font-medium text-white text-[16px] tracking-[-0.32px] leading-[24px]"
-                                style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}
-                              />
-                            </div>
-                            <div aria-label="Icon Wrapper" className="items-center flex size-min justify-center overflow-hidden relative gap-[8px] shrink-[0] opacity-[0.6]">
-                              <div aria-label="Icon" className="aspect-square absolute w-5 left-[-20px] top-[50%] bg-white translate-y-[-50%] z-[1] shrink-[0]"></div>
-                              <div aria-label="Icon" className="aspect-square relative w-5 bg-white shrink-[0]"></div>
-                            </div>
-                          </a>
-                        </div>
+                      <div key={social.id} className="w-full">
+                        <a
+                          href={url}
+                          aria-label="Social link"
+                          className="flex items-center justify-between w-full py-[12px] group"
+                        >
+                          <EditableText
+                            contentKey={`footer.social.${social.id}`}
+                            defaultValue={social.label}
+                            as="p"
+                            className="font-medium text-white/60 text-[16px] tracking-[-0.32px] leading-[24px] group-hover:text-white transition-colors"
+                            style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}
+                          />
+                          <ArrowRight className="size-4 text-white/60 group-hover:text-white transition-colors shrink-0" />
+                        </a>
                         {isEditMode && (
                           <input
                             key={`url-${social.id}`}
@@ -137,17 +135,14 @@ export function Footer() {
                               updateContent(`footer.socialUrl.${social.id}`, e.target.value);
                               persistContent();
                             }}
-                            className="mt-1 w-full rounded bg-white/10 px-2 py-1 text-xs text-white/60 outline-none focus:bg-white/15 focus:text-white border border-white/10 placeholder:text-white/30"
+                            className="mb-1 w-full rounded bg-white/10 px-2 py-1 text-xs text-white/60 outline-none focus:bg-white/15 focus:text-white border border-white/10 placeholder:text-white/30"
                             placeholder="Social URL..."
                           />
                         )}
-                        {index < socialLinks.length - 1 && (
-                          <div className="h-px overflow-clip relative w-full bg-[rgb(68,_68,_68)] shrink-[0] mt-[12px]"></div>
-                        )}
+                        <div className="h-px w-full bg-[rgb(68,_68,_68)]" />
                       </div>
                     );
                   })}
-                  <div aria-label="Line" className="h-px overflow-clip relative w-full bg-[rgb(68,_68,_68)] shrink-[0]"></div>
                 </div>
               </div>
             </div>
