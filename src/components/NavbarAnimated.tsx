@@ -22,8 +22,9 @@ const navMenuLinks = [
 
 export function NavbarAnimated() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isEditMode, getContent } = useCMSStore();
+  const { isEditMode, getContent, updateContent, persistContent } = useCMSStore();
   const logoUrl = getContent('site.logoUrl', siteSettings.logoUrl);
+  const logoHeight = parseInt(getContent('site.logoHeightNavbar', '30'), 10);
 
   return (
     <>
@@ -36,14 +37,14 @@ export function NavbarAnimated() {
       >
         <nav aria-label="Navbar" className="items-center flex h-min justify-center overflow-clip relative w-full backdrop-blur-[20px] gap-[8px] pt-5 pr-0 pb-5 pl-0 translate-y-[-20px]">
           <div aria-label="Container" className="items-center flex grow h-min justify-between overflow-clip relative w-px basis-0 max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
-            <div aria-label="Logo" className="relative shrink-[0]">
+            <div aria-label="Logo" className="relative shrink-[0] flex items-center gap-2">
               <Link
                 to="/"
                 aria-label="Logo"
                 className="items-center flex size-min justify-center relative text-[rgb(0,_0,_238)] gap-[4px]"
                 style={{"textDecoration":"rgb(0, 0, 238)"}}
               >
-                <div aria-label="Icon" className="relative h-[30px] w-auto shrink-[0]">
+                <div aria-label="Icon" className="relative w-auto shrink-[0]" style={{ height: logoHeight }}>
                   <img src={logoUrl} className="h-full w-auto object-contain" alt="Logo" />
                 </div>
                 <div className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
@@ -56,6 +57,22 @@ export function NavbarAnimated() {
                   />
                 </div>
               </Link>
+              {isEditMode && (
+                <div className="flex items-center gap-1.5 rounded-lg bg-black/70 border border-white/10 px-2 py-1 backdrop-blur-sm">
+                  <span className="text-[10px] text-white/40 uppercase tracking-wide">Size</span>
+                  <input
+                    type="range"
+                    min={16}
+                    max={60}
+                    value={logoHeight}
+                    onChange={(e) => updateContent('site.logoHeightNavbar', e.target.value)}
+                    onMouseUp={() => persistContent()}
+                    onTouchEnd={() => persistContent()}
+                    className="w-16 accent-[#0099FF]"
+                  />
+                  <span className="text-[10px] text-white w-6 text-right">{logoHeight}</span>
+                </div>
+              )}
             </div>
             <div aria-label="Menu button" className="relative shrink-[0]">
               <motion.button

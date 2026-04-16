@@ -8,6 +8,7 @@ import { siteSettings, mainNavLinks, cmsNavLinks, socialLinks } from '../service
 
 export function Footer() {
   const { isEditMode, getContent, updateContent, persistContent } = useCMSStore();
+  const footerLogoHeight = parseInt(getContent('site.logoHeightFooter', '48'), 10);
 
   return (
     <div className="relative w-full shrink-[0]" style={{"order":"1003"}}>
@@ -151,13 +152,31 @@ export function Footer() {
           {/* Bottom Section */}
           <div aria-label="Wrapper" className="items-center flex flex-col h-min justify-center relative w-full gap-[32px] shrink-[0]">
             <div aria-label="Logo" className="items-center flex h-min justify-center relative w-full gap-[8px] shrink-[0]">
-              <div aria-label="Icon" className="relative h-[48px] w-auto shrink-[0]">
-                <EditableImage
-                  contentKey="site.logoUrl"
-                  defaultSrc={siteSettings.logoUrl}
-                  alt="Logo"
-                  className="h-full w-auto object-contain"
-                />
+              <div className="flex items-center gap-2 shrink-[0]">
+                <div aria-label="Icon" className="relative w-auto shrink-[0]" style={{ height: footerLogoHeight }}>
+                  <EditableImage
+                    contentKey="site.logoUrl"
+                    defaultSrc={siteSettings.logoUrl}
+                    alt="Logo"
+                    className="h-full w-auto object-contain"
+                  />
+                </div>
+                {isEditMode && (
+                  <div className="flex items-center gap-1.5 rounded-lg bg-white/5 border border-white/10 px-2 py-1">
+                    <span className="text-[10px] text-white/40 uppercase tracking-wide">Size</span>
+                    <input
+                      type="range"
+                      min={24}
+                      max={120}
+                      value={footerLogoHeight}
+                      onChange={(e) => updateContent('site.logoHeightFooter', e.target.value)}
+                      onMouseUp={() => persistContent()}
+                      onTouchEnd={() => persistContent()}
+                      className="w-20 accent-[#0099FF]"
+                    />
+                    <span className="text-[10px] text-white w-7 text-right">{footerLogoHeight}px</span>
+                  </div>
+                )}
               </div>
               <div className="flex flex-col grow justify-start overflow-hidden relative whitespace-pre w-px basis-0 shrink-[0]">
                 <img src="https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2Fe90c0b6198c4a04d7cdff16579b4a2e6ffcc4b31.svg?generation=1768843023516998&amp;alt=media" className="flex size-full" alt="" />
