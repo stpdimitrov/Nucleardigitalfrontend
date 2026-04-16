@@ -37,7 +37,7 @@ export function NavbarAnimated() {
       >
         <nav aria-label="Navbar" className="items-center flex h-min justify-center overflow-clip relative w-full backdrop-blur-[20px] gap-[8px] pt-5 pr-0 pb-5 pl-0 translate-y-[-20px]">
           <div aria-label="Container" className="items-center flex grow h-min justify-between overflow-clip relative w-px basis-0 max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
-            <div aria-label="Logo" className="relative shrink-[0] flex items-center gap-2">
+            <div aria-label="Logo" className="relative shrink-[0]">
               <Link
                 to="/"
                 aria-label="Logo"
@@ -58,7 +58,7 @@ export function NavbarAnimated() {
                 </div>
               </Link>
               {isEditMode && (
-                <div className="flex items-center gap-1.5 rounded-lg bg-black/70 border border-white/10 px-2 py-1 backdrop-blur-sm">
+                <div className="absolute top-full left-0 mt-2 z-[9999] flex items-center gap-1.5 rounded-lg bg-black/80 border border-white/10 px-2 py-1 backdrop-blur-sm whitespace-nowrap">
                   <span className="text-[10px] text-white/40 uppercase tracking-wide">Size</span>
                   <input
                     type="range"
