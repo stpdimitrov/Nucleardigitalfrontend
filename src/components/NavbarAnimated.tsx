@@ -44,9 +44,12 @@ export function NavbarAnimated() {
                 className="items-center flex size-min justify-center relative text-[rgb(0,_0,_238)] gap-[4px]"
                 style={{"textDecoration":"rgb(0, 0, 238)"}}
               >
-                <div className="relative shrink-0" style={{ height: logoHeight, width: 'fit-content' }}>
-                  <img src={logoUrl} className="h-full w-auto object-contain" alt="Logo" />
-                </div>
+                <img
+                  src={logoUrl}
+                  alt="Logo"
+                  style={{ maxHeight: logoHeight, height: 'auto', width: 'auto' }}
+                  className="block shrink-0"
+                />
                 <div className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
                   <EditableText
                     contentKey="navbar.siteName"

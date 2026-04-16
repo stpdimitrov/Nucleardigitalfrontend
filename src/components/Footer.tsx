@@ -153,12 +153,13 @@ export function Footer() {
           <div aria-label="Wrapper" className="items-center flex flex-col h-min justify-center relative w-full gap-[32px] shrink-[0]">
             <div aria-label="Logo" className="items-center flex h-min justify-center relative w-full gap-[8px] shrink-[0]">
               <div className="flex items-center gap-2 shrink-[0]">
-                <div className="relative shrink-0" style={{ height: footerLogoHeight, width: 'fit-content' }}>
+                <div className="relative shrink-0">
                   <EditableImage
                     contentKey="site.logoUrl"
                     defaultSrc={siteSettings.logoUrl}
                     alt="Logo"
-                    className="h-full w-auto object-contain"
+                    className="block shrink-0"
+                    style={{ maxHeight: footerLogoHeight, height: 'auto', width: 'auto' }}
                   />
                 </div>
                 {isEditMode && (
