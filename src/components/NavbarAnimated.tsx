@@ -58,7 +58,7 @@ export function NavbarAnimated() {
                 </div>
               </Link>
               {isEditMode && (
-                <div className="absolute top-full left-0 mt-2 z-[9999] flex items-center gap-1.5 rounded-lg bg-black/80 border border-white/10 px-2 py-1 backdrop-blur-sm whitespace-nowrap">
+                <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 z-[9999] flex items-center gap-1.5 rounded-lg bg-black/80 border border-white/10 px-2 py-1 backdrop-blur-sm whitespace-nowrap">
                   <span className="text-[10px] text-white/40 uppercase tracking-wide">Size</span>
                   <input
                     type="range"
