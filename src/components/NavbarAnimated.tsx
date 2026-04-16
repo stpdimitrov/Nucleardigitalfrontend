@@ -37,16 +37,14 @@ export function NavbarAnimated() {
       >
         <nav aria-label="Navbar" className="items-center flex h-min justify-center overflow-clip relative w-full backdrop-blur-[20px] gap-[8px] pt-5 pr-0 pb-5 pl-0 translate-y-[-20px]">
           <div aria-label="Container" className="items-center flex grow h-min justify-between overflow-clip relative w-px basis-0 max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
-            <div aria-label="Logo" className="relative shrink-[0]">
+            <div aria-label="Logo" className="flex items-center shrink-[0]">
               <Link
                 to="/"
                 aria-label="Logo"
                 className="items-center flex size-min justify-center relative text-[rgb(0,_0,_238)] gap-[4px]"
                 style={{"textDecoration":"rgb(0, 0, 238)"}}
               >
-                <div aria-label="Icon" className="relative w-auto shrink-[0]" style={{ height: logoHeight }}>
-                  <img src={logoUrl} className="h-full w-auto object-contain" alt="Logo" />
-                </div>
+                <img src={logoUrl} style={{ height: logoHeight }} className="w-auto object-contain shrink-0" alt="Logo" />
                 <div className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
                   <EditableText
                     contentKey="navbar.siteName"
@@ -58,7 +56,7 @@ export function NavbarAnimated() {
                 </div>
               </Link>
               {isEditMode && (
-                <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 z-[9999] flex items-center gap-1.5 rounded-lg bg-black/80 border border-white/10 px-2 py-1 backdrop-blur-sm whitespace-nowrap">
+                <div className="flex items-center gap-1.5 rounded-lg bg-black/80 border border-white/10 px-2 py-1 backdrop-blur-sm whitespace-nowrap ml-2 shrink-0">
                   <span className="text-[10px] text-white/40 uppercase tracking-wide">Size</span>
                   <input
                     type="range"
