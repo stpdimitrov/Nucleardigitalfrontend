@@ -8,18 +8,24 @@ import { useBackendData } from '../contexts/BackendDataContext';
 export function ProjectsPageNew() {
   const { projects: backendProjects, services } = useBackendData();
 
-  const defaultProjects = backendProjects.map(p => ({
-    id: p.id,
-    title: p.title || p.name || 'Untitled',
-    slug: p.slug,
-    shortDescription: p.description || '',
-    date: p.date,
-    service: p.service || p.category || '',
-    serviceId: p.serviceId,
-    clientName: '',
-    thumbnailUrl: p.image || p.videoUrl || '',
-    videoUrl: p.videoUrl,
-  }));
+  const defaultProjects = backendProjects.map(p => {
+    const resolvedService =
+      services.find(s => s.id === p.serviceId)?.title ||
+      services.find(s => s.title.toLowerCase() === (p.service || p.category || '').toLowerCase())?.title ||
+      '';
+    return {
+      id: p.id,
+      title: p.title || p.name || 'Untitled',
+      slug: p.slug,
+      shortDescription: p.description || '',
+      date: p.date,
+      service: resolvedService,
+      serviceId: p.serviceId,
+      clientName: '',
+      thumbnailUrl: p.image || p.videoUrl || '',
+      videoUrl: p.videoUrl,
+    };
+  });
 
   return (
     <div className="items-center contents h-min justify-start overflow-hidden relative bg-black gap-[0px] min-h-[640px]">
