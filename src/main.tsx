@@ -1,7 +1,30 @@
 
   import { createRoot } from "react-dom/client";
+  import { Component, type ReactNode } from "react";
   import App from "./App.tsx";
   import "./index.css";
 
-  createRoot(document.getElementById("root")!).render(<App />);
-  
+  class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
+    state = { error: null };
+    static getDerivedStateFromError(error: Error) { return { error }; }
+    render() {
+      if (this.state.error) {
+        return (
+          <div style={{ padding: 40, fontFamily: 'monospace', color: '#f66', background: '#111', minHeight: '100vh' }}>
+            <h2 style={{ color: '#f99' }}>App crashed — check this error:</h2>
+            <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{String(this.state.error)}</pre>
+            <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', opacity: 0.6 }}>
+              {(this.state.error as Error).stack}
+            </pre>
+          </div>
+        );
+      }
+      return this.props.children;
+    }
+  }
+
+  createRoot(document.getElementById("root")!).render(
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
+  );
