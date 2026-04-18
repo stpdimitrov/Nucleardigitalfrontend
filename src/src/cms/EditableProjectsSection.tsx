@@ -16,6 +16,7 @@ export interface Project {
   shortDescription: string;
   date: string;
   service: string;
+  serviceId?: string;
   clientName: string;
   thumbnailUrl: string;
   videoUrl?: string;
@@ -26,16 +27,17 @@ interface ProjectModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (project: Project) => void;
+  availableServices: ServiceOption[];
 }
 
-function ProjectModal({ project, isOpen, onClose, onSave }: ProjectModalProps) {
+function ProjectModal({ project, isOpen, onClose, onSave, availableServices }: ProjectModalProps) {
   const emptyProject = (): Project => ({
     id: Date.now().toString(),
     title: '',
     slug: '',
     shortDescription: '',
     date: new Date().toISOString().split('T')[0],
-    service: 'Video Production',
+    service: '',
     clientName: '',
     thumbnailUrl: '',
     videoUrl: '',
@@ -133,20 +135,6 @@ function ProjectModal({ project, isOpen, onClose, onSave }: ProjectModalProps) {
               />
             </div>
 
-            {/* Date */}
-            <div>
-              <label className="mb-2 block text-sm font-medium text-white">
-                Date
-              </label>
-              <input
-                type="date"
-                required
-                value={formData.date}
-                onChange={(e) => setFormData((prev) => ({ ...prev, date: e.target.value }))}
-                className="w-full rounded-lg border border-white/10 bg-[#2a2a2a] px-4 py-3 text-white outline-none transition-colors focus:border-blue-500 focus:bg-[#333]"
-              />
-            </div>
-
             {/* Services */}
             <div>
               <label className="mb-2 block text-sm font-medium text-white">
@@ -154,15 +142,20 @@ function ProjectModal({ project, isOpen, onClose, onSave }: ProjectModalProps) {
               </label>
               <select
                 required
-                value={formData.service}
-                onChange={(e) => setFormData((prev) => ({ ...prev, service: e.target.value }))}
+                value={formData.serviceId || formData.service}
+                onChange={(e) => {
+                  const chosen = availableServices.find(s => s.id === e.target.value);
+                  setFormData((prev) => ({
+                    ...prev,
+                    serviceId: chosen?.id || '',
+                    service: chosen?.title || e.target.value,
+                  }));
+                }}
                 className="w-full rounded-lg border border-white/10 bg-[#2a2a2a] px-4 py-3 text-white outline-none transition-colors focus:border-blue-500 focus:bg-[#333]"
               >
-                <option value="Video Production">Video Production</option>
-                <option value="Creative Direction">Creative Direction</option>
-                <option value="Post-Production & Editing">Post-Production & Editing</option>
-                <option value="Motion Graphics">Motion Graphics</option>
-                <option value="Photography">Photography</option>
+                {availableServices.map((s) => (
+                  <option key={s.id} value={s.id}>{s.title}</option>
+                ))}
               </select>
             </div>
 
@@ -182,9 +175,10 @@ function ProjectModal({ project, isOpen, onClose, onSave }: ProjectModalProps) {
 
             {/* Thumbnail Image */}
             <ImageUploadField
-              label="Thumbnail Image"
+              label="Thumbnail Image / Video"
               value={formData.thumbnailUrl}
               onChange={(url) => setFormData((prev) => ({ ...prev, thumbnailUrl: url }))}
+              acceptVideo
             />
 
             {/* Video (Optional) */}
@@ -226,6 +220,7 @@ interface DraggableProjectCardProps {
   onEdit: () => void;
   onDelete: () => void;
   moveCard: (dragIndex: number, hoverIndex: number) => void;
+  availableServices: ServiceOption[];
 }
 
 function DraggableProjectCard({
@@ -235,7 +230,11 @@ function DraggableProjectCard({
   onEdit,
   onDelete,
   moveCard,
+  availableServices,
 }: DraggableProjectCardProps) {
+  const serviceLabel = availableServices.find(s => s.id === project.serviceId)?.title
+    || availableServices.find(s => s.title.toLowerCase() === project.service?.toLowerCase())?.title
+    || project.service;
   const [{ isDragging }, drag] = useDrag({
     type: 'PROJECT',
     item: { index },
@@ -256,13 +255,6 @@ function DraggableProjectCard({
     collect: (monitor) => ({
       isOver: monitor.isOver(),
     }),
-  });
-
-  // Format date
-  const formattedDate = new Date(project.date).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric'
   });
 
   return (
@@ -310,15 +302,19 @@ function DraggableProjectCard({
       >
         <div aria-label="BG blur" className="absolute w-full h-[175px] left-[0%] bottom-0 backdrop-blur-[10px] z-[2] shrink-[0]"></div>
         <div aria-label="Video" className="size-full pointer-events-none absolute left-[0%] top-[0%] z-[1] shrink-[0]">
-          {project.videoUrl && /\.(mp4|webm|ogg)(\?|$)/i.test(project.videoUrl) ? (
-            <video src={project.videoUrl} className="size-full object-cover overflow-clip pointer-events-none" autoPlay muted loop playsInline></video>
-          ) : (
-            <img
-              src={project.thumbnailUrl || project.videoUrl}
-              alt={project.title}
-              className="size-full object-cover overflow-clip pointer-events-none"
-            />
-          )}
+          {(() => {
+            const isVideo = (url?: string) => !!url && /\.(mp4|webm|ogg)(\?|$)/i.test(url);
+            const videoSrc = isVideo(project.videoUrl) ? project.videoUrl : isVideo(project.thumbnailUrl) ? project.thumbnailUrl : null;
+            return videoSrc ? (
+              <video src={videoSrc} className="size-full object-cover overflow-clip pointer-events-none" autoPlay muted loop playsInline></video>
+            ) : (
+              <img
+                src={project.thumbnailUrl || project.videoUrl}
+                alt={project.title}
+                className="size-full object-cover overflow-clip pointer-events-none"
+              />
+            );
+          })()}
         </div>
         <div aria-label="Text" className="items-start flex flex-col h-min justify-center absolute w-full left-[50%] bottom-0 gap-[16px] p-5 translate-x-[-50%] z-[3] shrink-[0]">
           <div aria-label="Heading" className="items-center flex flex-col h-min justify-center relative w-full gap-[8px] shrink-[0]">
@@ -326,18 +322,17 @@ function DraggableProjectCard({
               <h6 className="font-medium text-left text-white text-[28px] tracking-[-0.84px] leading-[29.4px]" style={{"fontFamily":"Ronzino, \"Ronzino Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>{project.title}</h6>
             </div>
           </div>
-          <div aria-label="Details" className="items-center flex h-min justify-start relative w-full gap-[8px] shrink-[0]">
-            <div aria-label="Service" className="items-center flex size-min justify-center overflow-clip relative bg-white/10 gap-[4px] pt-1 pr-3 pb-1 pl-3 rounded-[62.5rem] border-[0.8px] border-solid border-white/20 backdrop-blur-[10px] shrink-[0]">
-              <div aria-label="Label" className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
-                <p className="font-medium text-left uppercase text-white text-[11px] tracking-[-0.16px] leading-[16px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>{project.service}</p>
+          {serviceLabel && (
+            <div aria-label="Details" className="items-center flex h-min justify-start relative w-full gap-[8px] shrink-[0]">
+              <div aria-label="Service" className="items-center flex size-min justify-center overflow-clip relative bg-white/10 gap-[4px] pt-1 pr-3 pb-1 pl-3 rounded-[62.5rem] border-[0.8px] border-solid border-white/20 backdrop-blur-[10px] shrink-[0]">
+                <div aria-label="Label" className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
+                  <p className="font-medium text-left uppercase text-white text-[11px] tracking-[-0.16px] leading-[16px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>
+                    {serviceLabel}
+                  </p>
+                </div>
               </div>
             </div>
-            <div aria-label="Date" className="items-center flex size-min justify-center overflow-clip relative bg-white/10 gap-[4px] pt-1 pr-3 pb-1 pl-3 rounded-[62.5rem] border-[0.8px] border-solid border-white/20 backdrop-blur-[10px] shrink-[0]">
-              <div aria-label="Label" className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
-                <p className="font-medium text-left uppercase text-white text-[11px] tracking-[-0.16px] leading-[16px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>{formattedDate}</p>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       </Link>
 
@@ -349,11 +344,14 @@ function DraggableProjectCard({
   );
 }
 
+interface ServiceOption { id: string; title: string; }
+
 interface EditableProjectsSectionProps {
   defaultProjects: Project[];
+  availableServices?: ServiceOption[];
 }
 
-export function EditableProjectsSection({ defaultProjects = [] }: EditableProjectsSectionProps) {
+export function EditableProjectsSection({ defaultProjects = [], availableServices = [] }: EditableProjectsSectionProps) {
   const { isEditMode, content, updateContent, setSaveStatus, adminToken } = useCMSStore();
   const [projects, setProjects] = useState<Project[]>([]);
   const [modalProject, setModalProject] = useState<Project | null>(null);
@@ -389,13 +387,16 @@ export function EditableProjectsSection({ defaultProjects = [] }: EditableProjec
     if (!adminToken) { console.warn('[CMS] Aborted — not logged in as admin'); setSaveStatus('error'); return; }
     setSaveStatus('saving');
     try {
+      const isVideo = (url?: string) => !!url && /\.(mp4|webm|ogg)(\?|$)/i.test(url);
+      const thumbIsVideo = isVideo(project.thumbnailUrl);
       const payload = {
         slug: project.slug,
+        service_id: project.serviceId || undefined,
         data: {
           title: project.title,
           description: project.shortDescription,
-          image: project.thumbnailUrl,
-          videoUrl: project.videoUrl || undefined,
+          image: thumbIsVideo ? undefined : (project.thumbnailUrl || undefined),
+          videoUrl: project.videoUrl || (thumbIsVideo ? project.thumbnailUrl : undefined),
           date: project.date,
           service: project.service,
           client: project.clientName,
@@ -465,7 +466,6 @@ export function EditableProjectsSection({ defaultProjects = [] }: EditableProjec
   };
 
   return (
-    <DndProvider backend={HTML5Backend}>
       <div aria-label="Projects wrapper" className="grid h-min justify-center relative w-full gap-[20px] shrink-[0]" style={{ gridTemplateColumns: `repeat(${gridColumns}, minmax(50px, 1fr))` }}>
         {/* Grid Settings Button (edit mode only) */}
         {isEditMode && (
@@ -545,6 +545,7 @@ export function EditableProjectsSection({ defaultProjects = [] }: EditableProjec
               onEdit={() => handleEditProject(project)}
               onDelete={() => handleDeleteProject(project.id)}
               moveCard={moveCard}
+              availableServices={availableServices}
             />
           </EditableGridItem>
         ))}
@@ -601,7 +602,7 @@ export function EditableProjectsSection({ defaultProjects = [] }: EditableProjec
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSave={handleSaveProject}
+        availableServices={availableServices}
       />
-    </DndProvider>
   );
 }

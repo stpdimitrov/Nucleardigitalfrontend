@@ -39,7 +39,7 @@ export function EditableCTASection({
     <div className="content-stretch flex flex-col items-start justify-center relative size-full" data-name="div.framer-18y2yvd-container">
       <div className="content-stretch flex items-center justify-center overflow-clip pb-[463.18px] pt-[463.19px] relative shrink-0 w-full" data-name="Desktop">
         {/* Background Image */}
-        <div className={`absolute inset-0 overflow-hidden ${isEditMode ? '' : 'pointer-events-none'}`}>
+        <div className={`absolute inset-0 overflow-hidden ${isEditMode ? '' : 'pointer-events-none'}`} data-name="BackgroundWrapper">
           <EditableImage
             contentKey={`${contentKey}.backgroundImage`}
             defaultSrc={backgroundImage}
@@ -49,7 +49,7 @@ export function EditableCTASection({
         </div>
 
         {/* Overlay */}
-        <div className={`absolute bg-black inset-[0_0_0.02%_0] opacity-30 ${isEditMode ? 'pointer-events-none' : ''}`} data-name="Overlay" />
+        <div className="absolute bg-black inset-[0_0_0.02%_0] opacity-30 pointer-events-none" data-name="Overlay" />
 
         {/* Container */}
         <div className="content-stretch flex items-center justify-center max-w-[1240px] overflow-clip px-[24px] relative shrink-0 w-[1240px] z-10" data-name="Container">

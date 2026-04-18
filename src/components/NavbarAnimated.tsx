@@ -7,75 +7,43 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from "motion/react";
 import { Link } from "react-router";
+import { Eye, EyeOff } from 'lucide-react';
 import { slideInTop } from "@/lib/animations";
-import { useCMSStore, EditableText } from '../src/cms';
-import { siteSettings, mainNavLinks, cmsNavLinks } from '../services/mock-data';
+import { useCMSStore, SiteLogo, EditableText } from '../src/cms';
 
 const navMenuLinks = [
   { id: 'nav-home', label: 'Home', href: '/' },
-  { id: 'nav-about', label: mainNavLinks[1].label, href: mainNavLinks[1].href },
-  { id: cmsNavLinks[0].id, label: cmsNavLinks[0].label, href: cmsNavLinks[0].href },
-  { id: cmsNavLinks[1].id, label: cmsNavLinks[1].label, href: cmsNavLinks[1].href },
-  { id: cmsNavLinks[2].id, label: cmsNavLinks[2].label, href: cmsNavLinks[2].href },
-  { id: 'nav-contact', label: mainNavLinks[2].label, href: mainNavLinks[2].href },
+  { id: 'nav-about', label: 'About us', href: '/about-us' },
+  { id: 'nav-services', label: 'Services', href: '/services' },
+  { id: 'nav-projects', label: 'Projects', href: '/projects' },
+  { id: 'nav-blogs', label: 'Blogs', href: '/blogs' },
+  { id: 'nav-contact', label: 'Contact us', href: '/contact-us' },
 ];
 
 export function NavbarAnimated() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isEditMode, getContent, updateContent, persistContent } = useCMSStore();
-  const logoUrl = getContent('site.logoUrl', siteSettings.logoUrl);
-  const logoHeight = parseInt(getContent('site.logoHeightNavbar', '30'), 10);
 
   return (
     <>
       <motion.div
-        className="fixed w-full left-[50%] top-0 translate-x-[-50%] z-[10] shrink-[0]"
+        className="fixed w-full left-[50%] top-0 translate-x-[-50%] z-[200] shrink-[0]"
         style={{"order":"-1000"}}
         initial="hidden"
         animate="visible"
         variants={slideInTop}
       >
-        <nav aria-label="Navbar" className="items-center flex h-min justify-center overflow-clip relative w-full backdrop-blur-[20px] gap-[8px] pt-5 pr-0 pb-5 pl-0 translate-y-[-20px]">
+        <nav aria-label="Navbar" className="items-center flex h-[60px] justify-center overflow-visible relative w-full backdrop-blur-[20px] gap-[8px] px-0">
           <div aria-label="Container" className="items-center flex grow h-min justify-between overflow-clip relative w-px basis-0 max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
             <div aria-label="Logo" className="flex items-center shrink-[0]">
-              <Link
-                to="/"
-                aria-label="Logo"
-                className="items-center flex size-min justify-center relative text-[rgb(0,_0,_238)] gap-[4px]"
-                style={{"textDecoration":"rgb(0, 0, 238)"}}
-              >
-                <img
-                  src={logoUrl}
-                  alt="Logo"
-                  style={{ maxHeight: logoHeight, height: 'auto', width: 'auto' }}
-                  className="block shrink-0"
-                />
-                <div className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
-                  <EditableText
-                    contentKey="navbar.siteName"
-                    defaultValue={siteSettings.siteName}
-                    as="p"
-                    className="font-medium uppercase text-white text-[24px] tracking-[-0.72px] leading-[24px]"
-                    style={{"fontFamily":"Ronzino, \"Ronzino Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}
-                  />
-                </div>
-              </Link>
-              {isEditMode && (
-                <div className="flex items-center gap-1.5 rounded-lg bg-black/80 border border-white/10 px-2 py-1 backdrop-blur-sm whitespace-nowrap ml-2 shrink-0">
-                  <span className="text-[10px] text-white/40 uppercase tracking-wide">Size</span>
-                  <input
-                    type="range"
-                    min={16}
-                    max={60}
-                    value={logoHeight}
-                    onChange={(e) => updateContent('site.logoHeightNavbar', e.target.value)}
-                    onMouseUp={() => persistContent()}
-                    onTouchEnd={() => persistContent()}
-                    className="w-16 accent-[#0099FF]"
-                  />
-                  <span className="text-[10px] text-white w-6 text-right">{logoHeight}</span>
-                </div>
-              )}
+              <SiteLogo
+                heightKey="site.logoHeightNavbar"
+                defaultHeight={36}
+                minHeight={16}
+                maxHeight={100}
+                defaultSiteName=""
+                defaultLogoUrl=""
+              />
             </div>
             <div aria-label="Menu button" className="relative shrink-[0]">
               <motion.button
@@ -123,30 +91,51 @@ export function NavbarAnimated() {
 
               {/* Menu Items */}
               <div className="flex flex-col justify-center h-full pl-[88px] gap-[16px]">
-                {navMenuLinks.map((link, index) => (
-                  <motion.div
-                    key={link.id}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 + index * 0.05 }}
-                  >
-                    <Link
-                      to={link.href}
-                      onClick={(e) => {
-                        if (isEditMode) { e.preventDefault(); return; }
-                        setIsMenuOpen(false);
-                      }}
-                      className="font-medium text-[#999] text-[48px] leading-[56px] tracking-[-1.44px] hover:text-white transition-colors block"
-                      style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}
+                {navMenuLinks.map((link, index) => {
+                  const pageHidden = getContent(`visibility.page.${link.id}`, 'false') === 'true';
+                  if (!isEditMode && pageHidden) return null;
+                  return (
+                    <motion.div
+                      key={link.id}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.3 + index * 0.05 }}
+                      className="flex items-center gap-3 group/pagelink"
                     >
-                      <EditableText
-                        contentKey={`navbar.link.${link.id}`}
-                        defaultValue={link.label}
-                        as="span"
-                      />
-                    </Link>
-                  </motion.div>
-                ))}
+                      <Link
+                        to={link.href}
+                        onClick={(e) => {
+                          if (isEditMode) { e.preventDefault(); return; }
+                          setIsMenuOpen(false);
+                        }}
+                        className={`font-medium text-[48px] leading-[56px] tracking-[-1.44px] hover:text-white transition-colors block ${pageHidden ? 'text-[#555] line-through' : 'text-[#999]'}`}
+                        style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}
+                      >
+                        <EditableText
+                          contentKey={`navbar.link.${link.id}`}
+                          defaultValue={link.label}
+                          as="span"
+                        />
+                      </Link>
+                      {isEditMode && (
+                        <button
+                          onClick={() => {
+                            updateContent(`visibility.page.${link.id}`, pageHidden ? 'false' : 'true');
+                            persistContent();
+                          }}
+                          className={`opacity-0 group-hover/pagelink:opacity-100 transition-opacity flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium ${
+                            pageHidden
+                              ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30'
+                              : 'bg-white/10 text-white/50 hover:text-white hover:bg-white/20'
+                          }`}
+                        >
+                          {pageHidden ? <Eye className="size-3" /> : <EyeOff className="size-3" />}
+                          {pageHidden ? 'Show' : 'Hide'}
+                        </button>
+                      )}
+                    </motion.div>
+                  );
+                })}
               </div>
 
               {/* Footer */}
