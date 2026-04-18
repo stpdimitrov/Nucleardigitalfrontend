@@ -466,6 +466,7 @@ export function EditableProjectsSection({ defaultProjects = [], availableService
   };
 
   return (
+    <>
       <div aria-label="Projects wrapper" className="grid h-min justify-center relative w-full gap-[20px] shrink-[0]" style={{ gridTemplateColumns: `repeat(${gridColumns}, minmax(50px, 1fr))` }}>
         {/* Grid Settings Button (edit mode only) */}
         {isEditMode && (
@@ -604,5 +605,6 @@ export function EditableProjectsSection({ defaultProjects = [], availableService
         onSave={handleSaveProject}
         availableServices={availableServices}
       />
+    </>
   );
 }
