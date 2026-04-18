@@ -62,35 +62,42 @@ const DEFAULT_SERVICES: ServiceCard[] = [
 ];
 
 export function EditableServicesPage({ contentKey = 'servicesPage' }: EditableServicesPageProps) {
-  const { isEditMode, getContent, updateContent, setSaveStatus, adminToken } = useCMSStore();
-  const { services: backendServices } = useBackendData();
+  const { isEditMode, getContent, setSaveStatus, adminToken } = useCMSStore();
+  const { services: backendServices, refreshServices } = useBackendData();
 
-  // Map backend services to ServiceCard format as fallback defaults
-  const backendDefaults: ServiceCard[] = backendServices.length > 0
-    ? backendServices.map((s, i) => ({
-        id: s.id,
-        title: s.title,
-        description: s.description,
-        imageUrl: s.image || DEFAULT_SERVICES[i % DEFAULT_SERVICES.length]?.imageUrl || '',
-        imageAlt: s.title,
-        tags: Array.isArray(s.features)
-          ? (s.features as Array<string | { name?: string; text?: string }>).map(f =>
-              typeof f === 'string' ? f : (f.name || f.text || '')
-            ).filter(Boolean)
-          : [],
-        layout: i === 0 ? 'large' : 'small',
-      }))
-    : DEFAULT_SERVICES;
+  // Map backend services to ServiceCard format — backend is always the source of truth
+  const toCards = (raw: typeof backendServices): ServiceCard[] =>
+    raw.length > 0
+      ? raw.map((s, i) => ({
+          id: s.id,
+          title: s.title,
+          description: s.description,
+          imageUrl: s.image || DEFAULT_SERVICES[i % DEFAULT_SERVICES.length]?.imageUrl || '',
+          imageAlt: s.title,
+          tags: Array.isArray(s.features)
+            ? (s.features as Array<string | { name?: string; text?: string }>).map(f =>
+                typeof f === 'string' ? f : (f.name || f.text || '')
+              ).filter(Boolean)
+            : [],
+          layout: i === 0 ? 'large' : ('small' as const),
+        }))
+      : DEFAULT_SERVICES;
 
-  // Get services from CMS (falls back to backend-mapped defaults)
-  const servicesData = getContent(`${contentKey}.services`, JSON.stringify(backendDefaults));
-  const services: ServiceCard[] = JSON.parse(servicesData);
+  // Local state — seeded from backend, updated after CRUD ops
+  const [services, setServices] = useState<ServiceCard[]>(() => toCards(backendServices));
 
-  // Save services — local state only (ordering/DnD is local, individual ops call backend)
-  const saveServices = (newServices: ServiceCard[]) => {
-    const servicesString = JSON.stringify(newServices);
-    updateContent(`${contentKey}.services`, servicesString);
-  };
+  // Re-seed whenever backend data changes (e.g. after refreshServices() resolves)
+  const prevBackendRef = useRef(backendServices);
+  useEffect(() => {
+    if (backendServices !== prevBackendRef.current) {
+      prevBackendRef.current = backendServices;
+      setServices(toCards(backendServices));
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [backendServices]);
+
+  // Local reorder only (no backend reorder endpoint)
+  const saveServices = (newServices: ServiceCard[]) => setServices(newServices);
 
   // Add service
   const addService = async () => {
@@ -119,7 +126,8 @@ export function EditableServicesPage({ contentKey = 'servicesPage' }: EditableSe
         },
       });
       const serviceWithId = { ...newService, id: created.id };
-      saveServices([...services, serviceWithId]);
+      setServices(prev => [...prev, serviceWithId]);
+      await refreshServices();
       setSaveStatus('saved');
       setTimeout(() => setSaveStatus('idle'), 2000);
     } catch (error) {
@@ -129,13 +137,16 @@ export function EditableServicesPage({ contentKey = 'servicesPage' }: EditableSe
   };
 
   // Delete service
-  const deleteService = (id: string) => {
+  const deleteService = async (id: string) => {
     if (!adminToken) return;
-    adminDeleteService(adminToken, id).catch((err) => {
+    setServices(prev => prev.filter(s => s.id !== id));
+    try {
+      await adminDeleteService(adminToken, id);
+      await refreshServices();
+    } catch (err) {
       console.error('Failed to delete service:', err);
       setSaveStatus('error');
-    });
-    saveServices(services.filter(s => s.id !== id));
+    }
   };
 
   // Update service
@@ -155,9 +166,8 @@ export function EditableServicesPage({ contentKey = 'servicesPage' }: EditableSe
           is_active: true,
         },
       });
-      const newServices = [...services];
-      newServices[index] = updatedService;
-      saveServices(newServices);
+      setServices(prev => { const n = [...prev]; n[index] = updatedService; return n; });
+      await refreshServices();
       setSaveStatus('saved');
       setTimeout(() => setSaveStatus('idle'), 2000);
     } catch (error) {
@@ -499,9 +509,10 @@ function ServiceSettingsModal({ service, onClose, onSave }: ServiceSettingsModal
           {activeTab === 'image' && (
             <div className="space-y-4">
               <ImageUploadField
-                label="Service Image"
+                label="Service Image / Video"
                 value={editedService.imageUrl}
                 onChange={(url) => setEditedService({ ...editedService, imageUrl: url })}
+                acceptVideo
               />
               <div>
                 <label className="block text-sm font-medium text-gray-400 mb-2">Image Alt Text</label>

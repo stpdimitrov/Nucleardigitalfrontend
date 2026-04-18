@@ -5,6 +5,7 @@ import { X, GripVertical, Pencil, Trash2 } from 'lucide-react';
 import type { Service } from '@/types';
 import { adminCreateService, adminUpdateService, adminDeleteService } from '../../services/api';
 import { ImageUploadField } from './ImageUploadField';
+import { useBackendData } from '../../contexts/BackendDataContext';
 
 function generateSlug(title: string): string {
   return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -96,7 +97,7 @@ function DraggableServiceCard({
       </div>
 
       {/* Content Section */}
-      <div className="content-stretch flex flex-col items-start justify-between overflow-visible p-[16px] relative self-stretch shrink-0" data-name="Wrapper">
+      <div className="content-stretch flex flex-col items-start justify-between overflow-hidden p-[16px] relative self-stretch flex-1 min-w-0" data-name="Wrapper">
         {/* Edit Mode Controls */}
         {isEditMode && (
           <div className="absolute -top-3 right-2 z-10 flex gap-2">
@@ -268,9 +269,10 @@ function ServiceModal({ service, isOpen, onClose, onSave }: ServiceModalProps) {
 
           {/* Image */}
           <ImageUploadField
-            label="Image (optional)"
+            label="Image / Video (optional)"
             value={formData.image || ''}
             onChange={(url) => setFormData({ ...formData, image: url })}
+            acceptVideo
           />
 
           {/* Features */}
@@ -346,11 +348,12 @@ interface EditableServicesSectionProps {
 
 export function EditableServicesSection({ defaultServices, serviceImages }: EditableServicesSectionProps) {
   const { isEditMode, setSaveStatus, adminToken } = useCMSStore();
+  const { refreshServices } = useBackendData();
   const [services, setServices] = useState<Service[]>(defaultServices);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalService, setModalService] = useState<Service | null>(null);
 
-  // Seed from defaultServices on first load
+  // Seed from defaultServices whenever backend data changes
   useEffect(() => {
     if (defaultServices.length > 0) {
       setServices(defaultServices);
@@ -386,10 +389,12 @@ export function EditableServicesSection({ defaultServices, serviceImages }: Edit
     if (window.confirm('Are you sure you want to delete this service?')) {
       const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(serviceId);
       if (isUUID) {
-        adminDeleteService(adminToken, serviceId).catch((err) => {
-          console.error('Failed to delete service:', err);
-          setSaveStatus('error');
-        });
+        adminDeleteService(adminToken, serviceId)
+          .then(() => refreshServices())
+          .catch((err) => {
+            console.error('Failed to delete service:', err);
+            setSaveStatus('error');
+          });
       }
       setServices((prev) => prev.filter((s) => s.id !== serviceId));
     }
@@ -428,6 +433,7 @@ export function EditableServicesSection({ defaultServices, serviceImages }: Edit
           { ...service, id: created.id },
         ]);
       }
+      await refreshServices();
       setSaveStatus('saved');
       setTimeout(() => setSaveStatus('idle'), 2000);
     } catch (error) {

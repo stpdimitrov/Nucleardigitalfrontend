@@ -7,12 +7,6 @@ import {
   fetchSiteSettings,
   fetchRawSiteSettings,
 } from '../services/api';
-import {
-  services as mockServices,
-  projects as mockProjects,
-  testimonials as mockTestimonials,
-  siteSettings as mockSiteSettings,
-} from '../services/mock-data';
 import { useCMSStore } from '../src/cms/cmsStore';
 
 interface BackendDataState {
@@ -22,15 +16,17 @@ interface BackendDataState {
   siteSettings: SiteSettings;
   loading: boolean;
   error: string | null;
+  refreshServices: () => Promise<void>;
 }
 
 const BackendDataContext = createContext<BackendDataState>({
-  services: mockServices,
-  projects: mockProjects,
-  testimonials: mockTestimonials,
-  siteSettings: mockSiteSettings,
+  services: [],
+  projects: [],
+  testimonials: [],
+  siteSettings: { siteName: '', tagline: '', logoUrl: '', footerVideoUrl: '', copyrightText: '', creditText: '', creditUrl: '', builtWithText: '', builtWithUrl: '' },
   loading: false,
   error: null,
+  refreshServices: async () => {},
 });
 
 export function useBackendData() {
@@ -38,10 +34,10 @@ export function useBackendData() {
 }
 
 export function BackendDataProvider({ children }: { children: React.ReactNode }) {
-  const [services, setServices] = useState<Service[]>(mockServices);
-  const [projects, setProjects] = useState<Project[]>(mockProjects);
-  const [testimonials, setTestimonials] = useState<Testimonial[]>(mockTestimonials);
-  const [siteSettings, setSiteSettings] = useState<SiteSettings>(mockSiteSettings);
+  const [services, setServices] = useState<Service[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [siteSettings, setSiteSettings] = useState<SiteSettings>({ siteName: '', tagline: '', logoUrl: '', footerVideoUrl: '', copyrightText: '', creditText: '', creditUrl: '', builtWithText: '', builtWithUrl: '' });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -109,7 +105,7 @@ export function BackendDataProvider({ children }: { children: React.ReactNode })
 
       if (errors.length > 0) {
         setError(errors.join('; '));
-        console.warn('[BackendDataProvider] Some fetches failed, using mock fallbacks:', errors);
+        console.warn('[BackendDataProvider] Some fetches failed:', errors);
       }
 
       setLoading(false);
@@ -119,8 +115,17 @@ export function BackendDataProvider({ children }: { children: React.ReactNode })
     return () => { cancelled = true; };
   }, []);
 
+  const refreshServices = async () => {
+    try {
+      const fresh = await fetchServices();
+      if (fresh.length > 0) setServices(fresh);
+    } catch (err) {
+      console.warn('[BackendDataProvider] refreshServices failed:', err);
+    }
+  };
+
   return (
-    <BackendDataContext.Provider value={{ services, projects, testimonials, siteSettings, loading, error }}>
+    <BackendDataContext.Provider value={{ services, projects, testimonials, siteSettings, loading, error, refreshServices }}>
       {children}
     </BackendDataContext.Provider>
   );
