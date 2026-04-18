@@ -4,11 +4,24 @@
 import { Link } from 'react-router';
 import { ArrowRight } from 'lucide-react';
 import { useCMSStore, EditableText, EditableImage } from '../src/cms';
-import { siteSettings, mainNavLinks, cmsNavLinks, socialLinks } from '../services/mock-data';
+import { SiteLogo } from '../src/cms/SiteLogo';
+
+const mainNavLinks = [
+  { id: 'nav-home', label: 'Home', href: '/' },
+  { id: 'nav-about', label: 'About us', href: '/about-us' },
+  { id: 'nav-contact', label: 'Contact us', href: '/contact-us' },
+];
+
+const cmsNavLinks = [
+  { id: 'nav-services', label: 'Services', href: '/services' },
+  { id: 'nav-projects', label: 'Projects', href: '/projects' },
+  { id: 'nav-blogs', label: 'Blogs', href: '/blogs' },
+];
+
+const socialLinks: { id: string; label: string; url: string }[] = [];
 
 export function Footer() {
   const { isEditMode, getContent, updateContent, persistContent } = useCMSStore();
-  const footerLogoHeight = parseInt(getContent('site.logoHeightFooter', '48'), 10);
 
   return (
     <div className="relative w-full shrink-[0]" style={{"order":"1003"}}>
@@ -18,7 +31,7 @@ export function Footer() {
             <div aria-label="Video" className="self-start size-full justify-self-start relative">
               <EditableImage
                 contentKey="footer.videoUrl"
-                defaultSrc={siteSettings.footerVideoUrl}
+                defaultSrc=""
                 alt="Footer background video"
                 className="size-full object-cover overflow-clip"
               />
@@ -152,39 +165,20 @@ export function Footer() {
           {/* Bottom Section */}
           <div aria-label="Wrapper" className="items-center flex flex-col h-min justify-center relative w-full gap-[32px] shrink-[0]">
             <div aria-label="Logo" className="items-center flex h-min justify-center relative w-full gap-[8px] shrink-[0]">
-              <div className="flex items-center gap-2 shrink-[0]">
-                <div className="relative shrink-0">
-                  <EditableImage
-                    contentKey="site.logoUrl"
-                    defaultSrc={siteSettings.logoUrl}
-                    alt="Logo"
-                    className="block shrink-0"
-                    style={{ maxHeight: footerLogoHeight, height: 'auto', width: 'auto' }}
-                  />
-                </div>
-                {isEditMode && (
-                  <div className="flex items-center gap-1.5 rounded-lg bg-white/5 border border-white/10 px-2 py-1">
-                    <span className="text-[10px] text-white/40 uppercase tracking-wide">Size</span>
-                    <input
-                      type="range"
-                      min={24}
-                      max={120}
-                      value={footerLogoHeight}
-                      onChange={(e) => updateContent('site.logoHeightFooter', e.target.value)}
-                      onMouseUp={() => persistContent()}
-                      onTouchEnd={() => persistContent()}
-                      className="w-20 accent-[#0099FF]"
-                    />
-                    <span className="text-[10px] text-white w-7 text-right">{footerLogoHeight}px</span>
-                  </div>
-                )}
-              </div>
+              <SiteLogo
+                heightKey="site.logoHeightFooter"
+                defaultHeight={48}
+                minHeight={24}
+                maxHeight={120}
+                defaultSiteName=""
+                defaultLogoUrl=""
+              />
               <div className="flex flex-col grow justify-start overflow-hidden relative whitespace-pre w-px basis-0 shrink-[0]">
                 <img src="https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2Fe90c0b6198c4a04d7cdff16579b4a2e6ffcc4b31.svg?generation=1768843023516998&amp;alt=media" className="flex size-full" alt="" />
                 <div className="flex flex-col grow justify-start overflow-hidden absolute w-px left-0 top-0 right-0 bottom-0 origin-[0px_0px] basis-0 shrink-[0]" style={{"scale":"0.762"}}>
                   <EditableText
                     contentKey="footer.brandName"
-                    defaultValue={siteSettings.siteName}
+                    defaultValue=""
                     as="p"
                     className="font-medium uppercase text-white text-[262.446px] tracking-[-7.87339px] leading-[236.202px]"
                     style={{"fontFamily":"Ronzino, \"Ronzino Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}
@@ -197,7 +191,7 @@ export function Footer() {
                 <div className="flex flex-col grow justify-start relative whitespace-pre-wrap w-px basis-0 shrink-[0]">
                   <EditableText
                     contentKey="footer.copyright"
-                    defaultValue={siteSettings.copyrightText}
+                    defaultValue=""
                     as="p"
                     className="font-medium text-left text-[rgb(221,_221,_221)] text-[16px] tracking-[-0.32px] leading-[24px]"
                     style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(221, 221, 221)"}}
@@ -214,7 +208,7 @@ export function Footer() {
                       className="font-medium text-[rgb(221,_221,_221)] text-[16px] tracking-[-0.32px] leading-[24px]"
                       style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}
                     />{' '}
-                    <a href={getContent('footer.creditUrl', siteSettings.creditUrl)} className="text-center text-white" style={{"textDecoration":"rgb(255, 255, 255)"}}>
+                    <a href={getContent('footer.creditUrl', '')} className="text-center text-white" style={{"textDecoration":"rgb(255, 255, 255)"}}>
                       <EditableText
                         contentKey="footer.creditName"
                         defaultValue="Muhammad talha"
@@ -227,7 +221,7 @@ export function Footer() {
                   {isEditMode && (
                     <input
                       type="text"
-                      defaultValue={getContent('footer.creditUrl', siteSettings.creditUrl)}
+                      defaultValue={getContent('footer.creditUrl', '')}
                       onBlur={(e) => {
                         updateContent('footer.creditUrl', e.target.value);
                         persistContent();

@@ -9,7 +9,8 @@ import { motion, AnimatePresence } from "motion/react";
 import { Link } from "react-router";
 import { Eye, EyeOff } from 'lucide-react';
 import { slideInTop } from "@/lib/animations";
-import { useCMSStore, SiteLogo, EditableText } from '../src/cms';
+import { useCMSStore, EditableText } from '../src/cms';
+import { SiteLogo } from '../src/cms/SiteLogo';
 
 const navMenuLinks = [
   { id: 'nav-home', label: 'Home', href: '/' },
