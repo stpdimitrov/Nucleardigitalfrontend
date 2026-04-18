@@ -5,6 +5,7 @@ import { ArrowRight, Settings, Plus, Trash2 } from 'lucide-react';
 import { useCMSStore } from './cmsStore';
 import { adminCreateService, adminUpdateService, adminDeleteService } from '../../services/api';
 import { EditableText } from './EditableText';
+import { EditableSection } from './EditableSection';
 import { EditableLetsConnectSection } from './EditableLetsConnectSection';
 import { EditableHowWeWorkSection } from './EditableHowWeWorkSection';
 import { useDrag, useDrop } from 'react-dnd';
@@ -178,83 +179,89 @@ export function EditableServicesPage({ contentKey = 'servicesPage' }: EditableSe
 
   return (
     <div className="w-full">
-      {/* Hero Section */}
-      <motion.section 
-        className="px-6 py-24 md:py-32"
-        initial="hidden"
-        whileInView="visible"
-        viewport={viewport}
-        variants={scrollFadeIn}
-      >
-        <div className="max-w-[1240px] mx-auto">
-          {/* Section Tag */}
-          <div className="mb-6">
-            <div className="inline-flex items-center justify-center h-[22px] pb-px">
+      {/* Hero + Services Grid */}
+      <EditableSection sectionId="services.hero" label="Hero">
+        <motion.section
+          className="px-6 py-24 md:py-32"
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewport}
+          variants={scrollFadeIn}
+        >
+          <div className="max-w-[1240px] mx-auto">
+            {/* Section Tag */}
+            <div className="mb-6">
+              <div className="inline-flex items-center justify-center h-[22px] pb-px">
+                <EditableText
+                  contentKey={`${contentKey}.hero.tag`}
+                  defaultValue='<p class="font-medium uppercase text-white text-[14px] tracking-[-0.16px] leading-[22.4px]" style="font-family: &quot;Apfel Grotezk&quot;, &quot;Apfel Grotezk Placeholder&quot;, sans-serif">our services</p>'
+                  as="div"
+                  className=""
+                />
+              </div>
+            </div>
+
+            {/* Hero Text */}
+            <div className="text-center mb-20">
               <EditableText
-                contentKey={`${contentKey}.hero.tag`}
-                defaultValue='<p class="font-medium uppercase text-white text-[14px] tracking-[-0.16px] leading-[22.4px]" style="font-family: &quot;Apfel Grotezk&quot;, &quot;Apfel Grotezk Placeholder&quot;, sans-serif">our services</p>'
+                contentKey={`${contentKey}.hero.title`}
+                defaultValue='<h1 class="font-medium text-white text-[56.7px] leading-[63px] tracking-[-1.8px] mb-2" style="font-family: Ronzino, &quot;Ronzino Placeholder&quot;, sans-serif">What We Offer</h1>'
+                as="div"
+                className=""
+              />
+              <EditableText
+                contentKey={`${contentKey}.hero.description`}
+                defaultValue='<p class="font-medium text-[#ddd] text-[16.5px] leading-[27px] opacity-60 max-w-[600px] mx-auto text-center" style="font-family: &quot;Apfel Grotezk&quot;, &quot;Apfel Grotezk Placeholder&quot;, sans-serif">Delivering expert video production services that elevate brands and bring stories to life.</p>'
                 as="div"
                 className=""
               />
             </div>
+
+            {/* Services Grid */}
+            <motion.div
+              className="grid grid-cols-1 md:grid-cols-2 gap-8"
+              variants={staggerContainer}
+            >
+              {services.map((service, index) => (
+                <ServiceCardComponent
+                  key={service.id}
+                  service={service}
+                  index={index}
+                  contentKey={contentKey}
+                  deleteService={deleteService}
+                  updateService={updateService}
+                  services={services}
+                  saveServices={saveServices}
+                />
+              ))}
+
+              {/* Add Service Button */}
+              {isEditMode && (
+                <motion.button
+                  onClick={addService}
+                  className="border-2 border-dashed border-[#0099FF]/50 bg-[#0099FF]/5 hover:bg-[#0099FF]/10 hover:border-[#0099FF] transition-all flex items-center justify-center group min-h-[400px] rounded-[16px]"
+                  variants={staggerItem}
+                >
+                  <div className="flex flex-col items-center gap-2">
+                    <Plus className="w-8 h-8 text-[#0099FF]" />
+                    <p className="text-white/70 text-sm font-medium">Add Service</p>
+                  </div>
+                </motion.button>
+              )}
+            </motion.div>
           </div>
+        </motion.section>
+      </EditableSection>
 
-          {/* Hero Text */}
-          <div className="text-center mb-20">
-            <EditableText
-              contentKey={`${contentKey}.hero.title`}
-              defaultValue='<h1 class="font-medium text-white text-[56.7px] leading-[63px] tracking-[-1.8px] mb-2" style="font-family: Ronzino, &quot;Ronzino Placeholder&quot;, sans-serif">What We Offer</h1>'
-              as="div"
-              className=""
-            />
-            <EditableText
-              contentKey={`${contentKey}.hero.description`}
-              defaultValue='<p class="font-medium text-[#ddd] text-[16.5px] leading-[27px] opacity-60 max-w-[600px] mx-auto text-center" style="font-family: &quot;Apfel Grotezk&quot;, &quot;Apfel Grotezk Placeholder&quot;, sans-serif">Delivering expert video production services that elevate brands and bring stories to life.</p>'
-              as="div"
-              className=""
-            />
-          </div>
-
-          {/* Services Grid */}
-          <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 gap-8"
-            variants={staggerContainer}
-          >
-            {services.map((service, index) => (
-              <ServiceCardComponent
-                key={service.id}
-                service={service}
-                index={index}
-                contentKey={contentKey}
-                deleteService={deleteService}
-                updateService={updateService}
-                services={services}
-                saveServices={saveServices}
-              />
-            ))}
-
-            {/* Add Service Button */}
-            {isEditMode && (
-              <motion.button
-                onClick={addService}
-                className="border-2 border-dashed border-[#0099FF]/50 bg-[#0099FF]/5 hover:bg-[#0099FF]/10 hover:border-[#0099FF] transition-all flex items-center justify-center group min-h-[400px] rounded-[16px]"
-                variants={staggerItem}
-              >
-                <div className="flex flex-col items-center gap-2">
-                  <Plus className="w-8 h-8 text-[#0099FF]" />
-                  <p className="text-white/70 text-sm font-medium">Add Service</p>
-                </div>
-              </motion.button>
-            )}
-          </motion.div>
-        </div>
-      </motion.section>
-
-      {/* Inside the Process Section */}
-      <EditableHowWeWorkSection />
+      {/* How We Work Section */}
+      <EditableSection sectionId="services.howWeWork" label="How We Work">
+        <EditableHowWeWorkSection />
+      </EditableSection>
 
       {/* Let's Connect Section */}
-      <EditableLetsConnectSection />
+      <EditableSection sectionId="services.letsConnect" label="Let's Connect">
+        <EditableLetsConnectSection />
+      </EditableSection>
     </div>
   );
 }
