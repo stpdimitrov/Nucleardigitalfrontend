@@ -26,23 +26,23 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
         delay: index * 0.1 // Stagger effect
       }}
     >
-      <motion.a 
+      <motion.a
         href={`/projects/${project.slug}`}
-        aria-label="Project card" 
-        className="items-center flex h-min justify-center relative w-full text-[rgb(0,_0,_238)] gap-[10px] min-h-[440px]" 
+        aria-label="Project card"
+        className="block relative w-full overflow-hidden text-[rgb(0,_0,_238)]"
         style={{"textDecoration":"rgb(0, 0, 238)"}}
         whileHover={{ scale: 1.02 }}
         transition={{ duration: 0.3 }}
       >
-        <div aria-label="BG blur" className="absolute w-full h-[175px] left-[0%] bottom-0 backdrop-blur-[10px] z-[2] shrink-[0]"></div>
-        <motion.div 
-          aria-label="Video" 
-          className="size-full pointer-events-none absolute left-[0%] top-[0%] z-[1] shrink-[0]"
+        <motion.div
+          aria-label="Video"
+          className="w-full pointer-events-none z-[1]"
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.4 }}
         >
-          <video src={project.videoUrl} className="size-full object-cover overflow-clip pointer-events-none"></video>
+          <video src={project.videoUrl} className="w-full h-auto block pointer-events-none"></video>
         </motion.div>
+        <div aria-label="BG blur" className="absolute w-full h-[175px] left-0 bottom-0 backdrop-blur-[10px] z-[2]"></div>
         <div aria-label="Text" className="items-start flex flex-col h-min justify-center absolute w-full left-[50%] bottom-0 gap-[16px] p-5 translate-x-[-50%] z-[3] shrink-[0]">
           <div aria-label="Heading" className="items-center flex flex-col h-min justify-center relative w-full gap-[8px] shrink-[0]">
             <div className="flex flex-col justify-start relative whitespace-pre-wrap w-full z-[2] shrink-[0]">
