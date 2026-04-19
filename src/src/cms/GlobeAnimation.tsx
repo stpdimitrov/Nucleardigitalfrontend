@@ -216,7 +216,7 @@ export function GlobeAnimation({
           size = 0.5;
         }
 
-        visible.push({ px: cx + rx * R, py: cy - ry * R, z: rz, alpha, size });
+        visible.push({ px: cx - rx * R, py: cy - ry * R, z: rz, alpha, size });
       }
 
       // Sort back-to-front
@@ -255,7 +255,7 @@ export function GlobeAnimation({
 
       if (mrz > -0.05) {
         const vis = Math.max(0, (mrz + 0.05) / 1.05);
-        const mpx = cx + mrx * R;
+        const mpx = cx - mrx * R;
         const mpy = cy - mry * R;
 
         const pr = 12 + pulseVal * 12;
