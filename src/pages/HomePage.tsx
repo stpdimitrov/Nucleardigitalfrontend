@@ -16,6 +16,7 @@ import { EditableWhyChooseUsSection } from '../src/cms/EditableWhyChooseUsSectio
 import { EditableHowWeWorkSection } from '../src/cms/EditableHowWeWorkSection';
 import { EditableTestimonialsSection } from '../src/cms/EditableTestimonialsSection';
 import { scrollFadeIn, staggerContainer, staggerItem, viewport } from '../lib/animations';
+import { useMemo } from 'react';
 import { useBackendData } from '../contexts/BackendDataContext';
 
 // Animation variants
@@ -36,18 +37,21 @@ export function HomePage() {
   const { projects, services, testimonials } = useBackendData();
 
   // Transform projects data to match EditableProjectsSection interface
-  const transformedProjects = projects.map(p => ({
+  // useMemo prevents a new array reference on every render, which would
+  // otherwise trigger EditableProjectsSection's useEffect and overwrite
+  // any locally-saved edits before the backend data refreshes.
+  const transformedProjects = useMemo(() => projects.map(p => ({
     id: p.id,
-    title: p.title,
+    title: p.title || p.name || 'Untitled',
     slug: p.slug,
-    shortDescription: p.description,
+    shortDescription: p.description || '',
     date: p.date,
     service: p.service || '',
     serviceId: p.serviceId,
-    clientName: '',
-    thumbnailUrl: p.image,
+    clientName: p.client || '',
+    thumbnailUrl: p.image || p.videoUrl || '',
     videoUrl: p.videoUrl,
-  }));
+  })), [projects, services]);
   
   return (
     <div className="items-center contents h-min justify-start overflow-hidden relative bg-black gap-[0px] min-h-[640px]">{/* Removed DndProvider */}

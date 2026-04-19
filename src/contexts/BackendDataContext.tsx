@@ -17,6 +17,7 @@ interface BackendDataState {
   loading: boolean;
   error: string | null;
   refreshServices: () => Promise<void>;
+  refreshProjects: () => Promise<void>;
 }
 
 const BackendDataContext = createContext<BackendDataState>({
@@ -27,6 +28,7 @@ const BackendDataContext = createContext<BackendDataState>({
   loading: false,
   error: null,
   refreshServices: async () => {},
+  refreshProjects: async () => {},
 });
 
 export function useBackendData() {
@@ -124,8 +126,17 @@ export function BackendDataProvider({ children }: { children: React.ReactNode })
     }
   };
 
+  const refreshProjects = async () => {
+    try {
+      const fresh = await fetchProjects();
+      if (fresh.length > 0) setProjects(fresh);
+    } catch (err) {
+      console.warn('[BackendDataProvider] refreshProjects failed:', err);
+    }
+  };
+
   return (
-    <BackendDataContext.Provider value={{ services, projects, testimonials, siteSettings, loading, error, refreshServices }}>
+    <BackendDataContext.Provider value={{ services, projects, testimonials, siteSettings, loading, error, refreshServices, refreshProjects }}>
       {children}
     </BackendDataContext.Provider>
   );

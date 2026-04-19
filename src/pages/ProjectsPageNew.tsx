@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { EditableText } from '../src/cms/EditableText';
 import { EditableImage } from '../src/cms/EditableImage';
 import { EditableProjectsSection } from '../src/cms/EditableProjectsSection';
@@ -8,11 +9,11 @@ import { useBackendData } from '../contexts/BackendDataContext';
 export function ProjectsPageNew() {
   const { projects: backendProjects, services } = useBackendData();
 
-  const defaultProjects = backendProjects.map(p => {
+  const defaultProjects = useMemo(() => backendProjects.map(p => {
     const resolvedService =
       services.find(s => s.id === p.serviceId)?.title ||
       services.find(s => s.title.toLowerCase() === (p.service || p.category || '').toLowerCase())?.title ||
-      '';
+      p.service || '';
     return {
       id: p.id,
       title: p.title || p.name || 'Untitled',
@@ -21,11 +22,11 @@ export function ProjectsPageNew() {
       date: p.date,
       service: resolvedService,
       serviceId: p.serviceId,
-      clientName: '',
+      clientName: p.client || '',
       thumbnailUrl: p.image || p.videoUrl || '',
       videoUrl: p.videoUrl,
     };
-  });
+  }), [backendProjects, services]);
 
   return (
     <div className="items-center contents h-min justify-start overflow-hidden relative bg-black gap-[0px] min-h-[640px]">

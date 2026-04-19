@@ -8,6 +8,7 @@ import { Link } from 'react-router';
 import { EditableGridItem } from './EditableGridItem';
 import { ImageUploadField } from './ImageUploadField';
 import { adminCreateProject, adminUpdateProject, adminDeleteProject } from '../../services/api';
+import { useBackendData } from '../../contexts/BackendDataContext';
 
 export interface Project {
   id: string;
@@ -361,6 +362,7 @@ interface EditableProjectsSectionProps {
 
 export function EditableProjectsSection({ defaultProjects = [], availableServices = [] }: EditableProjectsSectionProps) {
   const { isEditMode, content, updateContent, setSaveStatus, adminToken } = useCMSStore();
+  const { refreshProjects } = useBackendData();
   const [projects, setProjects] = useState<Project[]>([]);
   const [modalProject, setModalProject] = useState<Project | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -427,6 +429,8 @@ export function EditableProjectsSection({ defaultProjects = [], availableService
       }
       setSaveStatus('saved');
       setTimeout(() => setSaveStatus('idle'), 2000);
+      // Refresh backend data so navigation away/back shows the latest state
+      refreshProjects().catch(() => {});
     } catch (err) {
       console.error('Failed to save project:', err);
       setSaveStatus('error');
