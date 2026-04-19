@@ -3,7 +3,7 @@ import { useCMSStore } from './cmsStore';
 import { motion } from 'motion/react';
 import { useDrag, useDrop } from 'react-dnd';
 import { Trash2, Plus, X, Edit2, Upload, Link } from 'lucide-react';
-import { staggerItem } from '../../lib/animations';
+import { staggerItem } from '../../lib/animations'; // still used by EditableLogoCard
 import ReactDOM from 'react-dom';
 import { uploadMedia } from '../../services/api';
 
@@ -208,10 +208,14 @@ function EditableLogoCard({ logo, index, moveLogo, deleteLogo, editLogo }: {
       aria-label="Client logo"
       className="self-start justify-self-start relative w-full group"
       variants={staggerItem}
-      style={{ opacity: isDragging ? 0.4 : 1 }}
+      style={{ opacity: isDragging ? 0.4 : 1, cursor: isEditMode ? 'grab' : 'default' }}
       data-handler-id={handlerId}
     >
-      <div aria-label="Client logo" className="items-center flex justify-center overflow-clip relative w-full h-[120px] bg-[rgb(36,_36,_36)] gap-[8px]">
+      <div
+        aria-label="Client logo"
+        className="items-center flex justify-center overflow-clip relative w-full h-[120px] bg-[rgb(36,_36,_36)] gap-[8px]"
+        style={isEditMode ? { outline: '1px dashed rgba(0,153,255,0.3)' } : undefined}
+      >
         <div
           aria-label="Logo"
           className="relative w-[140px] h-[52px] shrink-[0]"
@@ -389,21 +393,26 @@ export function EditableClientLogos({ defaultLogos }: EditableClientLogosProps) 
         />
       ))}
 
-      <motion.div
-        className="self-start justify-self-start relative w-full"
-        variants={staggerItem}
-        style={{ display: isEditMode ? 'block' : 'none' }}
-      >
-        <button
-          onClick={() => setShowAddModal(true)}
-          className="items-center flex justify-center overflow-clip relative w-full h-[120px] bg-[rgb(36,_36,_36)] hover:bg-[rgb(46,_46,_46)] gap-[8px] border-2 border-dashed border-[#0099FF]/50 hover:border-[#0099FF] transition-all group"
-        >
-          <div className="flex flex-col items-center gap-2">
-            <Plus className="w-8 h-8 text-[#0099FF] group-hover:scale-110 transition-transform" />
-            <span className="text-[#0099FF] text-sm font-medium">Add Logo</span>
-          </div>
-        </button>
-      </motion.div>
+      {isEditMode && (
+        <div className="self-start justify-self-start relative w-full">
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="items-center flex justify-center overflow-clip relative w-full h-[120px] bg-[rgb(36,_36,_36)] hover:bg-[rgb(46,_46,_46)] gap-[8px] border-2 border-dashed border-[#0099FF]/50 hover:border-[#0099FF] transition-all group"
+          >
+            <div className="flex flex-col items-center gap-2">
+              <Plus className="w-8 h-8 text-[#0099FF] group-hover:scale-110 transition-transform" />
+              <span className="text-[#0099FF] text-sm font-medium">Add Logo</span>
+            </div>
+          </button>
+        </div>
+      )}
+
+      {/* Empty state placeholder — keeps the grid row visible so users know logos go here */}
+      {logos.length === 0 && !isEditMode && (
+        <div className="col-span-4 flex items-center justify-center h-[120px] opacity-20">
+          <span className="text-white text-sm">Client logos</span>
+        </div>
+      )}
 
       {showAddModal && ReactDOM.createPortal(
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[100] p-4">
