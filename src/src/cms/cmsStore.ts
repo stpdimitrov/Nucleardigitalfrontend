@@ -6,6 +6,20 @@ export type ContentRegistry = Record<string, ContentValue>;
 
 export type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
 
+export interface CustomTextBox {
+  id: string;
+  page: string;   // pathname e.g. '/', '/about-us'
+  x: number;      // viewport px from left
+  y: number;      // viewport px from top
+  width: number;  // px
+  height?: number; // px — undefined means auto
+  content: string;
+  fontSize?: string;
+  fontWeight?: string;
+  color?: string;
+  textAlign?: string;
+}
+
 interface CMSState {
   // Edit mode state
   isEditMode: boolean;
@@ -34,6 +48,30 @@ interface CMSState {
   // Admin auth token (not persisted — session only)
   adminToken: string | null;
   setAdminToken: (token: string | null) => void;
+
+  // Currently focused editable text key + element (for toolbar in EditModeToggle)
+  activeTextKey: string | null;
+  setActiveTextKey: (key: string | null) => void;
+  activeTextEl: HTMLElement | null;
+  setActiveTextEl: (el: HTMLElement | null) => void;
+
+  // Custom text boxes (CRUD + drag positioning)
+  customTextBoxes: CustomTextBox[];
+  addCustomTextBox: (page: string) => void;
+  updateCustomTextBox: (id: string, updates: Partial<CustomTextBox>) => void;
+  deleteCustomTextBox: (id: string) => void;
+
+  // Per-key position offsets for existing EditableText elements (transform: translate)
+  textPositionOffsets: Record<string, { dx: number; dy: number }>;
+  setTextPositionOffset: (key: string, offset: { dx: number; dy: number } | null) => void;
+
+  // Hidden text keys (soft-delete existing EditableText elements)
+  hiddenTextKeys: Record<string, boolean>;
+  setTextHidden: (key: string, hidden: boolean) => void;
+
+  // Per-key size overrides for EditableText elements
+  textSizes: Record<string, { width?: number }>;
+  setTextSize: (key: string, size: { width?: number } | null) => void;
 }
 
 // Module-level debounce timer for backend sync
@@ -68,23 +106,24 @@ export const useCMSStore = create<CMSState>()(
       // Content
       content: {},
       getContent: (key: string, defaultValue: string) => {
-        const content = get().content[key];
+        const registry = get().content ?? {};
+        const content = registry[key];
         return content !== undefined && content !== '' ? content : defaultValue;
       },
       updateContent: (key: string, value: string) => {
         set((state) => ({
-          content: { ...state.content, [key]: value },
+          content: { ...(state.content ?? {}), [key]: value },
         }));
         // Sync to backend if we have an admin token
         const { adminToken, setSaveStatus, content } = get();
         if (adminToken) {
-          const updated = { ...content, [key]: value };
+          const updated = { ...(content ?? {}), [key]: value };
           scheduleSyncToBackend(updated, adminToken, setSaveStatus);
         }
       },
       batchUpdateContent: (updates: ContentRegistry) => {
         set((state) => ({
-          content: { ...state.content, ...updates },
+          content: { ...(state.content ?? {}), ...updates },
         }));
       },
       resetContent: () => {
@@ -134,11 +173,99 @@ export const useCMSStore = create<CMSState>()(
       // Admin token (session only — not persisted)
       adminToken: null,
       setAdminToken: (token: string | null) => set({ adminToken: token }),
+
+      // Active text element
+      activeTextKey: null,
+      setActiveTextKey: (key: string | null) => set({ activeTextKey: key }),
+      activeTextEl: null,
+      setActiveTextEl: (el: HTMLElement | null) => set({ activeTextEl: el }),
+
+      // Custom text boxes
+      customTextBoxes: [],
+      addCustomTextBox: (page: string) => {
+        const box: CustomTextBox = {
+          id: `ctb_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+          page,
+          x: Math.round(window.innerWidth / 2 - 100),
+          y: Math.round(window.scrollY + window.innerHeight / 2 - 20),
+          width: 200,
+          content: 'Text box',
+          color: '#ffffff',
+        };
+        set((state) => ({ customTextBoxes: [...state.customTextBoxes, box] }));
+        const { adminToken, setSaveStatus } = get();
+        if (adminToken) scheduleSyncToBackend(get().content, adminToken, setSaveStatus);
+      },
+      updateCustomTextBox: (id: string, updates: Partial<CustomTextBox>) => {
+        set((state) => ({
+          customTextBoxes: state.customTextBoxes.map((b) => b.id === id ? { ...b, ...updates } : b),
+        }));
+      },
+      deleteCustomTextBox: (id: string) => {
+        set((state) => ({ customTextBoxes: state.customTextBoxes.filter((b) => b.id !== id) }));
+        const { adminToken, setSaveStatus } = get();
+        if (adminToken) scheduleSyncToBackend(get().content, adminToken, setSaveStatus);
+      },
+
+      // Text position offsets
+      textPositionOffsets: {},
+      setTextPositionOffset: (key: string, offset: { dx: number; dy: number } | null) => {
+        set((state) => {
+          const next = { ...state.textPositionOffsets };
+          if (offset === null) { delete next[key]; } else { next[key] = offset; }
+          return { textPositionOffsets: next };
+        });
+        const { adminToken, setSaveStatus } = get();
+        if (adminToken) scheduleSyncToBackend(get().content, adminToken, setSaveStatus);
+      },
+
+      // Hidden text keys
+      hiddenTextKeys: {},
+      setTextHidden: (key: string, hidden: boolean) => {
+        set((state) => {
+          const next = { ...state.hiddenTextKeys };
+          if (!hidden) { delete next[key]; } else { next[key] = true; }
+          return { hiddenTextKeys: next };
+        });
+        const { adminToken, setSaveStatus } = get();
+        if (adminToken) scheduleSyncToBackend(get().content, adminToken, setSaveStatus);
+      },
+
+      // Text size overrides
+      textSizes: {},
+      setTextSize: (key: string, size: { width?: number } | null) => {
+        set((state) => {
+          const next = { ...state.textSizes };
+          if (size === null) { delete next[key]; } else { next[key] = size; }
+          return { textSizes: next };
+        });
+        const { adminToken, setSaveStatus } = get();
+        if (adminToken) scheduleSyncToBackend(get().content, adminToken, setSaveStatus);
+      },
     }),
     {
       name: 'flixen-cms-content',
-      // Only persist content, not auth token or transient state
-      partialize: (state) => ({ content: state.content }),
+      // Only persist content, custom text boxes, position offsets, and hidden keys — not auth token or transient state
+      partialize: (state) => ({
+        content: state.content,
+        customTextBoxes: state.customTextBoxes,
+        textPositionOffsets: state.textPositionOffsets,
+        hiddenTextKeys: state.hiddenTextKeys,
+        textSizes: state.textSizes,
+      }),
+      // Ensure content is always a valid object after rehydration
+      merge: (persisted: unknown, current) => {
+        const p = (persisted as Partial<CMSState>) ?? {};
+        return {
+          ...current,
+          ...p,
+          content: p.content ?? current.content ?? {},
+          customTextBoxes: p.customTextBoxes ?? current.customTextBoxes ?? [],
+          textPositionOffsets: p.textPositionOffsets ?? current.textPositionOffsets ?? {},
+          hiddenTextKeys: p.hiddenTextKeys ?? current.hiddenTextKeys ?? {},
+          textSizes: p.textSizes ?? current.textSizes ?? {},
+        };
+      },
     }
   )
 );
