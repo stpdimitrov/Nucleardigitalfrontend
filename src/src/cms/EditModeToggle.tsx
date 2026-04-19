@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useLocation } from 'react-router';
 import { useCMSStore } from './cmsStore';
 import { adminLogin } from '../../services/api';
@@ -109,6 +110,7 @@ export function EditModeToggle() {
   const { pathname } = useLocation();
 
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showSectionsPanel, setShowSectionsPanel] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
@@ -154,9 +156,11 @@ export function EditModeToggle() {
     }
   };
 
-  const handleReset = () => {
+  const handleReset = async () => {
     if (window.confirm('Reset all content to default? This cannot be undone.')) {
       resetContent();
+      // Persist the empty content to backend so it doesn't reload old data on next visit
+      await persistContent();
       window.location.reload();
     }
   };
@@ -274,45 +278,16 @@ export function EditModeToggle() {
         )}
         </div>
 
-        {/* Sections Panel — shown in edit mode */}
+        {/* Sections toggle button */}
         {isEditMode && Object.keys(registeredSections).length > 0 && (
-          <div style={{
-            background: 'rgba(10,10,10,0.95)', border: '1px solid rgba(255,255,255,0.15)',
-            borderRadius: 10, padding: '10px 12px', minWidth: 200,
-            boxShadow: '0 4px 20px rgba(0,0,0,0.6)',
-          }}>
-            <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10, fontFamily: 'Arial,sans-serif', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>
-              Sections
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-              {Object.entries(registeredSections).map(([sectionId, label]) => {
-                const isHidden = getContent(`visibility.section.${sectionId}`, 'false') === 'true';
-                return (
-                  <div key={sectionId} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
-                    <span style={{ color: isHidden ? 'rgba(248,113,113,0.8)' : 'rgba(255,255,255,0.7)', fontSize: 12, fontFamily: 'Arial,sans-serif', textDecoration: isHidden ? 'line-through' : 'none' }}>
-                      {label}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        updateContent(`visibility.section.${sectionId}`, isHidden ? 'false' : 'true');
-                        persistContent();
-                      }}
-                      style={{
-                        padding: '2px 8px', borderRadius: 5, fontSize: 11, cursor: 'pointer',
-                        fontFamily: 'Arial,sans-serif', fontWeight: 500,
-                        border: isHidden ? '1px solid rgba(248,113,113,0.5)' : '1px solid rgba(255,255,255,0.2)',
-                        background: isHidden ? 'rgba(220,38,38,0.25)' : 'rgba(255,255,255,0.08)',
-                        color: isHidden ? 'rgb(248,113,113)' : 'rgba(255,255,255,0.6)',
-                      }}
-                    >
-                      {isHidden ? 'Show' : 'Hide'}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          <button
+            type="button"
+            onClick={() => setShowSectionsPanel(p => !p)}
+            className="rounded-lg border border-white/10 bg-black/80 px-3 py-2 text-sm text-white/70 backdrop-blur-sm transition-all hover:border-white/20 hover:text-white"
+            style={{ fontFamily: 'Arial,sans-serif' }}
+          >
+            {showSectionsPanel ? 'Close Sections' : `Sections (${Object.keys(registeredSections).length})`}
+          </button>
         )}
       </div>
 
@@ -371,6 +346,65 @@ export function EditModeToggle() {
             </form>
           </div>
         </div>
+      )}
+
+      {/* Sections Panel — portal so it's never clipped */}
+      {isEditMode && showSectionsPanel && createPortal(
+        <div style={{
+          position: 'fixed', top: 80, right: 24, zIndex: 9997,
+          background: 'rgba(10,10,10,0.97)', border: '1px solid rgba(255,255,255,0.15)',
+          borderRadius: 10, width: 240,
+          boxShadow: '0 4px 24px rgba(0,0,0,0.8)',
+          maxHeight: 'calc(100vh - 120px)', display: 'flex', flexDirection: 'column',
+        }}>
+          <div style={{
+            padding: '10px 12px 8px', borderBottom: '1px solid rgba(255,255,255,0.08)',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          }}>
+            <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10, fontFamily: 'Arial,sans-serif', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+              Sections
+            </span>
+            <button
+              type="button"
+              onClick={() => setShowSectionsPanel(false)}
+              style={{ color: 'rgba(255,255,255,0.4)', background: 'none', border: 'none', cursor: 'pointer', fontSize: 16, lineHeight: 1, padding: '0 2px' }}
+            >×</button>
+          </div>
+          <div style={{ overflowY: 'auto', padding: '6px 12px 10px', display: 'flex', flexDirection: 'column', gap: 4 }}>
+            {Object.entries(registeredSections).map(([sectionId, label]) => {
+              const isHidden = getContent(`visibility.section.${sectionId}`, 'false') === 'true';
+              return (
+                <div key={sectionId} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, padding: '3px 0' }}>
+                  <span style={{
+                    color: isHidden ? 'rgba(248,113,113,0.85)' : 'rgba(255,255,255,0.75)',
+                    fontSize: 12, fontFamily: 'Arial,sans-serif',
+                    textDecoration: isHidden ? 'line-through' : 'none',
+                    flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                  }}>
+                    {label}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      updateContent(`visibility.section.${sectionId}`, isHidden ? 'false' : 'true');
+                      persistContent();
+                    }}
+                    style={{
+                      flexShrink: 0, padding: '2px 8px', borderRadius: 5, fontSize: 11, cursor: 'pointer',
+                      fontFamily: 'Arial,sans-serif', fontWeight: 500,
+                      border: isHidden ? '1px solid rgba(248,113,113,0.5)' : '1px solid rgba(255,255,255,0.2)',
+                      background: isHidden ? 'rgba(220,38,38,0.25)' : 'rgba(255,255,255,0.08)',
+                      color: isHidden ? 'rgb(248,113,113)' : 'rgba(255,255,255,0.6)',
+                    }}
+                  >
+                    {isHidden ? 'Show' : 'Hide'}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>,
+        document.body
       )}
     </>
   );

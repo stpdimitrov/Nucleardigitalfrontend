@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useCMSStore } from './cmsStore';
 import { X, Upload, Link, ImageIcon } from 'lucide-react';
-import { uploadImage } from '../../services/api';
+import { uploadMedia } from '../../services/api';
 
 interface EditableImageProps {
   contentKey: string;
@@ -57,7 +57,7 @@ export function EditableImage({
     setUploadError('');
     try {
       setSaveStatus('saving');
-      const url = await uploadImage(adminToken, file);
+      const url = await uploadMedia(adminToken, file);
       await saveMediaSrc(url);
       setTimeout(() => setSaveStatus('idle'), 2000);
     } catch (err: any) {
@@ -262,23 +262,34 @@ export function EditableImage({
               )}
 
               {/* Actions */}
-              {activeTab === 'url' && (
-                <div className="flex gap-2 pt-1">
+              <div className="flex gap-2 pt-1">
+                {currentSrc && (
                   <button
-                    onClick={() => setShowModal(false)}
-                    className="flex-1 rounded-lg bg-white/10 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/20"
+                    onClick={() => saveMediaSrc('')}
+                    className="rounded-lg bg-red-500/10 px-3 py-2 text-sm font-medium text-red-400 transition-colors hover:bg-red-500/20"
+                    title="Remove current image/video"
                   >
-                    Cancel
+                    Clear
                   </button>
-                  <button
-                    onClick={handleUrlSave}
-                    disabled={!urlValue.trim()}
-                    className="flex-1 rounded-lg bg-[#0099FF] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#0088ee] disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    Save
-                  </button>
-                </div>
-              )}
+                )}
+                {activeTab === 'url' && (
+                  <>
+                    <button
+                      onClick={() => setShowModal(false)}
+                      className="flex-1 rounded-lg bg-white/10 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/20"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleUrlSave}
+                      disabled={!urlValue.trim()}
+                      className="flex-1 rounded-lg bg-[#0099FF] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#0088ee] disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      Save
+                    </button>
+                  </>
+                )}
+              </div>
             </div>
           </div>
 
