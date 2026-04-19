@@ -1,47 +1,128 @@
 import { useEffect, useRef, useState } from 'react';
 import { useCMSStore } from './cmsStore';
 
-// Evenly distributed dots on a sphere using lat/lon grid
-function generateDots(): [number, number, number][] {
-  const dots: [number, number, number][] = [];
-  for (let latDeg = -88; latDeg <= 88; latDeg += 4) {
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+type Ring = [number, number][]; // [lon, lat] pairs in geographic degrees
+interface RingBounds { ring: Ring; min0: number; max0: number; min1: number; max1: number; }
+interface Dot { x: number; y: number; z: number; land: boolean; }
+
+// ─── Module-level world map cache ─────────────────────────────────────────────
+
+let _cache: RingBounds[] | null = null;
+let _fetch: Promise<RingBounds[]> | null = null;
+
+function decodeTopojson(topo: any): RingBounds[] {
+  const rawArcs: number[][][] = topo.arcs;
+  const [sx, sy] = topo.transform.scale as [number, number];
+  const [tx, ty] = topo.transform.translate as [number, number];
+
+  function decodeArc(idx: number): Ring {
+    const rev = idx < 0;
+    const raw = rawArcs[rev ? ~idx : idx];
+    let x = 0, y = 0;
+    const pts: Ring = raw.map((d: number[]) => {
+      x += d[0]; y += d[1];
+      return [x * sx + tx, y * sy + ty] as [number, number];
+    });
+    return rev ? pts.reverse() : pts;
+  }
+
+  const result: RingBounds[] = [];
+
+  function addRing(arcIndices: number[]) {
+    const ring: Ring = [];
+    for (const idx of arcIndices) ring.push(...decodeArc(idx));
+    if (ring.length < 3) return;
+    let min0 = Infinity, max0 = -Infinity, min1 = Infinity, max1 = -Infinity;
+    for (const [lo, la] of ring) {
+      if (lo < min0) min0 = lo; if (lo > max0) max0 = lo;
+      if (la < min1) min1 = la; if (la > max1) max1 = la;
+    }
+    result.push({ ring, min0, max0, min1, max1 });
+  }
+
+  for (const geom of topo.objects.land.geometries) {
+    if (geom.type === 'Polygon') addRing(geom.arcs[0]);
+    else if (geom.type === 'MultiPolygon')
+      (geom.arcs as number[][][]).forEach(p => addRing(p[0]));
+  }
+  return result;
+}
+
+function loadLand(): Promise<RingBounds[]> {
+  if (_cache) return Promise.resolve(_cache);
+  if (!_fetch) {
+    _fetch = fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json')
+      .then(r => r.json())
+      .then(topo => { _cache = decodeTopojson(topo); return _cache!; })
+      .catch(() => { _fetch = null; return [] as RingBounds[]; });
+  }
+  return _fetch;
+}
+
+function inRing(lo: number, la: number, ring: Ring): boolean {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i], [xj, yj] = ring[j];
+    if ((yi > la) !== (yj > la) && lo < ((xj - xi) * (la - yi)) / (yj - yi) + xi)
+      inside = !inside;
+  }
+  return inside;
+}
+
+function isLand(lon360: number, lat: number, rings: RingBounds[]): boolean {
+  const lo = lon360 > 180 ? lon360 - 360 : lon360;
+  for (const { ring, min0, max0, min1, max1 } of rings) {
+    if (lo < min0 || lo > max0 || lat < min1 || lat > max1) continue;
+    if (inRing(lo, lat, ring)) return true;
+  }
+  return false;
+}
+
+function buildDots(rings: RingBounds[]): Dot[] {
+  const dots: Dot[] = [];
+  for (let latDeg = -87; latDeg <= 87; latDeg += 3.5) {
     const latR = (latDeg * Math.PI) / 180;
     const cosLat = Math.cos(latR);
-    const sinLat = Math.sin(latR);
-    const count = Math.max(1, Math.round(90 * cosLat));
+    const count = Math.max(1, Math.round(96 * cosLat));
     for (let i = 0; i < count; i++) {
-      const lonR = (i / count) * 2 * Math.PI;
-      const x = cosLat * Math.cos(lonR);
-      const y = sinLat;
-      const z = cosLat * Math.sin(lonR);
-      dots.push([x, y, z]);
+      const f = i / count;
+      const lonR = f * 2 * Math.PI;
+      dots.push({
+        x: cosLat * Math.cos(lonR),
+        y: Math.sin(latR),
+        z: cosLat * Math.sin(lonR),
+        land: rings.length > 0 ? isLand(f * 360, latDeg, rings) : true,
+      });
     }
   }
   return dots;
 }
 
-const DOTS = generateDots();
+// Pre-generate uniform dots for initial render while world map loads
+const UNIFORM_DOTS: Dot[] = buildDots([]);
+
+// ─── Geocoding ────────────────────────────────────────────────────────────────
 
 async function geocodeAddress(address: string): Promise<{ lat: number; lng: number } | null> {
   try {
     const res = await fetch(
       `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1`,
-      { headers: { 'Accept': 'application/json' } }
+      { headers: { Accept: 'application/json' } }
     );
     const data = await res.json();
-    if (data && data[0]) {
-      return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
-    }
-  } catch {
-    // silently fail
-  }
+    if (data?.[0]) return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+  } catch { /* silent */ }
   return null;
 }
 
+// ─── Component ────────────────────────────────────────────────────────────────
+
 interface GlobeAnimationProps {
-  addressKey: string;   // CMS key for address text
-  latKey: string;       // CMS key for geocoded latitude
-  lngKey: string;       // CMS key for geocoded longitude
+  addressKey: string;
+  latKey: string;
+  lngKey: string;
   defaultAddress?: string;
   defaultLat?: number;
   defaultLng?: number;
@@ -50,16 +131,16 @@ interface GlobeAnimationProps {
 }
 
 export function GlobeAnimation({
-  addressKey,
-  latKey,
-  lngKey,
+  addressKey, latKey, lngKey,
   defaultAddress = 'London, UK',
-  defaultLat = 51.5,
-  defaultLng = -0.13,
-  width = 380,
-  height = 380,
+  defaultLat = 51.5, defaultLng = -0.13,
+  width = 380, height = 380,
 }: GlobeAnimationProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const angleRef = useRef(-Math.PI / 2); // start with Europe/Africa visible
+  const dotsRef = useRef<Dot[]>(UNIFORM_DOTS);
+  const frameRef = useRef<number>(0);
+
   const { isEditMode, getContent, updateContent, persistContent } = useCMSStore();
 
   const address = getContent(addressKey, defaultAddress);
@@ -68,198 +149,195 @@ export function GlobeAnimation({
 
   const [geocoding, setGeocoding] = useState(false);
   const [geocodeError, setGeocodeError] = useState('');
-  const [pulse, setPulse] = useState(0);
+  const [mapReady, setMapReady] = useState(false);
 
-  // Pulse animation for the blue dot
+  // Load world map once
   useEffect(() => {
-    let frame: number;
-    let t = 0;
-    const tick = () => {
-      t += 0.04;
-      setPulse(Math.abs(Math.sin(t)));
-      frame = requestAnimationFrame(tick);
-    };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
+    loadLand().then(rings => {
+      if (rings.length > 0) {
+        dotsRef.current = buildDots(rings);
+        setMapReady(true);
+      }
+    });
   }, []);
 
-  const handleAddressSave = async (value: string) => {
-    updateContent(addressKey, value);
-    if (!value.trim()) return;
-
-    setGeocoding(true);
-    setGeocodeError('');
-    const result = await geocodeAddress(value.trim());
-    setGeocoding(false);
-
-    if (result) {
-      updateContent(latKey, String(result.lat));
-      updateContent(lngKey, String(result.lng));
-      persistContent();
-    } else {
-      setGeocodeError('Address not found — check spelling');
-      persistContent();
-    }
-  };
-
+  // Canvas render loop
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d')!;
 
-    const R = (Math.min(width, height) / 2) * 0.82;
+    const R = Math.min(width, height) * 0.42;
     const cx = width / 2;
-    const cy = height / 2 + R * 0.05;
+    const cy = height * 0.48;
 
-    const lx = -0.4, ly = -0.7, lz = 0.6;
+    // Light from top-left-front
+    const lx = -0.3, ly = -0.6, lz = 0.74;
     const lLen = Math.sqrt(lx * lx + ly * ly + lz * lz);
-    const light = [lx / lLen, ly / lLen, lz / lLen] as const;
+    const [lnx, lny, lnz] = [lx / lLen, ly / lLen, lz / lLen];
 
-    let angle = 0;
-    let animFrame: number;
+    let pulse = 0;
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
 
-      const glowGrad = ctx.createRadialGradient(cx, cy, R * 0.5, cx, cy, R * 1.3);
-      glowGrad.addColorStop(0, 'rgba(60,60,70,0.0)');
-      glowGrad.addColorStop(0.7, 'rgba(40,40,50,0.08)');
-      glowGrad.addColorStop(1, 'rgba(20,20,30,0.0)');
-      ctx.beginPath();
-      ctx.arc(cx, cy, R * 1.3, 0, Math.PI * 2);
-      ctx.fillStyle = glowGrad;
-      ctx.fill();
-
+      pulse += 0.04;
+      const pulseVal = Math.abs(Math.sin(pulse));
+      const angle = angleRef.current;
       const cosA = Math.cos(angle);
       const sinA = Math.sin(angle);
 
-      type DotEntry = { px: number; py: number; z: number; bright: number };
-      const projected: DotEntry[] = [];
-      for (const [x, y, z] of DOTS) {
+      // Draw dots ─────────────────────────────────────────────────────────────
+      const dots = dotsRef.current;
+      type Entry = { px: number; py: number; z: number; alpha: number; size: number };
+      const visible: Entry[] = [];
+
+      for (const { x, y, z, land } of dots) {
+        // Rotate around Y axis
         const rx = x * cosA + z * sinA;
         const ry = y;
         const rz = -x * sinA + z * cosA;
-        if (rz < -0.08) continue;
 
-        const diff = Math.max(0, rx * light[0] + ry * light[1] + rz * light[2]);
-        const bright = 0.15 + diff * 0.85;
-        const visibility = (rz + 0.08) / 1.08;
+        if (rz < -0.05) continue; // back-face cull
 
-        projected.push({
-          px: cx + rx * R,
-          py: cy - ry * R,
-          z: rz,
-          bright: bright * Math.pow(Math.max(0, visibility), 0.5),
-        });
+        // Diffuse lighting
+        const diff = Math.max(0, rx * lnx + ry * lny + rz * lnz);
+        const depthFade = Math.pow(Math.max(0, (rz + 0.05) / 1.05), 0.4);
+
+        let alpha: number;
+        let size: number;
+
+        if (land) {
+          alpha = (0.2 + diff * 0.8) * depthFade;
+          size = 0.9 + rz * 1.2;
+        } else {
+          // Very faint ocean dots just to show sphere shape
+          alpha = 0.06 * depthFade;
+          size = 0.5;
+        }
+
+        visible.push({ px: cx + rx * R, py: cy - ry * R, z: rz, alpha, size });
       }
 
-      projected.sort((a, b) => a.z - b.z);
+      // Sort back-to-front
+      visible.sort((a, b) => a.z - b.z);
 
-      for (const { px, py, z, bright } of projected) {
-        const size = 0.8 + z * 1.4;
+      for (const { px, py, alpha, size } of visible) {
         ctx.beginPath();
         ctx.arc(px, py, Math.max(0.3, size), 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,255,255,${bright.toFixed(3)})`;
+        ctx.fillStyle = `rgba(255,255,255,${alpha.toFixed(3)})`;
         ctx.fill();
       }
 
-      // Rim glow
-      const rimGrad = ctx.createRadialGradient(cx, cy, R * 0.8, cx, cy, R * 1.02);
-      rimGrad.addColorStop(0, 'rgba(200,200,220,0.0)');
-      rimGrad.addColorStop(0.85, 'rgba(200,200,220,0.0)');
-      rimGrad.addColorStop(1, 'rgba(200,200,220,0.06)');
-      ctx.beginPath();
-      ctx.arc(cx, cy, R, 0, Math.PI * 2);
-      ctx.strokeStyle = rimGrad;
-      ctx.lineWidth = R * 0.04;
-      ctx.stroke();
+      // Atmosphere rim ────────────────────────────────────────────────────────
+      const rim = ctx.createRadialGradient(cx, cy, R * 0.88, cx, cy, R * 1.08);
+      rim.addColorStop(0, 'rgba(180,200,255,0)');
+      rim.addColorStop(0.7, 'rgba(180,200,255,0.04)');
+      rim.addColorStop(1, 'rgba(180,200,255,0)');
+      ctx.beginPath(); ctx.arc(cx, cy, R * 1.04, 0, Math.PI * 2);
+      ctx.strokeStyle = rim; ctx.lineWidth = R * 0.06; ctx.stroke();
 
-      // Blue location marker
+      // Blue location marker ──────────────────────────────────────────────────
       const mLatR = (lat * Math.PI) / 180;
       const mLngR = (lng * Math.PI) / 180;
-      const mx0 = Math.cos(mLatR) * Math.cos(mLngR);
+      // In my coord system: lon 0° → lonR 0 → x=cosLat, z=0
+      // Geographic lon → lonR: geoLon → (geoLon > 0 ? geoLon : 360 + geoLon) / 360 * 2π
+      const lonDeg360 = lng < 0 ? lng + 360 : lng;
+      const mLonR = (lonDeg360 / 360) * 2 * Math.PI;
+      const cosMLat = Math.cos(mLatR);
+      const mx0 = cosMLat * Math.cos(mLonR);
       const my0 = Math.sin(mLatR);
-      const mz0 = Math.cos(mLatR) * Math.sin(mLngR);
+      const mz0 = cosMLat * Math.sin(mLonR);
 
       const mrx = mx0 * cosA + mz0 * sinA;
       const mry = my0;
       const mrz = -mx0 * sinA + mz0 * cosA;
 
       if (mrz > -0.05) {
-        const markerVis = Math.max(0, (mrz + 0.05) / 1.05);
+        const vis = Math.max(0, (mrz + 0.05) / 1.05);
         const mpx = cx + mrx * R;
         const mpy = cy - mry * R;
 
-        const pulseR = 14 + pulse * 10;
-        const glowAlpha = 0.35 * markerVis * (0.5 + pulse * 0.5);
+        const pr = 12 + pulseVal * 12;
+        const ga = 0.4 * vis * (0.4 + pulseVal * 0.6);
 
-        const pulseGrad = ctx.createRadialGradient(mpx, mpy, 0, mpx, mpy, pulseR);
-        pulseGrad.addColorStop(0, `rgba(0,160,255,${glowAlpha})`);
-        pulseGrad.addColorStop(0.5, `rgba(0,120,255,${glowAlpha * 0.5})`);
-        pulseGrad.addColorStop(1, 'rgba(0,100,255,0)');
-        ctx.beginPath();
-        ctx.arc(mpx, mpy, pulseR, 0, Math.PI * 2);
-        ctx.fillStyle = pulseGrad;
-        ctx.fill();
+        // Pulse ring
+        const pg = ctx.createRadialGradient(mpx, mpy, 0, mpx, mpy, pr);
+        pg.addColorStop(0, `rgba(0,150,255,${ga})`);
+        pg.addColorStop(0.6, `rgba(0,120,255,${ga * 0.4})`);
+        pg.addColorStop(1, 'rgba(0,100,255,0)');
+        ctx.beginPath(); ctx.arc(mpx, mpy, pr, 0, Math.PI * 2);
+        ctx.fillStyle = pg; ctx.fill();
 
-        const innerGlow = ctx.createRadialGradient(mpx, mpy, 0, mpx, mpy, 10);
-        innerGlow.addColorStop(0, `rgba(100,220,255,${0.9 * markerVis})`);
-        innerGlow.addColorStop(1, `rgba(0,140,255,0)`);
-        ctx.beginPath();
-        ctx.arc(mpx, mpy, 10, 0, Math.PI * 2);
-        ctx.fillStyle = innerGlow;
-        ctx.fill();
+        // Inner glow
+        const ig = ctx.createRadialGradient(mpx, mpy, 0, mpx, mpy, 9);
+        ig.addColorStop(0, `rgba(120,220,255,${0.95 * vis})`);
+        ig.addColorStop(1, 'rgba(0,140,255,0)');
+        ctx.beginPath(); ctx.arc(mpx, mpy, 9, 0, Math.PI * 2);
+        ctx.fillStyle = ig; ctx.fill();
 
-        ctx.beginPath();
-        ctx.arc(mpx, mpy, 4.5, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,255,255,${markerVis})`;
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.arc(mpx, mpy, 3, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(0,200,255,${markerVis})`;
-        ctx.fill();
+        // Core
+        ctx.beginPath(); ctx.arc(mpx, mpy, 4, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${vis})`; ctx.fill();
+        ctx.beginPath(); ctx.arc(mpx, mpy, 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(0,200,255,${vis})`; ctx.fill();
       }
 
-      angle += 0.0025;
-      animFrame = requestAnimationFrame(draw);
+      angleRef.current += 0.004; // ~1.4 full rotations per minute
+      frameRef.current = requestAnimationFrame(draw);
     };
 
     draw();
-    return () => cancelAnimationFrame(animFrame);
-  }, [lat, lng, pulse, width, height]);
+    return () => cancelAnimationFrame(frameRef.current);
+  }, [lat, lng, mapReady, width, height]);
+
+  const handleAddressSave = async (value: string) => {
+    updateContent(addressKey, value);
+    if (!value.trim()) { persistContent(); return; }
+    setGeocoding(true);
+    setGeocodeError('');
+    const result = await geocodeAddress(value.trim());
+    setGeocoding(false);
+    if (result) {
+      updateContent(latKey, String(result.lat));
+      updateContent(lngKey, String(result.lng));
+    } else {
+      setGeocodeError('Address not found — check spelling');
+    }
+    persistContent();
+  };
 
   return (
     <div style={{ position: 'relative', width, height }}>
       <canvas ref={canvasRef} width={width} height={height} style={{ display: 'block' }} />
 
-      {/* Address label — always visible below marker */}
+      {/* Address label */}
       {!isEditMode && address && (
         <div style={{
-          position: 'absolute', bottom: 20, left: '50%', transform: 'translateX(-50%)',
-          color: 'rgba(255,255,255,0.85)', fontSize: 12, fontFamily: 'Arial, sans-serif',
+          position: 'absolute', bottom: 18, left: '50%', transform: 'translateX(-50%)',
+          color: 'rgba(255,255,255,0.88)', fontSize: 12, fontFamily: 'Arial, sans-serif',
           fontWeight: 500, whiteSpace: 'nowrap',
-          textShadow: '0 0 12px rgba(0,160,255,0.8)',
+          textShadow: '0 0 10px rgba(0,150,255,0.9)',
           pointerEvents: 'none',
         }}>
           {address}
         </div>
       )}
 
-      {/* Edit mode: address input only — geocodes on blur */}
+      {/* Edit mode controls */}
       {isEditMode && (
         <div style={{
-          position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)',
+          position: 'absolute', bottom: 10, left: '50%', transform: 'translateX(-50%)',
           display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
           width: '90%',
         }}>
           <input
             type="text"
             defaultValue={address}
-            onBlur={(e) => handleAddressSave(e.target.value)}
+            onBlur={e => handleAddressSave(e.target.value)}
             style={{
-              width: '100%', background: 'rgba(0,0,0,0.75)',
-              border: `1px solid ${geocodeError ? 'rgba(255,80,80,0.7)' : 'rgba(0,160,255,0.6)'}`,
+              width: '100%', background: 'rgba(0,0,0,0.8)',
+              border: `1px solid ${geocodeError ? 'rgba(255,80,80,0.7)' : 'rgba(0,150,255,0.6)'}`,
               borderRadius: 6, padding: '5px 10px', color: '#fff', fontSize: 12,
               fontFamily: 'Arial, sans-serif', outline: 'none', textAlign: 'center',
               boxSizing: 'border-box',
@@ -267,12 +345,12 @@ export function GlobeAnimation({
             placeholder="Enter office address…"
           />
           {geocoding && (
-            <span style={{ color: 'rgba(0,180,255,0.8)', fontSize: 10, fontFamily: 'Arial, sans-serif' }}>
+            <span style={{ color: 'rgba(0,180,255,0.8)', fontSize: 10, fontFamily: 'Arial,sans-serif' }}>
               Locating…
             </span>
           )}
           {geocodeError && !geocoding && (
-            <span style={{ color: 'rgba(255,100,100,0.9)', fontSize: 10, fontFamily: 'Arial, sans-serif' }}>
+            <span style={{ color: 'rgba(255,100,100,0.9)', fontSize: 10, fontFamily: 'Arial,sans-serif' }}>
               {geocodeError}
             </span>
           )}
