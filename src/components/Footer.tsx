@@ -18,7 +18,12 @@ const cmsNavLinks = [
   { id: 'nav-blogs', label: 'Blogs', href: '/blogs' },
 ];
 
-const socialLinks: { id: string; label: string; url: string }[] = [];
+const socialLinks: { id: string; label: string; url: string }[] = [
+  { id: 'social-instagram', label: 'Instagram', url: '' },
+  { id: 'social-twitter', label: 'X-Twitter', url: '' },
+  { id: 'social-linkedin', label: 'LinkedIn', url: '' },
+  { id: 'social-youtube', label: 'Youtube', url: '' },
+];
 
 export function Footer() {
   const { isEditMode, getContent, updateContent, persistContent } = useCMSStore();
