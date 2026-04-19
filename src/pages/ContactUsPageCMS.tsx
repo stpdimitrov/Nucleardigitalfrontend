@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { useCMSStore } from '../src/cms/cmsStore';
 import { EditableText } from '../src/cms/EditableText';
 import { EditableFAQSection } from '../src/cms/EditableFAQSection';
-import { EditableCTASection } from '../src/cms';
+import { EditableCTASection, EditableSection } from '../src/cms';
 import { EditableImage } from '../src/cms/EditableImage';
-import { faqItems } from '../services/mock-data';
 import { submitAppointment } from '../services/api';
 import svgPaths from "../imports/svg-caky0u7ahw";
 import imgCoverImageSilhouetteOfACameraOperatorFilmingOnAProfessionalSetSurroundedByBrightStudioLightsTheSceneConveysFocusAndCreativeEnergy from "figma:asset/f0ab34e01eb7a68a97d2f698b486de3693299155.png";
@@ -61,6 +60,7 @@ export function ContactUsPageCMS() {
     <div id="main" data-framer-generated-page className="items-center contents h-min justify-start overflow-hidden relative bg-black gap-[0px] min-h-[640px]">
 
       {/* Hero Section - Let's Connect */}
+      <EditableSection sectionId="contact.hero" label="Contact Hero">
       <section aria-label="Contact hero" className="items-center flex h-min justify-center overflow-clip relative w-full gap-[8px] pt-[140px] pr-0 pb-[100px] pl-0">
         
         <div aria-label="Container" className="items-center flex flex-col grow h-min justify-start overflow-clip relative w-px basis-0 gap-[64px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
@@ -360,8 +360,10 @@ export function ContactUsPageCMS() {
           </div>
         </div>
       </section>
+      </EditableSection>
 
       {/* Google Map Section */}
+      <EditableSection sectionId="contact.map" label="Map">
       <section aria-label="Map" className="items-center flex h-min justify-center overflow-clip relative w-full gap-[8px] pt-0 pr-0 pb-[100px] pl-0">
         <div aria-label="Container" className="items-center flex flex-col grow h-min justify-start overflow-clip relative w-px basis-0 gap-[64px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
           <div className="content-stretch flex flex-col h-[650px] items-start justify-center relative shrink-0 w-full rounded-[12px] overflow-hidden" data-name="Google map">
@@ -379,8 +381,10 @@ export function ContactUsPageCMS() {
           </div>
         </div>
       </section>
+      </EditableSection>
 
       {/* Contact Info Cards Section */}
+      <EditableSection sectionId="contact.info" label="Contact Info">
       <section aria-label="Contact info" className="items-center flex h-min justify-center overflow-clip relative w-full gap-[8px] pt-0 pr-0 pb-[100px] pl-0">
         <div aria-label="Container" className="items-center flex flex-col grow h-min justify-start overflow-clip relative w-px basis-0 gap-[24px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
           <div aria-label="Grid 3x" className="content-stretch flex gap-[20px] items-start justify-center relative size-full" data-name="Grid 3x">
@@ -659,16 +663,21 @@ export function ContactUsPageCMS() {
           </div>
         </div>
       </section>
+      </EditableSection>
 
       {/* FAQ Section */}
-      <EditableFAQSection 
-        defaultFaqs={faqItems}
+      <EditableSection sectionId="contact.faq" label="FAQ">
+      <EditableFAQSection
+        defaultFaqs={[]}
         coverImageUrl={imgCoverImageSilhouettedBandMembersPlayInstrumentsInASmokyWarehouseBacklitByVibrantOrangeAndTealLightsCreatingAMoodyDramaticAmbiance}
         coverImageAlt="Dramatic scene with people in fog with orange and teal lighting"
       />
+      </EditableSection>
 
       {/* Let's Work Together Section - CTA */}
+      <EditableSection sectionId="contact.cta" label="CTA">
       <EditableCTASection contentKey="contact.cta" />
+      </EditableSection>
     </div>
   );
 }

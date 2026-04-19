@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { Upload, Link } from 'lucide-react';
 import { useCMSStore } from './cmsStore';
-import { uploadImage } from '../../services/api';
+import { uploadMedia } from '../../services/api';
 
 interface ImageUploadFieldProps {
   value: string;
@@ -30,7 +30,7 @@ export function ImageUploadField({ value, onChange, label = 'Image', acceptVideo
     setUploading(true);
     setError('');
     try {
-      const url = await uploadImage(adminToken, file);
+      const url = await uploadMedia(adminToken, file);
       onChange(url);
       setUrlValue(url);
     } catch (err: any) {

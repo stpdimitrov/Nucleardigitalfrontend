@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Upload, ImageIcon, Trash2, X, Search } from 'lucide-react';
 import { useCMSStore } from './cmsStore';
-import { uploadImage } from '../../services/api';
+import { uploadMedia } from '../../services/api';
 import { EditableText } from './EditableText';
 import svgPaths from '../../imports/svg-caky0u7ahw';
 
@@ -56,7 +56,7 @@ export function EditableLetsConnectSection({ contentKey = 'letsConnectSection' }
     }
     try {
       setSaveStatus('saving');
-      const url = await uploadImage(adminToken, file);
+      const url = await uploadMedia(adminToken, file);
       await saveBackgroundImage(url);
     } catch (err: any) {
       console.error('Upload failed:', err);
@@ -281,7 +281,7 @@ function BackgroundImageModal({
     setUploading(true);
     setUploadError('');
     try {
-      const url = await uploadImage(adminToken, file);
+      const url = await uploadMedia(adminToken, file);
       onSaveImage(url);
       onClose();
     } catch (err: any) {

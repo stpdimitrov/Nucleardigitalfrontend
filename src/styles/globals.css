@@ -12,3 +12,18 @@
 [contenteditable="true"] span {
   -webkit-text-fill-color: currentColor !important;
 }
+
+/* Strip any background colour that browsers inject when pasting formatted text */
+[contenteditable="true"],
+[contenteditable="true"] * {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* Override browser selection highlight inside editables */
+[contenteditable="true"] ::selection,
+[contenteditable="true"]::selection {
+  background-color: rgba(0, 153, 255, 0.35);
+  -webkit-text-fill-color: inherit;
+  color: inherit;
+}

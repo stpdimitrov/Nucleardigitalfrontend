@@ -7,6 +7,7 @@ import { useCMSStore } from './cmsStore';
 import { EditableImage } from './EditableImage';
 import { EditableText } from './EditableText';
 import { EditableOverlay } from './EditableOverlay';
+import { SiteLogo } from './SiteLogo';
 
 interface EditableAboutUsSectionProps {
   contentKey?: string;
@@ -66,18 +67,12 @@ export function EditableAboutUsSection({
         <div aria-label="Container" className="items-center flex grow h-min justify-center overflow-clip relative w-px basis-0 gap-[64px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
           <div aria-label="Wrapper" className="items-center flex flex-col grow h-min justify-center overflow-clip relative w-px basis-0 gap-[24px] max-w-[790px] z-[1] shrink-[0]">
             {showLogo && (
-              <div aria-label="Logo" className="relative shrink-[0]">
-                <Link to="/" aria-label="Logo" className="items-center flex size-min justify-center relative text-[rgb(0,_0,_238)] gap-[4px]" style={{"textDecoration":"rgb(0, 0, 238)"}}>
-                  <div aria-label="Icon" className="relative w-[30px] h-[30px] shrink-[0]">
-                    <div className="absolute left-0 top-0 right-0 bottom-0">
-                      <img src="https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2Fdf1ea35df7df9da91ef7b7004a32fec3b03a527c.svg%3Fwidth=42&amp;height=42?generation=1768843022438331&amp;alt=media" className="block size-full object-cover overflow-clip aspect-[auto_42_/_42]" />
-                    </div>
-                  </div>
-                  <div className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
-                    <p className="font-medium uppercase text-white text-[24px] tracking-[-0.72px] leading-[24px]" style={{"fontFamily":"Ronzino, \"Ronzino Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>Flixen™</p>
-                  </div>
-                </Link>
-              </div>
+              <SiteLogo
+                heightKey="site.logoHeightNavbar"
+                defaultHeight={36}
+                minHeight={16}
+                maxHeight={100}
+              />
             )}
 
             {/* Editable Heading */}

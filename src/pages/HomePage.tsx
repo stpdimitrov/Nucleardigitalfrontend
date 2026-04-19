@@ -4,6 +4,7 @@ import { EditableFAQSection } from '../src/cms/EditableFAQSection';
 import { motion } from 'motion/react';
 import { ArrowRight, ArrowDown } from 'lucide-react';
 import { useCMSStore } from '../src/cms/cmsStore';
+import { EditableSection } from '../src/cms/EditableSection';
 import { EditableText } from '../src/cms/EditableText';
 import { EditableImage } from '../src/cms/EditableImage';
 import { EditableLink } from '../src/cms/EditableLink';
@@ -15,13 +16,6 @@ import { EditableWhyChooseUsSection } from '../src/cms/EditableWhyChooseUsSectio
 import { EditableHowWeWorkSection } from '../src/cms/EditableHowWeWorkSection';
 import { EditableTestimonialsSection } from '../src/cms/EditableTestimonialsSection';
 import { scrollFadeIn, staggerContainer, staggerItem, viewport } from '../lib/animations';
-import {
-  clientLogos,
-  whyChooseUsItems,
-  pricingPlans,
-  faqItems,
-  heroContent,
-} from '../services/mock-data';
 import { useBackendData } from '../contexts/BackendDataContext';
 
 // Animation variants
@@ -48,7 +42,8 @@ export function HomePage() {
     slug: p.slug,
     shortDescription: p.description,
     date: p.date,
-    service: p.service,
+    service: p.service || '',
+    serviceId: p.serviceId,
     clientName: '',
     thumbnailUrl: p.image,
     videoUrl: p.videoUrl,
@@ -56,11 +51,12 @@ export function HomePage() {
   
   return (
     <div className="items-center contents h-min justify-start overflow-hidden relative bg-black gap-[0px] min-h-[640px]">{/* Removed DndProvider */}
+      <EditableSection sectionId="home.hero" label="Hero">
       <motion.header aria-label="Hero section" className="items-center flex flex-col h-screen justify-center overflow-clip relative w-full gap-[8px] pt-[100px] pr-0 pb-6 pl-0" initial="hidden" animate="visible" variants={heroAnimation}>
         <div className={`absolute left-0 top-0 right-0 bottom-0 ${isEditMode ? '' : 'pointer-events-none'}`}>
           <EditableImage
             contentKey="home.hero.backgroundImage"
-            defaultSrc={heroContent.imageUrl}
+            defaultSrc=""
             alt="Silhouette of a person with a camera walking towards vibrant orange light under dim blue streetlights on a misty road at night. Mysterious and atmospheric."
             className="block size-full object-cover overflow-clip aspect-[auto_1536_/_1024]"
           />
@@ -77,7 +73,7 @@ export function HomePage() {
               />
             </div>
           </div>
-          <div aria-label="Bottom wrapper" className="items-end flex h-min justify-between overflow-clip relative w-full shrink-[0]">
+          <div aria-label="Bottom wrapper" className="items-end flex min-h-[200px] justify-between overflow-clip relative w-full shrink-[0]">
             <div aria-label="Scroll down" className="relative shrink-[0]">
               <div aria-label="Scroll down" className="items-center flex size-min justify-end overflow-hidden relative gap-[4px]">
                 <div className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
@@ -93,27 +89,11 @@ export function HomePage() {
                 </div>
               </div>
             </div>
-            <div aria-label="Hero video" className="relative shrink-[0]">
-              <div aria-label="Video Pause" className="overflow-hidden relative w-[250px] h-[200px]">
-                <div aria-label="Video Button" className="absolute left-4 bottom-4 z-[3]">
-                  <div aria-label="Play" className="items-center flex justify-center overflow-hidden relative w-8 h-8 backdrop-blur-[25px] bg-white/7 gap-[4px] rounded-[62.5rem]">
-                    <div aria-label="Icon" className="relative w-5 h-5 shrink-[0]">
-                      <div className="contents">
-                        <div className="inline-block size-full overflow-hidden text-white fill-white" style={{"textDecoration":"rgb(255, 255, 255)"}}>
-                          <img src="https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F6119109a2a77414c2fb8f621fa18aaed3e52019f.svg?generation=1768843022434339&amp;alt=media" className="inline-block size-full" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div aria-label="Video" className="absolute left-0 top-0 right-0 bottom-0">
-                  <video src="https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2Fc9ff2d7236821117c4faa28f56d63a4f06c5b37d.mp4?generation=1768843022528431&amp;alt=media" className="size-full object-cover overflow-clip"></video>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </motion.header>
+      </EditableSection>
+      <EditableSection sectionId="home.intro" label="Introduction">
       <motion.section aria-label="Introduction" className="items-center flex h-min justify-center overflow-clip relative w-full gap-[8px] pt-[100px] pr-0 pb-[100px] pl-0" initial="hidden" whileInView="visible" viewport={viewport} variants={scrollFadeIn}>
         <div aria-label="Container" className="items-center flex flex-col grow h-min justify-start overflow-clip relative w-px basis-0 gap-[64px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
           <div aria-label="Grid 3x" className="grid h-min justify-center overflow-clip relative w-full grid-rows-[repeat(1,min-content)] gap-[24px_64px] z-[4] shrink-[0]" style={{"gridTemplateColumns":"repeat(3, minmax(50px, 1fr))"}}>
@@ -167,11 +147,12 @@ export function HomePage() {
             </motion.div>
           </div>
           <motion.div aria-label="Grid 4x" className="grid h-min justify-center overflow-clip relative w-full grid-rows-[repeat(2,min-content)] gap-[12px] z-[4] shrink-[0]" style={{"gridTemplateColumns":"repeat(4, minmax(50px, 1fr))"}} initial="hidden" whileInView="visible" viewport={viewport} variants={staggerContainer}>
-            <EditableClientLogos defaultLogos={clientLogos} />
+            <EditableClientLogos defaultLogos={[]} />
           </motion.div>
         </div>
       </motion.section>
-      
+      </EditableSection>
+      <EditableSection sectionId="home.featured" label="Featured Work">
       <section aria-label="Featured work" className="items-center flex h-min justify-center overflow-clip relative w-full gap-[8px] pt-[100px] pr-0 pb-[100px] pl-0">
         <div aria-label="Container" className="items-center flex flex-col grow h-min justify-start relative w-px basis-0 gap-[64px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
           <div aria-label="Grid 6x" className="grid h-min justify-center overflow-clip relative w-full grid-rows-[repeat(1,min-content)] gap-[12px_32px] z-[4] shrink-[0]" style={{"gridTemplateColumns":"repeat(12, minmax(50px, 1fr))"}}>
@@ -232,10 +213,11 @@ export function HomePage() {
               </EditableLink>
             </div>
           </div>
-          <EditableProjectsSection defaultProjects={transformedProjects} />
+          <EditableProjectsSection defaultProjects={transformedProjects} availableServices={services.map(s => ({ id: s.id, title: s.title }))} />
         </div>
       </section>
-
+      </EditableSection>
+      <EditableSection sectionId="home.about" label="About Us">
       <EditableAboutUsSection
         contentKey="home.aboutUs"
         defaultBackgroundImage="https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2Fb78f23653961282fd6252e62cd8283d6c0057af5.jpeg%3Fwidth=1280&amp;height=1280?generation=1768843022673805&amp;alt=media"
@@ -244,9 +226,11 @@ export function HomePage() {
         defaultButtonText="About us"
         defaultButtonHref="/about-us"
       />
-
+      </EditableSection>
+      <EditableSection sectionId="home.services" label="Services">
       <ServicesSection services={services} />
-
+      </EditableSection>
+      <EditableSection sectionId="home.whychooseus" label="Why Choose Us">
       <EditableWhyChooseUsSection
         contentKey="home.whyChooseUs"
         defaultSectionTag="why choose us"
@@ -255,19 +239,24 @@ export function HomePage() {
         defaultButtonText="Contact us"
         defaultButtonHref="/contact-us"
       />
-
+      </EditableSection>
+      <EditableSection sectionId="home.howwework" label="How We Work">
       <EditableHowWeWorkSection />
-
-      <EditablePricingSection defaultPlans={pricingPlans} />
-
+      </EditableSection>
+      <EditableSection sectionId="home.pricing" label="Pricing">
+      <EditablePricingSection defaultPlans={[]} />
+      </EditableSection>
+      <EditableSection sectionId="home.testimonials" label="Testimonials">
       <EditableTestimonialsSection defaultTestimonials={testimonials} />
-
+      </EditableSection>
+      <EditableSection sectionId="home.faq" label="FAQ">
       <EditableFAQSection
-        defaultFaqs={faqItems}
+        defaultFaqs={[]}
         coverImageUrl="https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F2d3a81b8ccba0e26d61088a5aa4e7ee9ba77f6f4.jpeg%3Fscale-down-to=1024&amp;width=1280&amp;height=1280?generation=1768843023272576&amp;alt=media"
         coverImageAlt="Silhouetted band members play instruments in a smoky warehouse, backlit by vibrant orange and teal lights, creating a moody, dramatic ambiance."
       />
-
+      </EditableSection>
+      <EditableSection sectionId="home.cta" label="CTA">
       <CTASection
         tag="Lets work together"
         heading="Ready to bring your vision to life? Let's create stunning visuals that captivate, inspire, and deliver results."
@@ -276,6 +265,7 @@ export function HomePage() {
         backgroundImage="https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F034782943c0a8b7c7fd2455a1e51d707289a39ec.jpeg%3Fwidth=1280&amp;height=1280?generation=1768843023470915&amp;alt=media"
         backgroundAlt="Silhouette of a filmmaker with a camera on a tripod in a dimly lit alley, bathed in orange light and mist, creating a moody, cinematic atmosphere."
       />
+      </EditableSection>
     </div>
   );
 }

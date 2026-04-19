@@ -16,10 +16,7 @@ const delay = (ms: number = 300) => new Promise(resolve => setTimeout(resolve, m
  */
 export async function getProjects(): Promise<Project[]> {
   await delay();
-  
-  // Import from mock-data to use the actual Framer videos
-  const { projects } = await import('../services/mock-data');
-  return projects;
+  return [];
 }
 
 /**

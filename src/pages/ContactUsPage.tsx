@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { FAQSection } from '../components/FAQSection';
-import { faqItems } from '../services/mock-data';
 import svgPaths from "../imports/svg-caky0u7ahw";
 import imgCoverImageSilhouetteOfACameraOperatorFilmingOnAProfessionalSetSurroundedByBrightStudioLightsTheSceneConveysFocusAndCreativeEnergy from "figma:asset/f0ab34e01eb7a68a97d2f698b486de3693299155.png";
 import imgCoverImageSilhouettedBandMembersPlayInstrumentsInASmokyWarehouseBacklitByVibrantOrangeAndTealLightsCreatingAMoodyDramaticAmbiance from "figma:asset/0103be52b0be1ee4c947007cec96aea7cc4137fe.png";
@@ -474,7 +473,7 @@ export function ContactUsPage() {
 
       {/* FAQ Section */}
       <FAQSection
-        faqs={faqItems}
+        faqs={[]}
         coverImageUrl={imgCoverImageSilhouettedBandMembersPlayInstrumentsInASmokyWarehouseBacklitByVibrantOrangeAndTealLightsCreatingAMoodyDramaticAmbiance}
         coverImageAlt="Dramatic scene with people in fog with orange and teal lighting"
       />

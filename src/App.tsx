@@ -6,6 +6,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { EditModeProvider } from './contexts/EditModeContext';
 import { BackendDataProvider } from './contexts/BackendDataContext';
 import { EditModeToggle } from './src/cms/EditModeToggle';
+import { CustomTextBoxLayer } from './src/cms/CustomTextBoxLayer';
 import { NavbarAnimated } from './components/NavbarAnimated';
 import { Footer } from './components/Footer';
 import { HomePage } from './pages/HomePage';
@@ -76,6 +77,9 @@ export default function App() {
 
                 <Footer />
                 
+                {/* Custom text boxes overlay */}
+                <CustomTextBoxLayer />
+
                 {/* Edit Mode Button */}
                 <EditModeToggle />
               </div>

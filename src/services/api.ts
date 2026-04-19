@@ -1,20 +1,5 @@
 // API service layer — all requests go through Supabase Edge Functions
 import type { Project, Service, Testimonial, SiteSettings, FAQ } from '@/types';
-import {
-  projects as mockProjects,
-  services as mockServices,
-  testimonials as mockTestimonials,
-  siteSettings as mockSiteSettings,
-  clientLogos,
-  whyChooseUsItems,
-  processSteps,
-  pricingPlans,
-  faqItems,
-  mainNavLinks,
-  cmsNavLinks,
-  socialLinks,
-  homepageData,
-} from './mock-data';
 
 // ============================================
 // CONFIG
@@ -218,6 +203,7 @@ function mapProject(p: BackendProject): Project {
     service: d.service,
     category: d.category,
     featured: d.featured,
+    serviceId: p.service_id,
   };
 }
 
@@ -246,15 +232,15 @@ function mapSiteSettings(settings: BackendSiteSetting[]): SiteSettings {
   };
 
   return {
-    siteName: pick(['site_name', 'siteName'], mockSiteSettings.siteName),
-    tagline: pick(['tagline'], mockSiteSettings.tagline),
-    logoUrl: pick(['logo_url', 'logoUrl'], mockSiteSettings.logoUrl),
-    footerVideoUrl: pick(['footer_video_url', 'footerVideoUrl'], mockSiteSettings.footerVideoUrl),
-    copyrightText: pick(['copyright_text', 'copyrightText'], mockSiteSettings.copyrightText),
-    creditText: pick(['credit_text', 'creditText'], mockSiteSettings.creditText),
-    creditUrl: pick(['credit_url', 'creditUrl'], mockSiteSettings.creditUrl),
-    builtWithText: pick(['built_with_text', 'builtWithText'], mockSiteSettings.builtWithText),
-    builtWithUrl: pick(['built_with_url', 'builtWithUrl'], mockSiteSettings.builtWithUrl),
+    siteName: pick(['site_name', 'siteName'], ''),
+    tagline: pick(['tagline'], ''),
+    logoUrl: pick(['logo_url', 'logoUrl'], ''),
+    footerVideoUrl: pick(['footer_video_url', 'footerVideoUrl'], ''),
+    copyrightText: pick(['copyright_text', 'copyrightText'], ''),
+    creditText: pick(['credit_text', 'creditText'], ''),
+    creditUrl: pick(['credit_url', 'creditUrl'], ''),
+    builtWithText: pick(['built_with_text', 'builtWithText'], ''),
+    builtWithUrl: pick(['built_with_url', 'builtWithUrl'], ''),
   };
 }
 
@@ -297,9 +283,10 @@ export async function fetchRawSiteSettings(): Promise<BackendSiteSetting[]> {
 // FILE UPLOAD — Edge Function
 // ============================================
 
-export async function uploadImage(token: string, file: File): Promise<string> {
+/** Upload any file (image or video) to storage. Returns the public URL. */
+export async function uploadMedia(token: string, file: File): Promise<string> {
   const formData = new FormData();
-  formData.append('image', file);
+  formData.append('image', file); // field name kept for backend compatibility
 
   const res = await fetch(`${BASE_URL}/admin/upload`, {
     method: 'POST',
@@ -318,6 +305,9 @@ export async function uploadImage(token: string, file: File): Promise<string> {
   const data = await res.json() as { image_url: string };
   return data.image_url;
 }
+
+/** @deprecated Use uploadMedia instead */
+export const uploadImage = uploadMedia;
 
 // ============================================
 // CONTACT FORM — Edge Function
@@ -422,47 +412,18 @@ export async function adminUpdateSiteSetting(token: string, key: string, value_e
 }
 
 // ============================================
-// SEED — insert frontend mock data for tenant
+// LEGACY EXPORTS (no longer mock-backed)
 // ============================================
 
-export async function seedTenantServices(token: string): Promise<void> {
-  const { services: mockSvcs } = await import('./mock-data');
-  for (const s of mockSvcs) {
-    await adminCreateService(token, {
-      slug: s.id.replace('service-', '') + '-' + s.title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-      data: {
-        name: s.title,
-        title: s.title,
-        description: s.description,
-        videoUrl: s.videoUrl,
-        features: Array.isArray(s.features) ? s.features : [],
-        is_active: true,
-        is_featured: true,
-        cover_image: '',
-        gallery_images: [],
-        benefits: [],
-        process_steps: [],
-        faqs: [],
-      },
-    });
-  }
-}
-
-// ============================================
-// LEGACY MOCK-BACKED EXPORTS (unchanged data)
-// ============================================
-
-export { clientLogos, whyChooseUsItems, processSteps, pricingPlans, faqItems, mainNavLinks, cmsNavLinks, socialLinks, homepageData };
-
-export async function getClientLogos() { return clientLogos; }
-export async function getWhyChooseUsItems() { return whyChooseUsItems; }
-export async function getProcessSteps() { return processSteps; }
-export async function getPricingPlans() { return pricingPlans; }
-export async function getFAQItems(): Promise<FAQ[]> { return faqItems; }
-export async function getMainNavLinks() { return mainNavLinks; }
-export async function getCMSNavLinks() { return cmsNavLinks; }
-export async function getSocialLinks() { return socialLinks; }
-export async function getHomepageData() { return homepageData; }
+export async function getClientLogos() { return []; }
+export async function getWhyChooseUsItems() { return []; }
+export async function getProcessSteps() { return []; }
+export async function getPricingPlans() { return []; }
+export async function getFAQItems(): Promise<FAQ[]> { return []; }
+export async function getMainNavLinks() { return []; }
+export async function getCMSNavLinks() { return []; }
+export async function getSocialLinks() { return []; }
+export async function getHomepageData() { return {}; }
 
 export const getServices = fetchServices;
 export const getProjects = fetchProjects;
@@ -480,7 +441,6 @@ export const api = {
   adminCreateService, adminUpdateService, adminDeleteService,
   adminCreateProject, adminUpdateProject, adminDeleteProject,
   adminCreateTestimonial, adminUpdateTestimonial, adminDeleteTestimonial, adminUpdateSiteSetting,
-  seedTenantServices,
   getClientLogos, getWhyChooseUsItems, getProcessSteps, getPricingPlans,
   getFAQItems, getMainNavLinks, getCMSNavLinks, getSocialLinks, submitContactForm,
 };

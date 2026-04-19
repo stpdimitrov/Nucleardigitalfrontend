@@ -6,6 +6,7 @@ import {
   EditableAwardsContainer,
   EditableStorySection,
   EditableOverlay,
+  EditableSection,
   type TeamMember,
   useCMSStore,
 } from '../src/cms';
@@ -167,7 +168,7 @@ function EditableHeroSection() {
         </div>
 
         {/* Cover Image */}
-        <div className="h-[660px] overflow-clip relative shrink-0 w-full" data-name="Cover image">
+        <div className="overflow-clip relative shrink-0 w-full" style={{ height: 'clamp(200px, 53.2vw, 660px)' }} data-name="Cover image">
           <div className={`absolute inset-0 overflow-hidden ${isEditMode ? '' : 'pointer-events-none'}`}>
             <EditableImage
               contentKey="about.hero.coverImage"
@@ -185,7 +186,7 @@ function EditableHeroSection() {
 
         {/* Grid 2x - Images */}
         <div className="content-stretch flex gap-[24px] items-start justify-center overflow-clip relative shrink-0 w-full" data-name="Grid 2x">
-          <div className="flex-[1_0_0] h-[470px] min-h-px min-w-px overflow-clip relative" data-name="Image 01">
+          <div className="flex-[1_0_0] min-h-px min-w-px overflow-clip relative" style={{ height: 'clamp(180px, 37.9vw, 470px)' }} data-name="Image 01">
             <div className={`absolute inset-0 overflow-hidden ${isEditMode ? '' : 'pointer-events-none'}`}>
               <EditableImage
                 contentKey="about.hero.image01"
@@ -195,7 +196,7 @@ function EditableHeroSection() {
               />
             </div>
           </div>
-          <div className="flex-[1_0_0] h-[470px] min-h-px min-w-px overflow-clip relative" data-name="Image 02">
+          <div className="flex-[1_0_0] min-h-px min-w-px overflow-clip relative" style={{ height: 'clamp(180px, 37.9vw, 470px)' }} data-name="Image 02">
             <div className={`absolute inset-0 overflow-hidden ${isEditMode ? '' : 'pointer-events-none'}`}>
               <EditableImage
                 contentKey="about.hero.image02"
@@ -219,7 +220,7 @@ function EditableVideoSection() {
   const { isEditMode } = useCMSStore();
   
   return (
-    <div className="content-stretch flex flex-col h-[1200px] items-start justify-center relative w-full" data-name="Video">
+    <div className="content-stretch flex flex-col items-start justify-center relative w-full" style={{ height: 'clamp(400px, 96.8vw, 1200px)' }} data-name="Video">
       <div className="flex-[1_0_0] min-h-px min-w-px relative w-full" data-name="xmNDt2jWD6z1ApLfBpTfkZwfp90.mp4">
         <div className={`absolute inset-0 overflow-hidden ${isEditMode ? '' : 'pointer-events-none'}`}>
           <EditableImage
@@ -252,7 +253,7 @@ function EditableCTASection() {
   const { isEditMode } = useCMSStore();
   
   return (
-    <div className="content-stretch flex flex-col h-[1200px] items-start justify-center relative w-full" data-name="div.framer-18y2yvd-container">
+    <div className="content-stretch flex flex-col items-start justify-center relative w-full" style={{ height: 'clamp(400px, 96.8vw, 1200px)' }} data-name="div.framer-18y2yvd-container">
       <div className="content-stretch flex items-center justify-center overflow-clip pb-[463.18px] pt-[463.19px] relative shrink-0 w-full" data-name="Desktop">
         <div className={`absolute inset-0 overflow-hidden ${isEditMode ? '' : 'pointer-events-none'}`}>
           <EditableImage
@@ -348,11 +349,11 @@ function EditableCTASection() {
 export function AboutUsPage() {
   return (
     <div className="bg-black flex flex-col min-h-screen relative w-full">
-      <EditableHeroSection />
-      <EditableTeamSection defaultMembers={defaultTeamMembers} />
-      <EditableVideoSection />
-      <EditableAwardsSection />
-      <EditableCTASection />
+      <EditableSection sectionId="about.hero" label="Hero"><EditableHeroSection /></EditableSection>
+      <EditableSection sectionId="about.team" label="Team"><EditableTeamSection defaultMembers={defaultTeamMembers} /></EditableSection>
+      <EditableSection sectionId="about.video" label="Video"><EditableVideoSection /></EditableSection>
+      <EditableSection sectionId="about.awards" label="Awards"><EditableAwardsSection /></EditableSection>
+      <EditableSection sectionId="about.cta" label="CTA"><EditableCTASection /></EditableSection>
     </div>
   );
 }

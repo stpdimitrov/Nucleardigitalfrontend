@@ -4,7 +4,7 @@ import { motion } from 'motion/react';
 import { Link } from 'react-router';
 import { ArrowRight, Settings, Plus, Trash2, Image as ImageIcon, Palette, Layout, Type, Upload, Search, X } from 'lucide-react';
 import { useCMSStore } from './cmsStore';
-import { uploadImage } from '../../services/api';
+import { uploadMedia } from '../../services/api';
 import { EditableText } from './EditableText';
 import { useDrag, useDrop } from 'react-dnd';
 import { scrollFadeIn, viewport } from '../../lib/animations';
@@ -503,7 +503,7 @@ function ProcessStepContent({ step, stepIndex, contentKey, updateStep, sectionSe
       return;
     }
     try {
-      const url = await uploadImage(adminToken, file);
+      const url = await uploadMedia(adminToken, file);
       updateStep(stepIndex, { ...step, coverImage: url });
     } catch (err: any) {
       console.error('Upload failed:', err);
@@ -715,7 +715,7 @@ function ProcessStepSettingsModal({ step, onClose, onSave }: ProcessStepSettings
     setUploading(true);
     setUploadError('');
     try {
-      const url = await uploadImage(adminToken, file);
+      const url = await uploadMedia(adminToken, file);
       setEditedStep((prev) => ({ ...prev, coverImage: url }));
     } catch (err: any) {
       setUploadError(err.message || 'Upload failed. Please try again.');
@@ -1175,7 +1175,7 @@ function ImageManagementModal({ step, onClose, onSave }: ImageManagementModalPro
     setUploading(true);
     setUploadError('');
     try {
-      const url = await uploadImage(adminToken, file);
+      const url = await uploadMedia(adminToken, file);
       onSave(url, step.imageAlt);
       onClose();
     } catch (err: any) {

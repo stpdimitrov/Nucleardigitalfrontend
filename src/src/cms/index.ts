@@ -17,6 +17,8 @@ export { EditablePricingSection } from './EditablePricingSection';
 export { EditableTestimonialsSection } from './EditableTestimonialsSection';
 export { EditableFAQSection } from './EditableFAQSection';
 export { EditableCTASection } from './EditableCTASection';
+export { EditableSection } from './EditableSection';
+export { SiteLogo } from './SiteLogo';
 export { EditModeToggle } from './EditModeToggle';
 
 // CMS Store

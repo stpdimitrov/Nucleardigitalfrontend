@@ -15,6 +15,7 @@ export interface Project {
   image?: string; // CMS image URL
   videoUrl?: string; // Legacy field
   service?: string; // Legacy field
+  serviceId?: string;
   category?: string;
   featured?: boolean;
   client?: string;
