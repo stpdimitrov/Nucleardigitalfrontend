@@ -26,6 +26,11 @@ interface CMSState {
   toggleEditMode: () => void;
   setEditMode: (enabled: boolean) => void;
 
+  // Registered sections (non-persisted, for EditModeToggle panel)
+  registeredSections: Record<string, string>; // sectionId -> label
+  registerSection: (sectionId: string, label: string) => void;
+  unregisterSection: (sectionId: string) => void;
+
   // Content registry
   content: ContentRegistry;
   getContent: (key: string, defaultValue: string) => string;
@@ -102,6 +107,17 @@ export const useCMSStore = create<CMSState>()(
       isEditMode: false,
       toggleEditMode: () => set((state) => ({ isEditMode: !state.isEditMode })),
       setEditMode: (enabled: boolean) => set({ isEditMode: enabled }),
+
+      // Registered sections
+      registeredSections: {},
+      registerSection: (sectionId: string, label: string) =>
+        set((state) => ({ registeredSections: { ...state.registeredSections, [sectionId]: label } })),
+      unregisterSection: (sectionId: string) =>
+        set((state) => {
+          const next = { ...state.registeredSections };
+          delete next[sectionId];
+          return { registeredSections: next };
+        }),
 
       // Content
       content: {},
@@ -244,7 +260,8 @@ export const useCMSStore = create<CMSState>()(
       },
     }),
     {
-      name: 'flixen-cms-content',
+      name: 'nucleardigital-cms-content',
+      version: 1,
       // Only persist content, custom text boxes, position offsets, and hidden keys — not auth token or transient state
       partialize: (state) => ({
         content: state.content,

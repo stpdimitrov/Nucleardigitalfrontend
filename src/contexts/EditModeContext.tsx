@@ -31,7 +31,7 @@ export function EditModeProvider({ children }: { children: ReactNode }) {
   const [history, setHistory] = useState<EditHistory>(() => {
     // Load from localStorage on init
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('flixen-cms-edits');
+      const saved = localStorage.getItem('nucleardigital-cms-edits');
       const present = saved ? JSON.parse(saved) : {};
       return {
         past: [],
@@ -58,7 +58,7 @@ export function EditModeProvider({ children }: { children: ReactNode }) {
       setIsSaving(true);
       setTimeout(() => {
         if (typeof window !== 'undefined') {
-          localStorage.setItem('flixen-cms-edits', JSON.stringify(newPresent));
+          localStorage.setItem('nucleardigital-cms-edits', JSON.stringify(newPresent));
         }
         setIsSaving(false);
       }, 300);
@@ -79,7 +79,7 @@ export function EditModeProvider({ children }: { children: ReactNode }) {
       const newPast = prev.past.slice(0, prev.past.length - 1);
       
       if (typeof window !== 'undefined') {
-        localStorage.setItem('flixen-cms-edits', JSON.stringify(previous));
+        localStorage.setItem('nucleardigital-cms-edits', JSON.stringify(previous));
       }
       
       return {
@@ -98,7 +98,7 @@ export function EditModeProvider({ children }: { children: ReactNode }) {
       const newFuture = prev.future.slice(1);
       
       if (typeof window !== 'undefined') {
-        localStorage.setItem('flixen-cms-edits', JSON.stringify(next));
+        localStorage.setItem('nucleardigital-cms-edits', JSON.stringify(next));
       }
       
       return {
@@ -121,7 +121,7 @@ export function EditModeProvider({ children }: { children: ReactNode }) {
       setIsSaving(true);
       setTimeout(() => {
         if (typeof window !== 'undefined') {
-          localStorage.setItem('flixen-cms-edits', JSON.stringify(newPresent));
+          localStorage.setItem('nucleardigital-cms-edits', JSON.stringify(newPresent));
         }
         setIsSaving(false);
       }, 300);
@@ -145,7 +145,7 @@ export function EditModeProvider({ children }: { children: ReactNode }) {
       setIsSaving(true);
       setTimeout(() => {
         if (typeof window !== 'undefined') {
-          localStorage.setItem('flixen-cms-edits', JSON.stringify(newPresent));
+          localStorage.setItem('nucleardigital-cms-edits', JSON.stringify(newPresent));
         }
         setIsSaving(false);
       }, 300);
@@ -170,7 +170,7 @@ export function EditModeProvider({ children }: { children: ReactNode }) {
       setIsSaving(true);
       setTimeout(() => {
         if (typeof window !== 'undefined') {
-          localStorage.setItem('flixen-cms-edits', JSON.stringify(newPresent));
+          localStorage.setItem('nucleardigital-cms-edits', JSON.stringify(newPresent));
         }
         setIsSaving(false);
       }, 300);
@@ -194,7 +194,7 @@ export function EditModeProvider({ children }: { children: ReactNode }) {
       setIsSaving(true);
       setTimeout(() => {
         if (typeof window !== 'undefined') {
-          localStorage.setItem('flixen-cms-edits', JSON.stringify(newPresent));
+          localStorage.setItem('nucleardigital-cms-edits', JSON.stringify(newPresent));
         }
         setIsSaving(false);
       }, 300);

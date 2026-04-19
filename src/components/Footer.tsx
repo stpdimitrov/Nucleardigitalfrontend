@@ -3,7 +3,7 @@
 
 import { Link } from 'react-router';
 import { ArrowRight } from 'lucide-react';
-import { useCMSStore, EditableText, EditableImage } from '../src/cms';
+import { useCMSStore, EditableText } from '../src/cms';
 import { SiteLogo } from '../src/cms/SiteLogo';
 
 const mainNavLinks = [
@@ -28,14 +28,7 @@ export function Footer() {
       <footer aria-label="Footer" className="items-center flex h-min justify-center overflow-clip relative w-full bg-black gap-[8px] pt-[100px] pr-0 pb-8 pl-0">
         <div aria-label="Container" className="items-center flex flex-col grow h-min justify-start overflow-clip relative w-px basis-0 gap-[64px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
           <div aria-label="Grid 3x" className="grid h-min justify-center overflow-clip relative w-full grid-rows-[repeat(1,min-content)] gap-[36px] z-[4] shrink-[0]" style={{"gridTemplateColumns":"repeat(3, minmax(50px, 1fr))"}}>
-            <div aria-label="Video" className="self-start size-full justify-self-start relative">
-              <EditableImage
-                contentKey="footer.videoUrl"
-                defaultSrc=""
-                alt="Footer background video"
-                className="size-full object-cover overflow-clip"
-              />
-            </div>
+            <div aria-label="Video" className="self-start size-full justify-self-start relative" />
             <div aria-label="Grid 3x" className="self-start grid h-min justify-center justify-self-start relative w-full grid-rows-[repeat(1,min-content)] gap-[8px]" style={{"gridTemplateColumns":"repeat(3, minmax(50px, 1fr))","gridArea":"auto / span 2"}}>
               {/* Main Pages */}
               <div aria-label="Footer links wrapper" className="items-start self-start flex flex-col h-min justify-start justify-self-start overflow-clip relative w-full gap-[20px]">
@@ -203,7 +196,7 @@ export function Footer() {
                   <p className="font-medium text-center text-[rgb(221,_221,_221)] text-[16px] tracking-[-0.32px] leading-[24px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(221, 221, 221)"}}>
                     <EditableText
                       contentKey="footer.creditPrefix"
-                      defaultValue="Made with 🩷 by"
+                      defaultValue=""
                       as="span"
                       className="font-medium text-[rgb(221,_221,_221)] text-[16px] tracking-[-0.32px] leading-[24px]"
                       style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}
@@ -211,7 +204,7 @@ export function Footer() {
                     <a href={getContent('footer.creditUrl', '')} className="text-center text-white" style={{"textDecoration":"rgb(255, 255, 255)"}}>
                       <EditableText
                         contentKey="footer.creditName"
-                        defaultValue="Muhammad talha"
+                        defaultValue=""
                         as="span"
                         className="text-white"
                         style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}

@@ -1,9 +1,112 @@
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router';
 import { useCMSStore } from './cmsStore';
 import { adminLogin } from '../../services/api';
+import { parseTextSettings, type TextSettings } from './EditableText';
+
+const FONT_SIZES = ['10','11','12','13','14','15','16','18','20','22','24','28','32','36','40','48','56','64','72','80','96'];
+
+function TextFormatBar() {
+  const { activeTextKey, activeTextEl, getContent, updateContent, persistContent } = useCMSStore();
+  const [applyCount, setApplyCount] = useState(0);
+
+  if (!activeTextKey) return null;
+
+  const rawSettings = getContent(`${activeTextKey}__style`, '{}');
+  const settings: TextSettings = parseTextSettings(rawSettings);
+  const isBold = settings.fontWeight === 'bold' || settings.fontWeight === '700';
+
+  const apply = (next: TextSettings) => {
+    setApplyCount(c => c + 1);
+    console.log('[TextFormatBar] apply', activeTextKey, next);
+
+    // 1. Update store (triggers re-render of EditableText via React style prop)
+    updateContent(`${activeTextKey}__style`, JSON.stringify(next));
+    persistContent().catch(console.error);
+
+    // 2. Apply directly to DOM — including ALL child elements (child Tailwind classes override parent styles)
+    const el = activeTextEl;
+    if (el) {
+      const all = [el, ...Array.from(el.querySelectorAll<HTMLElement>('*'))];
+      all.forEach(node => {
+        if (next.fontSize)   node.style.setProperty('font-size',   next.fontSize,   'important');
+        if (next.fontWeight) node.style.setProperty('font-weight', next.fontWeight, 'important');
+        if (next.textAlign)  node.style.setProperty('text-align',  next.textAlign,  'important');
+        if (next.color) {
+          node.style.setProperty('color',                   next.color, 'important');
+          node.style.setProperty('-webkit-text-fill-color', next.color, 'important');
+        }
+      });
+    } else {
+      console.warn('[TextFormatBar] no activeTextEl');
+    }
+  };
+
+  const btn = (active: boolean) =>
+    `flex items-center justify-center w-7 h-7 rounded cursor-pointer transition-colors text-white text-xs select-none ${active ? 'bg-white/30' : 'hover:bg-white/15'}`;
+
+  return (
+    <div className="flex items-center gap-1 bg-[#111] border border-white/20 rounded-lg px-2 py-1 shadow-xl">
+      <span className="text-white/40 text-xs pr-1 select-none" title={activeTextKey ?? ''}>T</span>
+      {applyCount > 0 && <span className="text-green-400 text-xs px-1 select-none">✓{applyCount}</span>}
+
+      <select
+        value={settings.fontSize || ''}
+        onChange={(e) => apply({ ...settings, fontSize: e.target.value || undefined })}
+        className="bg-[#222] text-white text-xs border border-white/20 rounded px-1.5 py-0.5 cursor-pointer outline-none"
+        style={{ minWidth: 68, fontFamily: 'Arial, sans-serif' }}
+      >
+        <option value="">Size</option>
+        {FONT_SIZES.map(s => <option key={s} value={`${s}px`}>{s}px</option>)}
+      </select>
+
+      <div className="w-px h-5 bg-white/20 mx-0.5" />
+
+      <button type="button" className={btn(isBold)}
+        onClick={() => apply({ ...settings, fontWeight: isBold ? 'normal' : 'bold' })}>
+        <span style={{ fontFamily: 'Arial, sans-serif', fontWeight: 'bold' }}>B</span>
+      </button>
+
+      <div className="w-px h-5 bg-white/20 mx-0.5" />
+
+      <button type="button" className={btn(settings.textAlign === 'left')}
+        onClick={() => apply({ ...settings, textAlign: 'left' })} title="Align left">
+        <svg width="13" height="11" viewBox="0 0 13 11" fill="currentColor">
+          <rect y="0" width="13" height="2" rx="1"/><rect y="4.5" width="8" height="2" rx="1"/><rect y="9" width="13" height="2" rx="1"/>
+        </svg>
+      </button>
+      <button type="button" className={btn(settings.textAlign === 'center')}
+        onClick={() => apply({ ...settings, textAlign: 'center' })} title="Center">
+        <svg width="13" height="11" viewBox="0 0 13 11" fill="currentColor">
+          <rect y="0" width="13" height="2" rx="1"/><rect x="2.5" y="4.5" width="8" height="2" rx="1"/><rect y="9" width="13" height="2" rx="1"/>
+        </svg>
+      </button>
+      <button type="button" className={btn(settings.textAlign === 'right')}
+        onClick={() => apply({ ...settings, textAlign: 'right' })} title="Align right">
+        <svg width="13" height="11" viewBox="0 0 13 11" fill="currentColor">
+          <rect y="0" width="13" height="2" rx="1"/><rect x="5" y="4.5" width="8" height="2" rx="1"/><rect y="9" width="13" height="2" rx="1"/>
+        </svg>
+      </button>
+
+      <div className="w-px h-5 bg-white/20 mx-0.5" />
+
+      <label className="flex items-center gap-1.5 cursor-pointer px-1" title="Text color">
+        <span style={{ fontFamily: 'Arial, sans-serif', fontWeight: 'bold', fontSize: 12, color: settings.color || '#fff' }}>A</span>
+        <input
+          type="color"
+          value={settings.color || '#ffffff'}
+          onChange={(e) => apply({ ...settings, color: e.target.value })}
+          className="w-5 h-5 cursor-pointer rounded"
+          style={{ border: '1px solid rgba(255,255,255,0.2)', padding: 0 }}
+        />
+      </label>
+    </div>
+  );
+}
 
 export function EditModeToggle() {
-  const { isEditMode, toggleEditMode, setEditMode, saveStatus, resetContent, adminToken, setAdminToken } = useCMSStore();
+  const { isEditMode, toggleEditMode, setEditMode, saveStatus, resetContent, adminToken, setAdminToken, activeTextKey, setActiveTextKey, addCustomTextBox, registeredSections, getContent, updateContent, persistContent } = useCMSStore();
+  const { pathname } = useLocation();
 
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [email, setEmail] = useState('');
@@ -61,12 +164,17 @@ export function EditModeToggle() {
   const handleLogout = () => {
     setAdminToken(null);
     setEditMode(false);
+    setActiveTextKey(null);
   };
 
   return (
     <>
-      <div className="fixed right-6 top-6 z-[9998] flex items-center gap-3">
+      <div className="fixed right-6 top-6 z-[9998] flex flex-col items-end gap-2">
         {/* Save Status */}
+        {/* Text format bar — shown when an editable text element is focused */}
+        {isEditMode && activeTextKey && <TextFormatBar />}
+
+        <div className="flex items-center gap-3">
         {saveStatus !== 'idle' && (
           <div
             className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium ${
@@ -122,6 +230,20 @@ export function EditModeToggle() {
           {isEditMode ? 'Exit Edit Mode' : 'Edit Mode'}
         </button>
 
+        {/* Add Text Box (only in edit mode) */}
+        {isEditMode && (
+          <button
+            type="button"
+            onClick={() => addCustomTextBox(pathname)}
+            className="rounded-lg border border-white/10 bg-black/80 px-3 py-2 text-sm text-white/60 backdrop-blur-sm transition-all hover:border-[#0099FF]/50 hover:text-[#0099FF]"
+            title="Add text box"
+          >
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M12 5v14M5 12h14" strokeLinecap="round"/>
+            </svg>
+          </button>
+        )}
+
         {/* Reset Button (only in edit mode) */}
         {isEditMode && (
           <button
@@ -149,6 +271,48 @@ export function EditModeToggle() {
           >
             Logout
           </button>
+        )}
+        </div>
+
+        {/* Sections Panel — shown in edit mode */}
+        {isEditMode && Object.keys(registeredSections).length > 0 && (
+          <div style={{
+            background: 'rgba(10,10,10,0.95)', border: '1px solid rgba(255,255,255,0.15)',
+            borderRadius: 10, padding: '10px 12px', minWidth: 200,
+            boxShadow: '0 4px 20px rgba(0,0,0,0.6)',
+          }}>
+            <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10, fontFamily: 'Arial,sans-serif', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>
+              Sections
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              {Object.entries(registeredSections).map(([sectionId, label]) => {
+                const isHidden = getContent(`visibility.section.${sectionId}`, 'false') === 'true';
+                return (
+                  <div key={sectionId} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+                    <span style={{ color: isHidden ? 'rgba(248,113,113,0.8)' : 'rgba(255,255,255,0.7)', fontSize: 12, fontFamily: 'Arial,sans-serif', textDecoration: isHidden ? 'line-through' : 'none' }}>
+                      {label}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        updateContent(`visibility.section.${sectionId}`, isHidden ? 'false' : 'true');
+                        persistContent();
+                      }}
+                      style={{
+                        padding: '2px 8px', borderRadius: 5, fontSize: 11, cursor: 'pointer',
+                        fontFamily: 'Arial,sans-serif', fontWeight: 500,
+                        border: isHidden ? '1px solid rgba(248,113,113,0.5)' : '1px solid rgba(255,255,255,0.2)',
+                        background: isHidden ? 'rgba(220,38,38,0.25)' : 'rgba(255,255,255,0.08)',
+                        color: isHidden ? 'rgb(248,113,113)' : 'rgba(255,255,255,0.6)',
+                      }}
+                    >
+                      {isHidden ? 'Show' : 'Hide'}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         )}
       </div>
 

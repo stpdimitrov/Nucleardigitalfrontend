@@ -1,6 +1,5 @@
-// Mock data for Flixen™ application
-// CRITICAL: This data EXACTLY matches the static content in App.tsx
-// DO NOT modify without ensuring 100% visual parity
+// Default fallback data for Nuclear Digital
+// Used when backend data is not yet available
 
 import type {
   Project,
@@ -32,15 +31,15 @@ import type {
 // ============================================
 
 export const siteSettings: SiteSettings = {
-  siteName: "Flixen™",
-  tagline: "Create cinematic visuals that captivate every audience",
-  logoUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2Fdf1ea35df7df9da91ef7b7004a32fec3b03a527c.svg%3Fwidth=42&height=42?generation=1768843022438331&alt=media",
-  footerVideoUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F612d08e29da9284c877d475e2d74c21bf8099207.mp4?generation=1768843023558407&alt=media",
-  copyrightText: "Flixen ™. All rights reserved.",
-  creditText: "Made with 🩷 by Muhammad talha",
-  creditUrl: "https://x.com/xmuhammadtalha",
-  builtWithText: "Built in Framer",
-  builtWithUrl: "https://framer.link/mudasir-hussain",
+  siteName: "Nuclear Digital",
+  tagline: "",
+  logoUrl: "",
+  footerVideoUrl: "",
+  copyrightText: "Nuclear Digital. All rights reserved.",
+  creditText: "",
+  creditUrl: "",
+  builtWithText: "",
+  builtWithUrl: "",
 };
 
 // ============================================
@@ -72,84 +71,7 @@ export const socialLinks: SocialLink[] = [
 // PROJECTS
 // ============================================
 
-export const projects: Project[] = [
-  {
-    id: "project-1",
-    slug: "lumen-brew",
-    name: "Lumen Brew",
-    title: "Lumen Brew",
-    description: "Created a cinematic video showcasing the warmth, craftsmanship, and storytelling behind Lumen Brew Coffee.",
-    videoUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F64b0a1a53a864523488081e7312ff8fe5ffcdfc5.mp4?generation=1768843022678820&alt=media",
-    image: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F64b0a1a53a864523488081e7312ff8fe5ffcdfc5.mp4?generation=1768843022678820&alt=media",
-    service: "Video Production",
-    category: "Video Production",
-    date: "Nov 4, 2025",
-    client: "Lumen Coffee Co.",
-    overview: "Lumen Coffee Co. wanted to express the artistry and care that define their brewing process. We developed a concept centered on storytelling through motion — from the first bean roast to the final pour. Using natural light, close-up cinematography, and ambient soundscapes, the film communicates the brand's dedication to slow, thoughtful craftsmanship. Every detail, from color tone to pacing, was designed to evoke warmth, community, and authenticity. The video became the brand's core marketing asset, setting a new visual standard for their online and retail presence.",
-    process: "Our process began with pre-production planning, where we storyboarded the visual flow and mood. Filming took place across two days in the café's ambient setting, capturing organic moments of coffee brewing, customer interactions, and brand lifestyle. During post-production, we emphasized cinematic tone and texture through color grading and sound design. The pacing was intentionally slow, mirroring the rhythm of artisanal brewing. Collaborating closely with the client ensured every visual aligned with their story — celebrating detail, patience, and authenticity. The result was a piece that felt as handcrafted as the coffee itself.",
-    result: "The final film became a centerpiece for Lumen Coffee Co.'s online presence, featured across their website and social campaigns. The cinematic storytelling approach increased viewer engagement and helped strengthen the emotional connection with their audience. Sales rose following the campaign launch, and the brand received strong praise for its elevated visual identity. The video was later showcased in local creative exhibitions, highlighting its artistry and effectiveness in brand communication. Lumen Brew not only captured the beauty of the product but also redefined how handcrafted experiences could be told through motion.",
-  },
-  {
-    id: "project-2",
-    slug: "pulse-drive",
-    name: "Pulse Drive",
-    title: "Pulse Drive",
-    description: "High-energy automotive campaign capturing speed, precision, and innovation.",
-    videoUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F4baea21278109afdf6ad52b7f1bc92064c750bfc.mp4?generation=1768843022831653&alt=media",
-    image: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F4baea21278109afdf6ad52b7f1bc92064c750bfc.mp4?generation=1768843022831653&alt=media",
-    service: "Creative Direction",
-    category: "Creative Direction",
-    date: "Apr 10, 2025",
-  },
-  {
-    id: "project-3",
-    slug: "echo-frames",
-    name: "Echo Frames",
-    title: "Echo Frames",
-    description: "Artistic exploration of movement and sound through visual storytelling.",
-    videoUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F7166c66f8f1b9ba340b0f978dd8b91a152a53f34.mp4?generation=1768843022674074&alt=media",
-    image: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F7166c66f8f1b9ba340b0f978dd8b91a152a53f34.mp4?generation=1768843022674074&alt=media",
-    service: "Video Production",
-    category: "Video Production",
-    date: "Aug 4, 2024",
-  },
-  {
-    id: "project-4",
-    slug: "waveline",
-    name: "Waveline",
-    title: "Waveline",
-    description: "Dynamic brand film showcasing fluid motion and modern aesthetics.",
-    videoUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2Fe5aaf449795958d028fcd4c74c04f17b42566998.mp4?generation=1768843022845391&alt=media",
-    image: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2Fe5aaf449795958d028fcd4c74c04f17b42566998.mp4?generation=1768843022845391&alt=media",
-    service: "Post-Production & Editing",
-    category: "Post-Production",
-    date: "Dec 19, 2023",
-  },
-  {
-    id: "project-5",
-    slug: "noir-threads",
-    name: "Noir Threads",
-    title: "Noir Threads",
-    description: "Fashion-forward cinematography blending elegance with bold creativity.",
-    videoUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F5cba97d1c8d90adbe24a83c6153eec57a5f594c1.mp4?generation=1768843022814400&alt=media",
-    image: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F5cba97d1c8d90adbe24a83c6153eec57a5f594c1.mp4?generation=1768843022814400&alt=media",
-    service: "Creative Direction",
-    category: "Creative Direction",
-    date: "Oct 18, 2022",
-  },
-  {
-    id: "project-6",
-    slug: "auralis",
-    name: "Auralis",
-    title: "Auralis",
-    description: "Ethereal visual journey combining light, color, and cinematic excellence.",
-    videoUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2Fc56a53f96b5a5696fdb5c3660cf3328d3973d852.mp4?generation=1768843022788930&alt=media",
-    image: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2Fc56a53f96b5a5696fdb5c3660cf3328d3973d852.mp4?generation=1768843022788930&alt=media",
-    service: "Video Production",
-    category: "Video Production",
-    date: "Jun 22, 2021",
-  },
-];
+export const projects: Project[] = [];
 
 // ============================================
 // CLIENT LOGOS
@@ -210,53 +132,7 @@ export const clientLogos: ClientLogo[] = [
 // SERVICES
 // ============================================
 
-const videoProductionFeatures: ServiceFeature[] = [
-  { id: "vp-1", name: "Commercials" },
-  { id: "vp-2", name: "Brand Films" },
-  { id: "vp-3", name: "Product Videos" },
-  { id: "vp-4", name: "Corporate Shoots" },
-  { id: "vp-5", name: "Event Coverage" },
-];
-
-const creativeDirectionFeatures: ServiceFeature[] = [
-  { id: "cd-1", name: "Concept Development" },
-  { id: "cd-2", name: "Scriptwriting" },
-  { id: "cd-3", name: "Storyboarding" },
-  { id: "cd-4", name: "Art Direction" },
-  { id: "cd-5", name: "Campaign Planning" },
-];
-
-const postProductionFeatures: ServiceFeature[] = [
-  { id: "pp-1", name: "Video Editing" },
-  { id: "pp-2", name: "Color Grading" },
-  { id: "pp-3", name: "Motion Graphics" },
-  { id: "pp-4", name: "Sound Design" },
-  { id: "pp-5", name: "Visual Effects" },
-];
-
-export const services: Service[] = [
-  {
-    id: "service-1",
-    title: "Video Production",
-    description: "We handle every stage from concept to filming, creating  visuals that capture emotion and inspire audiences.",
-    videoUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F5e0f4c9c4b7be63e83a8e86c3f1f1ae9a84b3f49.mp4?generation=1768843022870330&alt=media",
-    features: videoProductionFeatures,
-  },
-  {
-    id: "service-2",
-    title: "Creative Direction",
-    description: "Our team brings bold ideas to life, shaping stories that resonate and campaigns that stand out in the market.",
-    videoUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F10afc99bc25de72e6d8e3f5fa2a3f8af08befc3a.mp4?generation=1768843022839062&alt=media",
-    features: creativeDirectionFeatures,
-  },
-  {
-    id: "service-3",
-    title: "Post-Production & Editing",
-    description: "We refine raw footage into polished masterpieces, adding the finishing touches that make every frame unforgettable.",
-    videoUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2Fb88a7e2734745330d3a44aa73c74bb06cdb5c26c.mp4?generation=1768843022755903&alt=media",
-    features: postProductionFeatures,
-  },
-];
+export const services: Service[] = [];
 
 // ============================================
 // WHY CHOOSE US
@@ -426,44 +302,16 @@ export const faqItems: FAQ[] = [
 // TESTIMONIALS
 // ============================================
 
-export const testimonials: Testimonial[] = [
-  {
-    id: "testimonial-1",
-    name: "Liam Carter",
-    role: "CEO, Nova Media",
-    company: "Client Satisfaction",
-    quote: "The Flixen™ team is reliable, fast, and detail-oriented. Every frame felt intentional and beautifully crafted with creativity and care.",
-    rating: "10x",
-    imageUrl: "figma:asset/7e73c7aabad20943e4272bca350bb8114758102b.png",
-  },
-  {
-    id: "testimonial-2",
-    name: "Sofia Lane",
-    role: "Content Strategist",
-    company: "Engagement Boost",
-    quote: "Flixen™ brought our campaign to life with storytelling and visuals that matched our brand tone and expectations.",
-    rating: "3x",
-    imageUrl: "figma:asset/4b463d6fb2243401ecb681d36cb89dcaf0c09986.png",
-  },
-  {
-    id: "testimonial-3",
-    name: "Ethan Ross",
-    role: "Creative Producer",
-    company: "Brand Growth",
-    quote: "Working with Flixen™ was effortless. They understood our vision instantly and delivered visuals that elevated our brand story.",
-    rating: "5x",
-    imageUrl: "figma:asset/92e2965cd21a86fe0952e28b698ba606d7a53405.png",
-  },
-];
+export const testimonials: Testimonial[] = [];
 
 // ============================================
 // HERO CONTENT
 // ============================================
 
 export const heroContent: HeroContent = {
-  title: "Create cinematic visuals that captivate every audience",
-  imageUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2F90322362c9ba13d2653aa3ef4d89e79643dc092d.png%3Fwidth=1536&height=1024?generation=1768843022421906&alt=media",
-  videoUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2Fc9ff2d7236821117c4faa28f56d63a4f06c5b37d.mp4?generation=1768843022528431&alt=media",
+  title: "",
+  imageUrl: "",
+  videoUrl: "",
 };
 
 // ============================================
@@ -480,7 +328,7 @@ export const homepageData: HomepageData = {
   featuredProjects: projects,
   aboutUs: {
     title: "Bringing Stories to Life, Frame by Frame",
-    description: "At Flixen, we believe every brand has a story worth telling. Our mission is to transform ideas into captivating visual narratives that resonate with audiences and leave lasting impressions. With a passion for cinematic excellence and years of expertise, we partner with businesses to create videos that inspire, engage, and elevate brands across industries.",
+    description: "At Nuclear Digital, we believe every brand has a story worth telling. Our mission is to transform ideas into captivating visual narratives that resonate with audiences and leave lasting impressions.",
     imageUrl: "https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2Fb78f23653961282fd6252e62cd8283d6c0057af5.jpeg%3Fwidth=1280&height=1280?generation=1768843022673805&alt=media",
     ctaText: "About us",
     ctaUrl: "/about-us",

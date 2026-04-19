@@ -23,7 +23,7 @@ export interface ContentAPI {
  * Default LocalStorage Implementation
  */
 class LocalStorageContentAPI implements ContentAPI {
-  private storageKey = 'flixen-cms-content';
+  private storageKey = 'nucleardigital-cms-content';
 
   async loadContent(): Promise<ContentRegistry> {
     try {
