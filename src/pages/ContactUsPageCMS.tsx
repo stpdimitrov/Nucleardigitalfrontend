@@ -618,7 +618,7 @@ export function ContactUsPageCMS() {
             {/* Visit Our Office Card with Globe */}
             <div className="bg-[#242424] flex-[1_0_0] min-h-px min-w-px relative self-stretch" data-name="Office card">
               <div className="overflow-clip rounded-[inherit] size-full">
-                <div className="content-stretch flex flex-col items-start pb-[8px] pt-[23px] px-[24px] relative size-full" style={{ minHeight: 300 }}>
+                <div className="content-stretch flex flex-col items-start pb-[8px] pt-[23px] px-[24px] relative size-full" style={{ minHeight: 380 }}>
                   <div className="content-stretch flex items-center justify-center relative shrink-0 w-full" data-name="Text">
                     <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-h-px min-w-px relative" data-name="div.framer-a4b5g0">
                       <div className="content-stretch flex flex-col items-start pb-[0.8px] relative shrink-0 w-full" data-name="p.framer-text">
@@ -635,7 +635,7 @@ export function ContactUsPageCMS() {
                     </div>
                   </div>
                   {/* Globe */}
-                  <div className="absolute bottom-0 left-0 right-0 flex items-end justify-center overflow-hidden" style={{ height: 260 }}>
+                  <div className="absolute bottom-0 left-0 right-0 flex items-end justify-center" style={{ height: 320 }}>
                     <GlobeAnimation
                       latKey="contactUs.officeGlobe.lat"
                       lngKey="contactUs.officeGlobe.lng"
@@ -643,8 +643,8 @@ export function ContactUsPageCMS() {
                       defaultLat={51.5}
                       defaultLng={-0.13}
                       defaultAddress="London, UK"
-                      width={340}
-                      height={340}
+                      width={320}
+                      height={320}
                     />
                   </div>
                 </div>
