@@ -1,4 +1,4 @@
-import { ReactNode, useRef, useState, useEffect } from 'react';
+import { ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { useCMSStore } from './cmsStore';
 
@@ -9,90 +9,71 @@ interface EditableSectionProps {
 }
 
 export function EditableSection({ sectionId, label, children }: EditableSectionProps) {
-  const { isEditMode, getContent, updateContent, persistContent } = useCMSStore();
+  // Use selector to subscribe only to isEditMode — more reliable re-render trigger
+  const isEditMode = useCMSStore((s) => s.isEditMode);
+  const getContent = useCMSStore((s) => s.getContent);
+  const updateContent = useCMSStore((s) => s.updateContent);
+  const persistContent = useCMSStore((s) => s.persistContent);
+
   const isHidden = getContent(`visibility.section.${sectionId}`, 'false') === 'true';
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const [btnPos, setBtnPos] = useState<{ top: number; right: number } | null>(null);
 
   const toggle = () => {
     updateContent(`visibility.section.${sectionId}`, isHidden ? 'false' : 'true');
     persistContent();
   };
 
-  // Track section position for the fixed button
-  useEffect(() => {
-    if (!isEditMode || !wrapperRef.current) return;
-    const update = () => {
-      const rect = wrapperRef.current?.getBoundingClientRect();
-      if (rect) {
-        setBtnPos({
-          top: Math.max(rect.top + 16, 80),
-          right: 24,
-        });
-      }
-    };
-    update();
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', update);
-      window.removeEventListener('resize', update);
-    };
-  }, [isEditMode]);
-
   if (!isEditMode && isHidden) return null;
 
   return (
-    <div ref={wrapperRef} style={{ position: 'relative' }}>
-      {children}
-
-      {isEditMode && isHidden && (
+    <div style={{ position: 'relative' }}>
+      {isEditMode && (
         <div style={{
-          position: 'absolute', inset: 0,
-          background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(2px)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          zIndex: 50, pointerEvents: 'none',
+          display: 'flex',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          padding: '4px 12px',
+          background: isHidden ? 'rgba(220,38,38,0.15)' : 'rgba(0,0,0,0.4)',
+          borderBottom: isHidden ? '1px solid rgba(220,38,38,0.3)' : '1px solid rgba(255,255,255,0.08)',
+          position: 'relative',
+          zIndex: 9980,
         }}>
-          <span style={{
-            background: 'rgba(0,0,0,0.8)', border: '1px solid rgba(239,68,68,0.3)',
-            padding: '8px 16px', borderRadius: 8,
-            color: 'rgba(248,113,113,0.8)', fontSize: 14, fontWeight: 500,
-          }}>
-            {label} — Hidden
+          <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, fontFamily: 'Arial,sans-serif', marginRight: 'auto' }}>
+            {label}
           </span>
+          <button
+            onClick={toggle}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 5,
+              padding: '4px 10px', borderRadius: 6,
+              fontSize: 11, fontWeight: 500, cursor: 'pointer',
+              fontFamily: 'Arial,sans-serif',
+              border: isHidden ? '1px solid rgba(248,113,113,0.5)' : '1px solid rgba(255,255,255,0.2)',
+              background: isHidden ? 'rgba(220,38,38,0.2)' : 'rgba(255,255,255,0.08)',
+              color: isHidden ? 'rgb(248,113,113)' : 'rgba(255,255,255,0.7)',
+            }}
+          >
+            {isHidden ? '👁 Show' : '🙈 Hide'}
+          </button>
         </div>
       )}
 
-      {isEditMode && btnPos && createPortal(
-        <button
-          onClick={toggle}
-          style={{
-            position: 'fixed',
-            top: btnPos.top,
-            right: btnPos.right,
-            zIndex: 9990,
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6,
-            padding: '6px 12px',
-            borderRadius: 8,
-            fontSize: 12,
-            fontWeight: 500,
-            cursor: 'pointer',
-            border: isHidden
-              ? '1px solid rgba(239,68,68,0.4)'
-              : '1px solid rgba(255,255,255,0.15)',
-            background: isHidden
-              ? 'rgba(239,68,68,0.15)'
-              : 'rgba(0,0,0,0.85)',
-            color: isHidden ? 'rgb(248,113,113)' : 'rgba(255,255,255,0.7)',
-            backdropFilter: 'blur(8px)',
-            fontFamily: 'Arial, sans-serif',
-          }}
-          title={`${isHidden ? 'Show' : 'Hide'} ${label}`}
-        >
-          {isHidden ? '👁 Show' : '🙈 Hide'} · {label}
-        </button>,
+      {children}
+
+      {isEditMode && isHidden && createPortal(
+        <div style={{
+          position: 'fixed', inset: 0, pointerEvents: 'none',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          zIndex: 9970,
+        }}>
+          <div style={{
+            background: 'rgba(0,0,0,0.7)', border: '1px solid rgba(220,38,38,0.4)',
+            padding: '10px 20px', borderRadius: 8,
+            color: 'rgba(248,113,113,0.9)', fontSize: 14, fontWeight: 500,
+            fontFamily: 'Arial,sans-serif',
+          }}>
+            {label} — Hidden
+          </div>
+        </div>,
         document.body
       )}
     </div>
