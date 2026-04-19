@@ -165,7 +165,6 @@ function EditableLogoCard({ logo, index, moveLogo, deleteLogo, editLogo }: {
   editLogo: (id: string, updatedLogo: Omit<ClientLogo, 'id'>) => void;
 }) {
   const { isEditMode } = useCMSStore();
-  const [hovered, setHovered] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editedLogo, setEditedLogo] = useState({
@@ -211,13 +210,11 @@ function EditableLogoCard({ logo, index, moveLogo, deleteLogo, editLogo }: {
       variants={staggerItem}
       style={{ opacity: isDragging ? 0.4 : 1, cursor: isEditMode ? 'grab' : 'default' }}
       data-handler-id={handlerId}
-      onMouseEnter={() => isEditMode && setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
     >
       <div
         aria-label="Client logo"
-        className="items-center flex justify-center overflow-clip relative w-full h-[120px] bg-[rgb(36,_36,_36)] gap-[8px]"
-        style={isEditMode ? { outline: '2px dashed rgba(0,153,255,0.5)' } : undefined}
+        className="items-center flex justify-center relative w-full h-[120px] bg-[rgb(36,_36,_36)] gap-[8px]"
+        style={isEditMode ? { outline: '2px dashed rgba(0,153,255,0.5)', overflow: 'visible' } : { overflow: 'clip' }}
       >
         <div
           aria-label="Logo"
@@ -233,39 +230,36 @@ function EditableLogoCard({ logo, index, moveLogo, deleteLogo, editLogo }: {
             />
           </div>
         </div>
-      </div>
 
-      {/* Controls rendered outside overflow-clip, using React hover state */}
-      {isEditMode && (
-        <div
-          style={{
-            position: 'absolute',
-            top: 8,
-            right: 8,
-            display: 'flex',
-            gap: 6,
-            zIndex: 20,
-            opacity: hovered ? 1 : 0,
-            transition: 'opacity 0.15s',
-            pointerEvents: hovered ? 'auto' : 'none',
-          }}
-        >
-          <button
-            onClick={(e) => { e.stopPropagation(); setShowEditModal(true); }}
-            style={{ padding: 6, background: 'rgba(0,153,255,0.9)', border: 'none', borderRadius: 8, cursor: 'pointer', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-            title="Edit logo"
+        {/* Always-visible controls in edit mode — no hover required */}
+        {isEditMode && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 6,
+              right: 6,
+              display: 'flex',
+              gap: 4,
+              zIndex: 20,
+            }}
           >
-            <Edit2 style={{ width: 14, height: 14 }} />
-          </button>
-          <button
-            onClick={(e) => { e.stopPropagation(); setShowDeleteConfirm(true); }}
-            style={{ padding: 6, background: 'rgba(239,68,68,0.9)', border: 'none', borderRadius: 8, cursor: 'pointer', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-            title="Delete logo"
-          >
-            <Trash2 style={{ width: 14, height: 14 }} />
-          </button>
-        </div>
-      )}
+            <button
+              onClick={(e) => { e.stopPropagation(); setShowEditModal(true); }}
+              style={{ padding: 5, background: 'rgba(0,153,255,0.95)', border: 'none', borderRadius: 6, cursor: 'pointer', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.4)' }}
+              title="Edit logo"
+            >
+              <Edit2 style={{ width: 13, height: 13 }} />
+            </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); setShowDeleteConfirm(true); }}
+              style={{ padding: 5, background: 'rgba(239,68,68,0.95)', border: 'none', borderRadius: 6, cursor: 'pointer', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.4)' }}
+              title="Delete logo"
+            >
+              <Trash2 style={{ width: 13, height: 13 }} />
+            </button>
+          </div>
+        )}
+      </div>
 
 
       {showDeleteConfirm && (
