@@ -26,7 +26,7 @@ export function EditableSection({ sectionId, label, children }: EditableSectionP
         <>
           <button
             onClick={toggle}
-            className={`absolute top-4 right-6 z-[60] flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium backdrop-blur-sm border transition-all ${
+            className={`absolute top-16 right-6 z-[250] flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium backdrop-blur-sm border transition-all ${
               isHidden
                 ? 'bg-red-500/20 border-red-500/40 text-red-400 hover:bg-red-500/30'
                 : 'bg-black/70 border-white/10 text-white/60 hover:text-white hover:bg-black/90'
