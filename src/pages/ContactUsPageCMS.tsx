@@ -8,8 +8,7 @@ import { submitAppointment } from '../services/api';
 import svgPaths from "../imports/svg-caky0u7ahw";
 import imgCoverImageSilhouetteOfACameraOperatorFilmingOnAProfessionalSetSurroundedByBrightStudioLightsTheSceneConveysFocusAndCreativeEnergy from "figma:asset/f0ab34e01eb7a68a97d2f698b486de3693299155.png";
 import imgCoverImageSilhouettedBandMembersPlayInstrumentsInASmokyWarehouseBacklitByVibrantOrangeAndTealLightsCreatingAMoodyDramaticAmbiance from "figma:asset/0103be52b0be1ee4c947007cec96aea7cc4137fe.png";
-import imgGlobe from "figma:asset/e55f19621fc993b2cbf97f430d52ffb48c20a89a.png";
-import { imgDiv } from "../imports/svg-rh7ls";
+import { GlobeAnimation } from '../src/cms/GlobeAnimation';
 
 export function ContactUsPageCMS() {
   const { isEditMode } = useCMSStore();
@@ -622,7 +621,7 @@ export function ContactUsPageCMS() {
             {/* Visit Our Office Card with Globe */}
             <div className="bg-[#242424] flex-[1_0_0] min-h-px min-w-px relative self-stretch" data-name="Office card">
               <div className="overflow-clip rounded-[inherit] size-full">
-                <div className="content-stretch flex flex-col items-start pb-[162px] pt-[23px] px-[24px] relative size-full">
+                <div className="content-stretch flex flex-col items-start pb-[8px] pt-[23px] px-[24px] relative size-full" style={{ minHeight: 300 }}>
                   <div className="content-stretch flex items-center justify-center relative shrink-0 w-full" data-name="Text">
                     <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-h-px min-w-px relative" data-name="div.framer-a4b5g0">
                       <div className="content-stretch flex flex-col items-start pb-[0.8px] relative shrink-0 w-full" data-name="p.framer-text">
@@ -639,23 +638,17 @@ export function ContactUsPageCMS() {
                     </div>
                   </div>
                   {/* Globe */}
-                  <div className="absolute bottom-[-202px] content-stretch flex flex-col items-start justify-center right-px w-[369px]" data-name="Globe">
-                    <div className="content-stretch flex items-center justify-center relative shrink-0 w-full" data-name="div">
-                      <div className="flex-[1_0_0] h-[372px] max-w-[800px] min-h-px min-w-px relative" data-name="div:mask-group">
-                        <div className="-translate-y-1/2 absolute aspect-[369/372] content-stretch flex flex-col items-start justify-center left-0 mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[0%_0px] mask-size-[100%_372px] max-w-[800px] pb-[3px] right-0 top-1/2" data-name="div" style={{ maskImage: `url('${imgDiv}')` }}>
-                          <div className="h-[369px] relative shrink-0 w-full" data-name="image">
-                            <div className={`absolute inset-0 overflow-hidden ${isEditMode ? '' : 'pointer-events-none'}`}>
-                              <EditableImage
-                                contentKey="contactUs.cards.officeCard.globeImage"
-                                defaultSrc={imgGlobe}
-                                alt="Globe"
-                                className="absolute left-0 max-w-none size-full top-0 animate-[spin_20s_linear_infinite]"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                  <div className="absolute bottom-0 left-0 right-0 flex items-end justify-center overflow-hidden" style={{ height: 260 }}>
+                    <GlobeAnimation
+                      latKey="contactUs.officeGlobe.lat"
+                      lngKey="contactUs.officeGlobe.lng"
+                      addressKey="contactUs.officeGlobe.address"
+                      defaultLat={51.5}
+                      defaultLng={-0.13}
+                      defaultAddress="London, UK"
+                      width={340}
+                      height={340}
+                    />
                   </div>
                 </div>
               </div>
