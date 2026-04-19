@@ -369,7 +369,7 @@ export async function adminCreateProject(token: string, payload: { slug: string;
   return fnPost<BackendProject>('admin/projects', { ...payload, tenant_id: TENANT_ID }, token);
 }
 
-export async function adminUpdateProject(token: string, id: string, payload: { slug?: string; data?: object }): Promise<BackendProject> {
+export async function adminUpdateProject(token: string, id: string, payload: { slug?: string; data?: object; service_id?: string }): Promise<BackendProject> {
   return fnPut<BackendProject>(`admin/projects/${id}`, { ...payload, tenant_id: TENANT_ID }, token);
 }
 

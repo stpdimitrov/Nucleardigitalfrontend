@@ -48,7 +48,14 @@ function ProjectModal({ project, isOpen, onClose, onSave, availableServices }: P
   // Reset form whenever the modal opens or the target project changes
   useEffect(() => {
     if (isOpen) {
-      setFormData(project || emptyProject());
+      const base = project || emptyProject();
+      // If no service is assigned yet, default to the first available service
+      if (!base.serviceId && !base.service && availableServices.length > 0) {
+        const first = availableServices[0];
+        base.serviceId = first.id;
+        base.service = first.title;
+      }
+      setFormData(base);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, project?.id]);
