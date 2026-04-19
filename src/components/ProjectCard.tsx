@@ -34,37 +34,38 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
         whileHover={{ scale: 1.02 }}
         transition={{ duration: 0.3 }}
       >
-        <div aria-label="BG blur" className="absolute w-full h-[175px] left-[0%] bottom-0 backdrop-blur-[10px] z-[2] shrink-[0]"></div>
-        <motion.div 
-          aria-label="Video" 
+        <motion.div
+          aria-label="Video"
           className="size-full pointer-events-none absolute left-[0%] top-[0%] z-[1] shrink-[0]"
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.4 }}
         >
           <video src={project.videoUrl} className="size-full object-cover overflow-clip pointer-events-none"></video>
         </motion.div>
-        <div aria-label="Text" className="items-start flex flex-col h-min justify-center absolute w-full left-[50%] bottom-0 gap-[16px] p-5 translate-x-[-50%] z-[3] shrink-[0]">
+        <div aria-label="Text" className="items-start flex flex-col h-min justify-center absolute w-full left-[50%] bottom-0 gap-[12px] px-5 pt-10 pb-5 translate-x-[-50%] z-[3] shrink-[0] backdrop-blur-[10px]" style={{ background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.72) 40%)' }}>
           <div aria-label="Heading" className="items-center flex flex-col h-min justify-center relative w-full gap-[8px] shrink-[0]">
             <div className="flex flex-col justify-start relative whitespace-pre-wrap w-full z-[2] shrink-[0]">
-              <h6 className="font-medium text-left text-white text-[28px] tracking-[-0.84px] leading-[29.4px]" style={{"fontFamily":"Ronzino, \"Ronzino Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>{project.name}</h6>
+              <h6 className="font-medium text-left text-white text-[28px] tracking-[-0.84px] leading-[29.4px]" style={{"fontFamily":"Ronzino, \"Ronzino Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)","textShadow":"0 1px 6px rgba(0,0,0,0.6)"}}>{project.name}</h6>
             </div>
           </div>
-          <div aria-label="Details" className="items-center flex h-min justify-start relative w-full gap-[8px] shrink-[0]">
-            <div aria-label="Service provided" className="relative shrink-[0]">
-              <div aria-label="Blog tag" className="items-center flex size-min justify-start overflow-clip relative backdrop-blur-[10px] gap-[8px] pt-1 pr-3 pb-1 pl-3 after:border after:size-full after:pointer-events-none after:absolute after:left-0 after:top-0 after:border-white/10 after:content-['']">
-                <div aria-label="Description" className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
-                  <p className="font-medium text-[rgb(221,_221,_221)] text-[14px] leading-[19.6px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(221, 221, 221)"}}>{project.service}</p>
+          {(project.service || project.date) && (
+            <div aria-label="Details" className="items-center flex h-min justify-start relative w-full gap-[8px] shrink-[0]">
+              {project.service && (
+                <div aria-label="Service provided" className="relative shrink-[0]">
+                  <div aria-label="Blog tag" className="items-center flex size-min justify-start overflow-clip relative bg-black/30 backdrop-blur-[10px] gap-[8px] pt-1 pr-3 pb-1 pl-3 rounded-[62.5rem] border-[0.8px] border-white/30">
+                    <p className="font-medium uppercase text-white text-[11px] tracking-[-0.16px] leading-[16px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}>{project.service}</p>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div aria-label="Date" className="relative shrink-[0]">
-              <div aria-label="Blog tag" className="items-center flex size-min justify-start overflow-clip relative backdrop-blur-[10px] gap-[8px] pt-1 pr-3 pb-1 pl-3 after:border after:size-full after:pointer-events-none after:absolute after:left-0 after:top-0 after:border-white/10 after:content-['']">
-                <div aria-label="Description" className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
-                  <p className="font-medium text-[rgb(221,_221,_221)] text-[14px] leading-[19.6px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(221, 221, 221)"}}>{project.date}</p>
+              )}
+              {project.date && (
+                <div aria-label="Date" className="relative shrink-[0]">
+                  <div aria-label="Blog tag" className="items-center flex size-min justify-start overflow-clip relative bg-black/30 backdrop-blur-[10px] gap-[8px] pt-1 pr-3 pb-1 pl-3 rounded-[62.5rem] border-[0.8px] border-white/30">
+                    <p className="font-medium text-white/80 text-[11px] leading-[16px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}>{project.date}</p>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
-          </div>
+          )}
         </div>
       </motion.a>
     </motion.div>

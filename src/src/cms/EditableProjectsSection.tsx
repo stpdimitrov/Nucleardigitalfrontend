@@ -309,7 +309,6 @@ function DraggableProjectCard({
         style={{"textDecoration":"rgb(0, 0, 238)"}}
         onClick={(e) => isEditMode && e.preventDefault()}
       >
-        <div aria-label="BG blur" className="absolute w-full h-[175px] left-[0%] bottom-0 backdrop-blur-[10px] z-[2] shrink-[0]"></div>
         <div aria-label="Video" className="size-full pointer-events-none absolute left-[0%] top-[0%] z-[1] shrink-[0]">
           {(() => {
             const isVideo = (url?: string) => !!url && /\.(mp4|webm|ogg)(\?|$)/i.test(url);
@@ -325,15 +324,15 @@ function DraggableProjectCard({
             );
           })()}
         </div>
-        <div aria-label="Text" className="items-start flex flex-col h-min justify-center absolute w-full left-[50%] bottom-0 gap-[16px] p-5 translate-x-[-50%] z-[3] shrink-[0]">
+        <div aria-label="Text" className="items-start flex flex-col h-min justify-center absolute w-full left-[50%] bottom-0 gap-[12px] px-5 pt-10 pb-5 translate-x-[-50%] z-[3] shrink-[0] backdrop-blur-[10px]" style={{ background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.72) 40%)' }}>
           <div aria-label="Heading" className="items-center flex flex-col h-min justify-center relative w-full gap-[8px] shrink-[0]">
             <div className="flex flex-col justify-start relative whitespace-pre-wrap w-full z-[2] shrink-[0]">
-              <h6 className="font-medium text-left text-white text-[28px] tracking-[-0.84px] leading-[29.4px]" style={{"fontFamily":"Ronzino, \"Ronzino Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>{project.title}</h6>
+              <h6 className="font-medium text-left text-white text-[28px] tracking-[-0.84px] leading-[29.4px]" style={{"fontFamily":"Ronzino, \"Ronzino Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)","textShadow":"0 1px 6px rgba(0,0,0,0.6)"}}>{project.title}</h6>
             </div>
           </div>
           {serviceLabel && (
             <div aria-label="Details" className="items-center flex h-min justify-start relative w-full gap-[8px] shrink-[0]">
-              <div aria-label="Service" className="items-center flex size-min justify-center overflow-clip relative bg-white/10 gap-[4px] pt-1 pr-3 pb-1 pl-3 rounded-[62.5rem] border-[0.8px] border-solid border-white/20 backdrop-blur-[10px] shrink-[0]">
+              <div aria-label="Service" className="items-center flex size-min justify-center overflow-clip relative bg-black/30 gap-[4px] pt-1 pr-3 pb-1 pl-3 rounded-[62.5rem] border-[0.8px] border-solid border-white/30 backdrop-blur-[10px] shrink-[0]">
                 <div aria-label="Label" className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
                   <p className="font-medium text-left uppercase text-white text-[11px] tracking-[-0.16px] leading-[16px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>
                     {serviceLabel}
