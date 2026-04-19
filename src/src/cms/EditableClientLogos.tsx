@@ -346,16 +346,19 @@ function EditableLogoCard({ logo, index, moveLogo, deleteLogo, editLogo }: {
 
 export function EditableClientLogos({ defaultLogos }: EditableClientLogosProps) {
   const { isEditMode, getContent, updateContent, persistContent } = useCMSStore();
-  const [logos, setLogos] = useState<ClientLogo[]>(() => {
-    const stored = getContent('home.clientLogos', '');
+
+  // Derive logos directly from the CMS store so backend hydration (batchUpdateContent)
+  // is reflected without needing local state initialised only once at mount.
+  const stored = getContent('home.clientLogos', '');
+  const logos: ClientLogo[] = React.useMemo(() => {
     try { return stored ? JSON.parse(stored) : defaultLogos; }
     catch { return defaultLogos; }
-  });
+  }, [stored]);
+
   const [showAddModal, setShowAddModal] = useState(false);
   const [newLogo, setNewLogo] = useState({ name: '', logoUrl: '', aspectRatio: 'auto 1 / 1' });
 
   const saveLogos = (newLogos: ClientLogo[]) => {
-    setLogos(newLogos);
     updateContent('home.clientLogos', JSON.stringify(newLogos));
     persistContent();
   };
