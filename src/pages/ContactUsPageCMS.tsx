@@ -11,7 +11,8 @@ import imgCoverImageSilhouettedBandMembersPlayInstrumentsInASmokyWarehouseBackli
 import { GlobeAnimation } from '../src/cms/GlobeAnimation';
 
 export function ContactUsPageCMS() {
-  const { isEditMode } = useCMSStore();
+  const { isEditMode, getContent } = useCMSStore();
+  const officeAddress = getContent('contactUs.officeGlobe.address', 'London, UK');
 
   // Form State
   const [formData, setFormData] = useState({
@@ -367,7 +368,7 @@ export function ContactUsPageCMS() {
         <div aria-label="Container" className="items-center flex flex-col grow h-min justify-start overflow-clip relative w-px basis-0 gap-[64px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
           <div className="content-stretch flex flex-col h-[650px] items-start justify-center relative shrink-0 w-full rounded-[12px] overflow-hidden" data-name="Google map">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3305.4326!2d-118.37!3d34.09!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzTCsDA1JzI0LjAiTiAxMTjCsDIyJzEyLjAiVw!5e0!3m2!1sen!2sus!4v1234567890"
+              src={`https://maps.google.com/maps?q=${encodeURIComponent(officeAddress)}&output=embed`}
               width="100%"
               height="100%"
               style={{ border: 0 }}
@@ -464,7 +465,7 @@ export function ContactUsPageCMS() {
                     </a>
                     <div className="bg-[#444] h-px shrink-0 w-full" data-name="Line" />
                     {/* Location */}
-                    <a className="content-stretch cursor-pointer flex gap-[8px] items-center justify-center relative shrink-0 w-full group hover:opacity-100 transition-opacity duration-200" data-name="Contact link → Contact link" href="https://www.google.com/maps/search/92+Crescent+Avenue,+Los+Angeles,+CA/@34.0892625,-118.3685139,578m/data=!3m2!1e3!4b1">
+                    <a className="content-stretch cursor-pointer flex gap-[8px] items-center justify-center relative shrink-0 w-full group hover:opacity-100 transition-opacity duration-200" data-name="Contact link → Contact link" href={`https://www.google.com/maps/search/${encodeURIComponent(officeAddress)}`}>
                       <div className="relative shrink-0 size-[20px] group-hover:scale-110 transition-transform duration-200" data-name="Component 1">
                         <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 20 20">
                           <g>
@@ -478,11 +479,7 @@ export function ContactUsPageCMS() {
                         <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
                           <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#ddd] text-[14.1px] text-left tracking-[-0.32px] whitespace-nowrap" role="link" tabIndex={0}>
                             <p className="cursor-pointer leading-[24px]">
-                              <EditableText
-                                contentKey="contactUs.cards.contactCard.location"
-                                defaultValue="Los Angeles, CA"
-                                as="span"
-                              />
+                              <span>{officeAddress}</span>
                             </p>
                           </div>
                         </div>
