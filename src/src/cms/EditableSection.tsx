@@ -20,15 +20,15 @@ export function EditableSection({ sectionId, label, children }: EditableSectionP
   if (!isEditMode && isHidden) return null;
 
   return (
-    <div className="relative group/editsection">
+    <div className="relative">
       {children}
       {isEditMode && (
         <>
           <button
             onClick={toggle}
-            className={`absolute top-4 right-6 z-[60] flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium backdrop-blur-sm border transition-all opacity-0 group-hover/editsection:opacity-100 ${
+            className={`absolute top-4 right-6 z-[60] flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium backdrop-blur-sm border transition-all ${
               isHidden
-                ? 'bg-red-500/20 border-red-500/40 text-red-400 hover:bg-red-500/30 !opacity-100'
+                ? 'bg-red-500/20 border-red-500/40 text-red-400 hover:bg-red-500/30'
                 : 'bg-black/70 border-white/10 text-white/60 hover:text-white hover:bg-black/90'
             }`}
           >
