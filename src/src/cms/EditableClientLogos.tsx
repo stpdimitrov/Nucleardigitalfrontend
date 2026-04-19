@@ -165,6 +165,7 @@ function EditableLogoCard({ logo, index, moveLogo, deleteLogo, editLogo }: {
   editLogo: (id: string, updatedLogo: Omit<ClientLogo, 'id'>) => void;
 }) {
   const { isEditMode } = useCMSStore();
+  const [hovered, setHovered] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editedLogo, setEditedLogo] = useState({
@@ -206,15 +207,17 @@ function EditableLogoCard({ logo, index, moveLogo, deleteLogo, editLogo }: {
     <motion.div
       ref={ref}
       aria-label="Client logo"
-      className="self-start justify-self-start relative w-full group"
+      className="self-start justify-self-start relative w-full"
       variants={staggerItem}
       style={{ opacity: isDragging ? 0.4 : 1, cursor: isEditMode ? 'grab' : 'default' }}
       data-handler-id={handlerId}
+      onMouseEnter={() => isEditMode && setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
       <div
         aria-label="Client logo"
         className="items-center flex justify-center overflow-clip relative w-full h-[120px] bg-[rgb(36,_36,_36)] gap-[8px]"
-        style={isEditMode ? { outline: '1px dashed rgba(0,153,255,0.3)' } : undefined}
+        style={isEditMode ? { outline: '2px dashed rgba(0,153,255,0.5)' } : undefined}
       >
         <div
           aria-label="Logo"
@@ -230,26 +233,40 @@ function EditableLogoCard({ logo, index, moveLogo, deleteLogo, editLogo }: {
             />
           </div>
         </div>
-
-        {isEditMode && (
-          <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
-            <button
-              onClick={() => setShowEditModal(true)}
-              className="p-2 bg-[#0099FF]/90 hover:bg-[#0099FF] text-white rounded-lg shadow-lg transition-all"
-              title="Edit logo"
-            >
-              <Edit2 className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => setShowDeleteConfirm(true)}
-              className="p-2 bg-red-500/90 hover:bg-red-600 text-white rounded-lg shadow-lg transition-all"
-              title="Delete logo"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
-          </div>
-        )}
       </div>
+
+      {/* Controls rendered outside overflow-clip, using React hover state */}
+      {isEditMode && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 8,
+            right: 8,
+            display: 'flex',
+            gap: 6,
+            zIndex: 20,
+            opacity: hovered ? 1 : 0,
+            transition: 'opacity 0.15s',
+            pointerEvents: hovered ? 'auto' : 'none',
+          }}
+        >
+          <button
+            onClick={(e) => { e.stopPropagation(); setShowEditModal(true); }}
+            style={{ padding: 6, background: 'rgba(0,153,255,0.9)', border: 'none', borderRadius: 8, cursor: 'pointer', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            title="Edit logo"
+          >
+            <Edit2 style={{ width: 14, height: 14 }} />
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); setShowDeleteConfirm(true); }}
+            style={{ padding: 6, background: 'rgba(239,68,68,0.9)', border: 'none', borderRadius: 8, cursor: 'pointer', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            title="Delete logo"
+          >
+            <Trash2 style={{ width: 14, height: 14 }} />
+          </button>
+        </div>
+      )}
+
 
       {showDeleteConfirm && (
         <div className="absolute inset-0 bg-black/90 flex items-center justify-center z-20 rounded-lg">
