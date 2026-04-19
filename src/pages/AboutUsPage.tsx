@@ -98,7 +98,8 @@ const defaultTeamMembers: TeamMember[] = [
  * Editable Hero Section - 100% Visually Identical
  */
 function EditableHeroSection() {
-  const { isEditMode } = useCMSStore();
+  const { isEditMode, getContent, updateContent, persistContent } = useCMSStore();
+  const coverScale = parseFloat(getContent('about.hero.coverImageScale', '1')) || 1;
   
   return (
     <div className="content-stretch flex items-center justify-center pb-[72px] pt-[100px] px-[24px] md:px-[60px] lg:px-[100px] xl:px-[140px] 2xl:px-[340px] relative w-full" data-name="Hero section">
@@ -168,14 +169,39 @@ function EditableHeroSection() {
         </div>
 
         {/* Cover Image */}
-        <div className="overflow-clip relative shrink-0 w-full" style={{ height: 'clamp(200px, 53.2vw, 660px)' }} data-name="Cover image">
-          <div className={`absolute inset-0 overflow-hidden ${isEditMode ? '' : 'pointer-events-none'}`}>
-            <EditableImage
-              contentKey="about.hero.coverImage"
-              defaultSrc={imgCoverImage}
-              alt=""
-              className="absolute h-[180.61%] left-0 max-w-none top-[-40.3%] w-full"
-            />
+        <div className="relative shrink-0 w-full" data-name="Cover image">
+          {isEditMode && (
+            <div style={{
+              position: 'absolute', top: 8, right: 8, zIndex: 50,
+              background: 'rgba(0,0,0,0.75)', borderRadius: 8, padding: '8px 12px',
+              display: 'flex', alignItems: 'center', gap: 10, backdropFilter: 'blur(4px)',
+              border: '1px solid rgba(255,255,255,0.15)',
+            }}>
+              <span style={{ color: '#fff', fontSize: 11, fontFamily: 'sans-serif', whiteSpace: 'nowrap' }}>
+                Height {Math.round(coverScale * 100)}%
+              </span>
+              <input
+                type="range" min="0.3" max="2" step="0.05"
+                value={coverScale}
+                onChange={e => updateContent('about.hero.coverImageScale', e.target.value)}
+                onMouseUp={() => persistContent()}
+                onTouchEnd={() => persistContent()}
+                style={{ width: 100, accentColor: '#0099FF', cursor: 'pointer' }}
+              />
+            </div>
+          )}
+          <div
+            className="overflow-clip w-full"
+            style={{ height: `clamp(${Math.round(200 * coverScale)}px, ${(53.2 * coverScale).toFixed(2)}vw, ${Math.round(660 * coverScale)}px)` }}
+          >
+            <div className={`absolute inset-0 overflow-hidden ${isEditMode ? '' : 'pointer-events-none'}`}>
+              <EditableImage
+                contentKey="about.hero.coverImage"
+                defaultSrc={imgCoverImage}
+                alt=""
+                className="absolute h-[180.61%] left-0 max-w-none top-[-40.3%] w-full"
+              />
+            </div>
           </div>
         </div>
 
