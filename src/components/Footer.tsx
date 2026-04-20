@@ -179,7 +179,6 @@ export function Footer() {
                 defaultLogoUrl=""
               />
               <div className="flex flex-col grow justify-start overflow-hidden relative whitespace-pre w-px basis-0 shrink-[0]">
-                <img src="https://storage.googleapis.com/download/storage/v1/b/prd-shared-services.firebasestorage.app/o/h2m-assets%2Fe90c0b6198c4a04d7cdff16579b4a2e6ffcc4b31.svg?generation=1768843023516998&amp;alt=media" className="flex size-full" alt="" />
                 <div className="flex flex-col grow justify-start overflow-hidden absolute w-px left-0 top-0 right-0 bottom-0 origin-[0px_0px] basis-0 shrink-[0]" style={{"scale":"0.762"}}>
                   <EditableText
                     contentKey="footer.brandName"
