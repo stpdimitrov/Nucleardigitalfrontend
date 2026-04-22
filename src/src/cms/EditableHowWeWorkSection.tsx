@@ -196,41 +196,37 @@ export function EditableHowWeWorkSection({ contentKey = 'howWeWorkSection' }: Ed
   return (
     <motion.section 
       aria-label="How we work" 
-      className="items-center flex h-min justify-center overflow-clip relative w-full gap-[8px] pt-[100px] pr-0 pb-[100px] pl-0 bg-black"
+      className="items-center flex h-min justify-center overflow-clip relative w-full gap-[8px] pt-[60px] md:pt-[100px] pr-0 pb-[60px] md:pb-[100px] pl-0 bg-black"
       initial="hidden"
       whileInView="visible"
       viewport={viewport}
       variants={scrollFadeIn}
       >
-        <div aria-label="Container" className="content-stretch flex flex-col gap-[62.99px] items-center max-w-[1240px] overflow-clip px-[24px] relative shrink-0 w-[1240px]">
-          
-          {/* Header Section */}
-          <div className="h-[106.41px] overflow-clip relative shrink-0 w-full" data-name="Grid 6x">
-            {/* Section Tag */}
-            <div className="absolute content-stretch flex h-[22.41px] items-center justify-center left-0 overflow-clip pb-px top-0" data-name="Section tag">
-              <div className="content-stretch flex flex-col items-start relative shrink-0">
-                <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
-                  <EditableText
-                    contentKey={`${contentKey}.header.tag`}
-                    defaultValue='<div class="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[13.6px] text-white tracking-[-0.16px] uppercase whitespace-nowrap" style="font-family: &quot;Apfel Grotezk&quot;, &quot;Apfel Grotezk Placeholder&quot;, sans-serif"><p class="leading-[22.4px]">How we work</p></div>'
-                    as="div"
-                    className=""
-                  />
-                </div>
-              </div>
-            </div>
+        <div aria-label="Container" className="content-stretch flex flex-col gap-[48px] md:gap-[62.99px] items-center max-w-[1240px] overflow-clip px-[24px] relative shrink-0 w-full">
 
-            {/* Text Wrapper */}
-            <div className="absolute h-[106.41px] left-[400px] overflow-clip right-[400px] top-0" data-name="Text wrapper">
-              <div className="absolute content-stretch flex flex-col items-start left-0 right-0 top-[-1px]">
+          {/* Header Section */}
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 w-full relative" data-name="Grid 6x">
+            {/* Section Tag */}
+            <div className="shrink-0" data-name="Section tag">
+              <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
                 <EditableText
-                  contentKey={`${contentKey}.header.title`}
-                  defaultValue='<div class="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[45.4px] text-white tracking-[-1.44px] whitespace-nowrap" style="font-family: Ronzino, &quot;Ronzino Placeholder&quot;, sans-serif"><p class="leading-[50.4px]">Inside the Process</p></div>'
+                  contentKey={`${contentKey}.header.tag`}
+                  defaultValue='<div class="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[13.6px] text-white tracking-[-0.16px] uppercase whitespace-nowrap" style="font-family: &quot;Apfel Grotezk&quot;, &quot;Apfel Grotezk Placeholder&quot;, sans-serif"><p class="leading-[22.4px]">How we work</p></div>'
                   as="div"
                   className=""
                 />
               </div>
-              <div className="absolute content-stretch flex flex-col items-start left-0 opacity-70 right-0 top-[58.4px]">
+            </div>
+
+            {/* Text Wrapper */}
+            <div className="flex flex-col gap-[8px] flex-1 md:max-w-lg" data-name="Text wrapper">
+              <EditableText
+                contentKey={`${contentKey}.header.title`}
+                defaultValue='<div class="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[45.4px] text-white tracking-[-1.44px] whitespace-nowrap" style="font-family: Ronzino, &quot;Ronzino Placeholder&quot;, sans-serif"><p class="leading-[50.4px]">Inside the Process</p></div>'
+                as="div"
+                className=""
+              />
+              <div className="opacity-70">
                 <EditableText
                   contentKey={`${contentKey}.header.description`}
                   defaultValue='<div class="flex flex-col font-medium justify-center leading-[24px] not-italic relative shrink-0 text-[#ddd] text-[14.6px] tracking-[-0.32px] whitespace-nowrap" style="font-family: &quot;Apfel Grotezk&quot;, &quot;Apfel Grotezk Placeholder&quot;, sans-serif"><p class="mb-0">From concept to screen, our process transforms ideas into </p><p>powerful visual stories that inspire.</p></div>'
@@ -241,9 +237,9 @@ export function EditableHowWeWorkSection({ contentKey = 'howWeWorkSection' }: Ed
             </div>
 
             {/* Button */}
-            <Link 
-              to={getContent(`${contentKey}.header.buttonHref`, '/services')} 
-              className="absolute bg-[#fdc500] content-stretch cursor-pointer flex gap-[14px] items-center left-[1035.39px] overflow-clip pl-[16px] pr-[6px] py-[6px] rounded-[1000px] top-[62.4px] hover:bg-[#fdd520] transition-colors"
+            <Link
+              to={getContent(`${contentKey}.header.buttonHref`, '/services')}
+              className="bg-[#fdc500] content-stretch cursor-pointer flex gap-[14px] items-center overflow-clip pl-[16px] pr-[6px] py-[6px] rounded-[1000px] hover:bg-[#fdd520] transition-colors shrink-0 self-start md:self-auto"
             >
               <div className="content-stretch flex flex-col items-start relative shrink-0">
                 <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
@@ -280,7 +276,7 @@ export function EditableHowWeWorkSection({ contentKey = 'howWeWorkSection' }: Ed
           <div className="content-stretch flex flex-col gap-[24px] items-center justify-center relative shrink-0 w-full">
             
             {/* Top Tabs */}
-            <div className="content-stretch flex gap-[14px] items-start justify-center relative shrink-0 w-full" data-name="Top tabs">
+            <div className="flex gap-[14px] items-start relative w-full overflow-x-auto pb-1" data-name="Top tabs">
               {steps.map((step, index) => (
                 <ProcessTabButton
                   key={step.id}
@@ -521,11 +517,11 @@ function ProcessStepContent({ step, stepIndex, contentKey, updateStep, sectionSe
     <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
       <div className="relative shrink-0 w-full" style={{ backgroundColor: step.cardBackgroundColor || '#242424' }}>
         <div className="flex flex-row justify-center size-full">
-          <div className="content-stretch flex gap-[14px] items-start justify-center p-[20px] relative w-full">
-            
+          <div className="flex flex-col md:flex-row gap-[14px] items-start p-[20px] relative w-full">
+
             {/* Cover Image */}
-            <div 
-              className="h-[473px] overflow-clip relative shrink-0 w-[763.33px]" 
+            <div
+              className="w-full md:flex-[1_0_0] h-[260px] md:h-[473px] overflow-clip relative rounded-[12px]"
               data-name="Cover image"
               onMouseEnter={() => isEditMode && setShowImageControls(true)}
               onMouseLeave={() => isEditMode && setShowImageControls(false)}
@@ -579,10 +575,10 @@ function ProcessStepContent({ step, stepIndex, contentKey, updateStep, sectionSe
             </div>
 
             {/* Content Wrapper */}
-            <div className="overflow-clip relative self-stretch shrink-0 w-[374.66px]">
-              
+            <div className="flex flex-col gap-[22px] relative w-full md:w-[374.66px] shrink-0">
+
               {/* Top Content */}
-              <div className="absolute content-stretch flex flex-col gap-[22px] items-start justify-center left-0 right-0 top-[-1px]">
+              <div className="flex flex-col gap-[22px] items-start w-full">
                 {/* Step Number */}
                 {sectionSettings.showStepNumbers && (
                   <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
@@ -598,16 +594,14 @@ function ProcessStepContent({ step, stepIndex, contentKey, updateStep, sectionSe
                 )}
 
                 {/* Text Content */}
-                <div className="h-[138.41px] overflow-clip relative shrink-0 w-full">
-                  <div className="absolute content-stretch flex flex-col items-start left-0 right-0 top-[-1px]">
-                    <EditableText
-                      contentKey={`${contentKey}.step.${step.id}.heading`}
-                      defaultValue={`<div class="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[45.2px] tracking-[-1.44px] whitespace-nowrap" style="font-family: Ronzino, &quot;Ronzino Placeholder&quot;, sans-serif; color: ${step.textColor || '#ffffff'}"><p class="leading-[50.4px]">${step.heading}</p></div>`}
-                      as="div"
-                      className=""
-                    />
-                  </div>
-                  <div className="absolute content-stretch flex flex-col items-start left-0 opacity-60 right-0 top-[66.4px]">
+                <div className="flex flex-col gap-[8px] w-full">
+                  <EditableText
+                    contentKey={`${contentKey}.step.${step.id}.heading`}
+                    defaultValue={`<div class="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[45.2px] tracking-[-1.44px] whitespace-nowrap" style="font-family: Ronzino, &quot;Ronzino Placeholder&quot;, sans-serif; color: ${step.textColor || '#ffffff'}"><p class="leading-[50.4px]">${step.heading}</p></div>`}
+                    as="div"
+                    className=""
+                  />
+                  <div className="opacity-60">
                     <EditableText
                       contentKey={`${contentKey}.step.${step.id}.description`}
                       defaultValue={`<div class="flex flex-col font-medium justify-center leading-[24px] not-italic relative shrink-0 text-[14.3px] tracking-[-0.32px]" style="font-family: &quot;Apfel Grotezk&quot;, &quot;Apfel Grotezk Placeholder&quot;, sans-serif; color: ${step.textColor || '#dddddd'}"><p class="whitespace-pre-wrap">${step.description}</p></div>`}
@@ -619,9 +613,9 @@ function ProcessStepContent({ step, stepIndex, contentKey, updateStep, sectionSe
               </div>
 
               {/* Button */}
-              <Link 
-                to={step.buttonHref} 
-                className="absolute content-stretch cursor-pointer flex items-center justify-between left-0 overflow-clip pl-[20px] pr-[8.01px] py-[8px] right-0 rounded-[1000px] top-[425px] transition-all hover:opacity-90"
+              <Link
+                to={step.buttonHref}
+                className="content-stretch cursor-pointer flex items-center justify-between overflow-clip pl-[20px] pr-[8.01px] py-[8px] rounded-[1000px] transition-all hover:opacity-90 mt-auto"
                 style={{ backgroundColor: step.buttonColor || '#fdc500' }}
               >
                 <div className="content-stretch flex flex-col items-start relative shrink-0">

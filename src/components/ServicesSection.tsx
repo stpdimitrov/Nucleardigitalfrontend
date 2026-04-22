@@ -25,7 +25,7 @@ export function ServicesSection({ services }: ServicesSectionProps) {
   return (
     <motion.section
       aria-label="Services"
-      className="content-stretch flex items-center justify-center px-[24px] py-[100px] relative w-full"
+      className="content-stretch flex items-center justify-center px-[24px] py-[60px] md:py-[100px] relative w-full"
       data-name="Services"
       initial="hidden"
       whileInView="visible"
@@ -50,10 +50,10 @@ export function ServicesSection({ services }: ServicesSectionProps) {
             </div>
           </div>
           
-          <div className="flex items-end justify-between gap-[32px] w-full" data-name="Title and button row">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-[32px] w-full" data-name="Title and button row">
             <div className="flex flex-col gap-[8px] flex-1 min-w-0" data-name="Text wrapper">
               <div className="content-stretch flex flex-col items-start" data-name="h2.framer-text">
-                <div className="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[45.2px] text-white tracking-[-1.44px]" style={{fontFamily: 'Ronzino, "Ronzino Placeholder", sans-serif'}}>
+                <div className="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[28px] md:text-[45.2px] text-white tracking-[-1.44px]" style={{fontFamily: 'Ronzino, "Ronzino Placeholder", sans-serif'}}>
                   <EditableText
                     contentKey="home.services.heading"
                     defaultValue="<p class='leading-[50.4px]'>What We Offer</p>"
@@ -74,7 +74,7 @@ export function ServicesSection({ services }: ServicesSectionProps) {
               </div>
             </div>
             
-            <Link to="/contact-us" className="bg-[#fdc500] content-stretch cursor-pointer flex gap-[14px] items-center overflow-visible pl-[16px] pr-[6px] py-[6px] rounded-[1000px] shrink-0" data-name="Button → Small">
+            <Link to="/contact-us" className="bg-[#fdc500] content-stretch cursor-pointer flex gap-[14px] items-center overflow-visible pl-[16px] pr-[6px] py-[6px] rounded-[1000px] shrink-0 self-start md:self-auto" data-name="Button → Small">
               <div className="content-stretch flex flex-col items-start relative shrink-0" data-name="Description">
                 <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
                   <div className="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14.1px] text-black text-left tracking-[-0.16px] uppercase whitespace-nowrap" style={{fontFamily: '"Apfel Grotezk", "Apfel Grotezk Placeholder", sans-serif'}} role="link" tabIndex={0}>

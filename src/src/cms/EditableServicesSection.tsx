@@ -81,16 +81,15 @@ function DraggableServiceCard({
     <div
       ref={ref}
       data-handler-id={handlerId}
-      className="content-stretch flex gap-[8px] items-start justify-center overflow-visible relative shrink-0 w-full"
+      className={`content-stretch flex gap-[8px] items-start justify-center overflow-visible relative shrink-0 w-full flex-col ${isImageLeft ? 'md:flex-row' : 'md:flex-row-reverse'}`}
       data-name={`Service card → ${index + 1}-desktop`}
       style={{
         opacity: isDragging ? 0.5 : 1,
         cursor: isEditMode ? 'move' : 'default',
-        flexDirection: isImageLeft ? 'row' : 'row-reverse',
       }}
     >
       {/* Image Section */}
-      <div className="h-[500px] relative shrink-0 w-[592px]" data-name="div.framer-1nvv2kh">
+      <div className="h-[300px] md:h-[500px] relative shrink-0 w-full md:w-[592px]" data-name="div.framer-1nvv2kh">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <img alt="" className="absolute h-[118.4%] left-0 max-w-none top-[-9.2%] w-full" src={getImageForIndex(index)} />
         </div>

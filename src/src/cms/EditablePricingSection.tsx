@@ -563,41 +563,35 @@ export function EditablePricingSection({ defaultPlans = [] }: EditablePricingSec
     <>
       <motion.section
         aria-label="Pricing"
-        className="items-center flex h-min justify-center overflow-clip relative w-full gap-[8px] pt-[100px] pr-0 pb-[100px] pl-0"
+        className="items-center flex h-min justify-center overflow-clip relative w-full gap-[8px] pt-[60px] md:pt-[100px] pr-0 pb-[60px] md:pb-[100px] pl-0"
         initial="hidden"
         whileInView="visible"
         viewport={viewport}
         variants={scrollFadeIn}
       >
-        <div aria-label="Container" className="content-stretch flex flex-col gap-[64px] items-center max-w-[1240px] overflow-clip px-[24px] relative shrink-0 w-[1240px]">
-          
+        <div aria-label="Container" className="content-stretch flex flex-col gap-[48px] md:gap-[64px] items-center max-w-[1240px] overflow-clip px-[24px] relative shrink-0 w-full">
+
           {/* Header Section */}
-          <div className="h-[106.41px] overflow-clip relative shrink-0 w-full" data-name="Grid 6x">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 w-full" data-name="Grid 6x">
             {/* Section Tag */}
-            <div className="absolute content-stretch flex h-[22.41px] items-center justify-center left-0 overflow-clip pb-px top-0" data-name="Section tag → Section tag">
-              <div className="content-stretch flex flex-col items-start relative shrink-0" data-name="Description">
-                <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
-                  <EditableText
-                    contentKey="pricing.sectionLabel"
-                    defaultValue="<div class='flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14.1px] text-white tracking-[-0.16px] uppercase whitespace-nowrap' style='font-family: &quot;Apfel Grotezk&quot;, &quot;Apfel Grotezk Placeholder&quot;, sans-serif'><p class='leading-[22.4px]'>pricing plan</p></div>"
-                    as="div"
-                    className=""
-                  />
-                </div>
-              </div>
+            <div className="shrink-0" data-name="Section tag → Section tag">
+              <EditableText
+                contentKey="pricing.sectionLabel"
+                defaultValue="<div class='flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14.1px] text-white tracking-[-0.16px] uppercase whitespace-nowrap' style='font-family: &quot;Apfel Grotezk&quot;, &quot;Apfel Grotezk Placeholder&quot;, sans-serif'><p class='leading-[22.4px]'>pricing plan</p></div>"
+                as="div"
+                className=""
+              />
             </div>
 
             {/* Text Wrapper */}
-            <div className="absolute h-[106.41px] left-[400px] overflow-clip right-[400px] top-0" data-name="Text">
-              <div className="absolute content-stretch flex flex-col items-start left-0 right-0 top-[-1px]" data-name="h2.framer-text">
-                <EditableText
-                  contentKey="pricing.title"
-                  defaultValue="<div class='flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[45.6px] text-white tracking-[-1.44px] whitespace-nowrap' style='font-family: Ronzino, &quot;Ronzino Placeholder&quot;, sans-serif'><p class='leading-[50.4px]'>Affordable Plans</p></div>"
-                  as="div"
-                  className=""
-                />
-              </div>
-              <div className="absolute content-stretch flex flex-col items-start left-0 opacity-70 right-0 top-[58.41px]" data-name="p.framer-text">
+            <div className="flex flex-col gap-[8px] flex-1 md:max-w-lg" data-name="Text">
+              <EditableText
+                contentKey="pricing.title"
+                defaultValue="<div class='flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[45.6px] text-white tracking-[-1.44px] whitespace-nowrap' style='font-family: Ronzino, &quot;Ronzino Placeholder&quot;, sans-serif'><p class='leading-[50.4px]'>Affordable Plans</p></div>"
+                as="div"
+                className=""
+              />
+              <div className="opacity-70">
                 <EditableText
                   contentKey="pricing.subtitle"
                   defaultValue="<div class='flex flex-col font-medium justify-center leading-[24px] not-italic relative shrink-0 text-[#ddd] text-[14.4px] tracking-[-0.32px] whitespace-nowrap' style='font-family: &quot;Apfel Grotezk&quot;, &quot;Apfel Grotezk Placeholder&quot;, sans-serif'><p class='mb-0'>We offer flexible pricing plans tailored to your goals, </p><p>budget, and creative needs.</p></div>"
@@ -609,7 +603,7 @@ export function EditablePricingSection({ defaultPlans = [] }: EditablePricingSec
             </div>
 
             {/* Clients Wrapper */}
-            <div className="absolute content-stretch flex gap-[8px] items-center left-[992px] max-w-[200px] overflow-clip right-0 top-[78.41px]" data-name="Clients wrapper">
+            <div className="flex gap-[8px] items-center shrink-0 self-start md:self-auto" data-name="Clients wrapper">
               <div className="content-stretch flex items-center relative shrink-0 w-[101px]" data-name="Images wrapper">
                 <div className="overflow-clip relative rounded-[999px] shrink-0 size-[28px]" data-name="Image 01">
                   <div className="absolute inset-0 rounded-[999px]">
@@ -668,7 +662,7 @@ export function EditablePricingSection({ defaultPlans = [] }: EditablePricingSec
           </div>
 
           {/* Pricing Cards Grid */}
-          <div className="content-stretch flex gap-[14px] items-start justify-center relative shrink-0 w-full" data-name="Grid 6x">
+          <div className="flex flex-col md:flex-row gap-[14px] items-stretch justify-center relative shrink-0 w-full" data-name="Grid 6x">
             {plans.map((plan, index) => (
               <DraggablePricingCard
                 key={plan.id}

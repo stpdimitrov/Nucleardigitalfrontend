@@ -211,6 +211,14 @@ export function EditableWhyChooseUsSection({
     try { return JSON.parse(rawCardsFromStore ?? JSON.stringify(defaultCards)); } catch { return defaultCards; }
   });
 
+  // Mobile detection
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 768);
+  useEffect(() => {
+    const update = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
   // Sidebar width state
   const [sidebarWidth, setSidebarWidth] = useState<number | undefined>(() => {
     const n = parseFloat(rawSidebarWidth ?? '');
@@ -291,15 +299,15 @@ export function EditableWhyChooseUsSection({
   return (
     <motion.section
       aria-label="Why choose us"
-      className="items-center flex h-min justify-center overflow-clip relative w-full gap-[8px] pt-[100px] pr-0 pb-[100px] pl-0"
+      className="items-center flex h-min justify-center overflow-clip relative w-full gap-[8px] pt-[60px] md:pt-[100px] pr-0 pb-[60px] md:pb-[100px] pl-0"
       initial="hidden" whileInView="visible" viewport={viewport} variants={scrollFadeIn}
     >
       <div className="items-center flex flex-col grow h-min justify-start overflow-clip relative w-px basis-0 gap-[64px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
 
         {/* Header — left: tag + title + description / right: button */}
-        <div className="flex items-end justify-between w-full gap-8">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between w-full gap-6">
           {/* Left */}
-          <div className="flex flex-col gap-[16px]">
+          <div className="flex flex-col gap-[16px] [&_h2]:!text-[clamp(24px,5.5vw,44px)] [&_h2]:!leading-[1.2]">
             <div className="flex flex-col gap-[8px]">
               <div className="items-center flex size-min justify-start overflow-clip relative bg-white/5 gap-[8px] pt-2 pr-4 pb-2 pl-4 rounded-[62.5rem]">
                 <EditableText contentKey={`${contentKey}.sectionTag`} defaultValue={`<p class="font-medium text-left uppercase text-white text-[16px] tracking-[-0.16px] leading-[22.4px]" style="font-family:&quot;Apfel Grotezk&quot;, sans-serif">${defaultSectionTag}</p>`} as="div" className="" />
@@ -331,17 +339,17 @@ export function EditableWhyChooseUsSection({
 
         {/* Bento Grid */}
         <motion.div
-          className="flex gap-4 w-full items-stretch"
+          className="flex flex-col md:flex-row gap-4 w-full items-stretch"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
           viewport={viewport}
         >
 
-          {/* Main grid — 3 columns */}
+          {/* Main grid — 3 columns on desktop, 1 on mobile */}
           <div
             className="grid gap-4"
-            style={{ flex: 3, gridTemplateColumns: 'repeat(3, 1fr)', gridAutoRows: 'minmax(clamp(180px, 27vw, 350px), auto)', alignItems: 'stretch' }}
+            style={{ flex: isMobile ? undefined : 3, width: isMobile ? '100%' : undefined, gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gridAutoRows: 'minmax(clamp(180px, 27vw, 350px), auto)', alignItems: 'stretch' }}
           >
             {mainCards.map((card) => (
               <CardComponent key={card.id} {...cardProps(card)} />
@@ -352,7 +360,7 @@ export function EditableWhyChooseUsSection({
           <div
             ref={sidebarContainerRef}
             className="flex flex-col gap-4 relative"
-            style={sidebarWidth ? { width: sidebarWidth, flexShrink: 0 } : { flex: 1 }}
+            style={isMobile ? { width: '100%' } : (sidebarWidth ? { width: sidebarWidth, flexShrink: 0 } : { flex: 1 })}
           >
             {sidebarCards.map((card, i) => (
               <CardComponent key={card.id} {...cardProps(card)} sidebar sidebarFirst={i === 0} />

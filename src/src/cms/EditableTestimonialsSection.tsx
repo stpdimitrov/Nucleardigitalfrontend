@@ -302,44 +302,35 @@ export function EditableTestimonialsSection({ defaultTestimonials, contentKey = 
       <motion.section
         ref={sectionRef}
         aria-label="Testimonials"
-        className="items-center flex h-min justify-center overflow-clip relative w-full gap-[8px] pt-[100px] pr-0 pb-[100px] pl-0"
+        className="items-center flex h-min justify-center overflow-clip relative w-full gap-[8px] pt-[60px] md:pt-[100px] pr-0 pb-[60px] md:pb-[100px] pl-0"
         initial="hidden"
         whileInView="visible"
         viewport={viewport}
         variants={scrollFadeIn}
       >
-        <div aria-label="Container" className="content-stretch flex flex-col gap-[64px] items-center max-w-[1240px] overflow-clip px-[24px] relative shrink-0 w-[1240px]">
-          
+        <div aria-label="Container" className="content-stretch flex flex-col gap-[48px] md:gap-[64px] items-center max-w-[1240px] overflow-clip px-[24px] relative shrink-0 w-full">
+
           {/* Header Section */}
-          <div className="h-[106.41px] overflow-clip relative shrink-0 w-full" data-name="Grid 6x">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 w-full" data-name="Grid 6x">
             {/* Section Tag */}
-            <div className="absolute content-stretch flex h-[22.41px] items-center justify-center left-0 overflow-clip pb-px top-0" data-name="Section tag → Section tag">
-              <div className="content-stretch flex flex-col items-start relative shrink-0" data-name="Description">
-                <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
-                  <div className="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14.1px] text-white tracking-[-0.16px] uppercase whitespace-nowrap" style={{fontFamily: '"Apfel Grotezk", "Apfel Grotezk Placeholder", sans-serif'}}>
-                    <p className="leading-[22.4px]">testimonials</p>
-                  </div>
-                </div>
+            <div className="shrink-0" data-name="Section tag → Section tag">
+              <div className="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14.1px] text-white tracking-[-0.16px] uppercase whitespace-nowrap" style={{fontFamily: '"Apfel Grotezk", "Apfel Grotezk Placeholder", sans-serif'}}>
+                <p className="leading-[22.4px]">testimonials</p>
               </div>
             </div>
 
             {/* Text Wrapper */}
-            <div className="absolute h-[106.41px] left-[400px] overflow-clip right-[400px] top-0" data-name="Text wrapper">
-              <div className="absolute content-stretch flex flex-col items-start left-0 right-0 top-[-1px]" data-name="h2.framer-text">
-                <div className="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[45.6px] text-white tracking-[-1.44px] whitespace-nowrap" style={{fontFamily: 'Ronzino, "Ronzino Placeholder", sans-serif'}}>
-                  <p className="leading-[50.4px]">Our Happy Clients</p>
-                </div>
+            <div className="flex flex-col gap-[8px] flex-1 md:max-w-lg" data-name="Text wrapper">
+              <div className="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[45.6px] text-white tracking-[-1.44px]" style={{fontFamily: 'Ronzino, "Ronzino Placeholder", sans-serif'}}>
+                <p className="leading-[50.4px]">Our Happy Clients</p>
               </div>
-              <div className="absolute content-stretch flex flex-col items-start left-0 opacity-70 right-0 top-[58.41px]" data-name="p.framer-text">
-                <div className="flex flex-col font-medium justify-center leading-[24px] not-italic relative shrink-0 text-[#ddd] text-[14.4px] tracking-[-0.32px] whitespace-nowrap" style={{fontFamily: '"Apfel Grotezk", "Apfel Grotezk Placeholder", sans-serif'}}>
-                  <p className="mb-0">{`Hear from our amazing clients who trusted us to bring their `}</p>
-                  <p>creative visions to life.</p>
-                </div>
+              <div className="flex flex-col font-medium justify-center leading-[24px] not-italic relative shrink-0 text-[#ddd] text-[14.4px] tracking-[-0.32px] opacity-70" style={{fontFamily: '"Apfel Grotezk", "Apfel Grotezk Placeholder", sans-serif'}}>
+                <p>Hear from our amazing clients who trusted us to bring their creative visions to life.</p>
               </div>
             </div>
 
             {/* Button */}
-            <Link to="/services" className="absolute bg-[#fdc500] content-stretch cursor-pointer flex gap-[14px] items-center left-[1035.39px] overflow-clip pl-[16px] pr-[6px] py-[6px] rounded-[1000px] top-[62.41px] hover:bg-[#fdd520] transition-colors" data-name="Button → Small">
+            <Link to="/services" className="bg-[#fdc500] content-stretch cursor-pointer flex gap-[14px] items-center overflow-clip pl-[16px] pr-[6px] py-[6px] rounded-[1000px] hover:bg-[#fdd520] transition-colors shrink-0 self-start md:self-auto" data-name="Button → Small">
               <div className="content-stretch flex flex-col items-start relative shrink-0" data-name="Description">
                 <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
                   <div className="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[13.6px] text-black text-left tracking-[-0.16px] uppercase whitespace-nowrap" style={{fontFamily: '"Apfel Grotezk", "Apfel Grotezk Placeholder", sans-serif'}} role="link" tabIndex={0}>

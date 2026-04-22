@@ -303,7 +303,7 @@ function DraggableProjectCard({
       <Link
         to={isEditMode ? '#' : `/projects/${project.slug}`}
         aria-label="Project card"
-        className={`items-center flex h-min justify-center relative w-full text-[rgb(0,_0,_238)] gap-[10px] min-h-[440px] ${
+        className={`items-center flex h-min justify-center relative w-full text-[rgb(0,_0,_238)] gap-[10px] min-h-[240px] md:min-h-[440px] ${
           isEditMode ? 'pointer-events-none cursor-move' : ''
         }`}
         style={{"textDecoration":"rgb(0, 0, 238)"}}
@@ -369,6 +369,14 @@ export function EditableProjectsSection({ defaultProjects = [], availableService
 
   // Get grid columns from store or use default - read directly from content object for reactivity
   const gridColumns = parseInt(content['home.projectsGrid.columns'] || '3') || 3;
+
+  // Mobile detection — on mobile always use 1 column regardless of CMS setting
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 768);
+  useEffect(() => {
+    const update = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
 
   // Sync from backend data whenever it updates
   useEffect(() => {
@@ -478,7 +486,7 @@ export function EditableProjectsSection({ defaultProjects = [], availableService
 
   return (
     <>
-      <div aria-label="Projects wrapper" className="grid h-min justify-center relative w-full gap-[20px] shrink-[0]" style={{ gridTemplateColumns: `repeat(${gridColumns}, minmax(50px, 1fr))` }}>
+      <div aria-label="Projects wrapper" className="grid h-min justify-center relative w-full gap-[20px] shrink-[0]" style={{ gridTemplateColumns: `repeat(${isMobile ? 1 : gridColumns}, minmax(50px, 1fr))` }}>
         {/* Grid Settings Button (edit mode only) */}
         {isEditMode && (
           <button
@@ -564,7 +572,7 @@ export function EditableProjectsSection({ defaultProjects = [], availableService
 
         {/* Add New Button (only in edit mode) */}
         {isEditMode && (
-          <div className="flex items-center justify-center" style={{ gridColumn: `span ${gridColumns}` }}>
+          <div className="flex items-center justify-center" style={{ gridColumn: `span ${isMobile ? 1 : gridColumns}` }}>
             <button
               onClick={handleAddProject}
               className="group flex w-full max-w-md items-center justify-center gap-3 rounded-lg border-2 border-dashed border-blue-500/30 bg-blue-500/5 px-6 py-6 text-blue-400 transition-all hover:border-blue-500/50 hover:bg-blue-500/10 active:scale-[0.98]"
@@ -585,7 +593,7 @@ export function EditableProjectsSection({ defaultProjects = [], availableService
 
         {/* Reset to Defaults Button (only in edit mode) */}
         {isEditMode && (
-          <div className="flex items-center justify-center" style={{ gridColumn: `span ${gridColumns}` }}>
+          <div className="flex items-center justify-center" style={{ gridColumn: `span ${isMobile ? 1 : gridColumns}` }}>
             <button
               onClick={handleResetToDefaults}
               className="group flex w-full max-w-md items-center justify-center gap-3 rounded-lg border-2 border-dashed border-red-500/30 bg-red-500/5 px-6 py-6 text-red-400 transition-all hover:border-red-500/50 hover:bg-red-500/10 active:scale-[0.98]"

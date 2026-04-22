@@ -67,7 +67,7 @@ export function HomePage() {
         </div>
         <div aria-label="Container" className="items-start flex flex-col grow h-px justify-end overflow-clip relative w-full basis-0 gap-[64px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
           <div aria-label="Top wrapper" className="items-center flex h-min justify-start relative w-full gap-[8px] shrink-[0]">
-            <div className="flex flex-col grow justify-start relative w-px basis-0 max-w-[600px] shrink-[0]">
+            <div className="flex flex-col grow justify-start relative w-px basis-0 max-w-[600px] shrink-[0] [&_h1]:!text-[clamp(24px,5.5vw,56px)] [&_h1]:!leading-[1.2]">
               <EditableText
                 contentKey="home.hero.headline"
                 defaultValue="<h1 class='font-medium text-white text-[56px] tracking-[-1.68px] leading-[67.2px]' style='font-family: Ronzino, &quot;Ronzino Placeholder&quot;, sans-serif; text-decoration: rgb(255, 255, 255);'><span class='inline-block' style='text-decoration: rgb(255, 255, 255);'>Create cinematic visuals that captivate every audience</span></h1>"
@@ -77,7 +77,7 @@ export function HomePage() {
               />
             </div>
           </div>
-          <div aria-label="Bottom wrapper" className="items-end flex min-h-[200px] justify-between overflow-clip relative w-full shrink-[0]">
+          <div aria-label="Bottom wrapper" className="items-end flex min-h-[100px] md:min-h-[200px] justify-between overflow-clip relative w-full shrink-[0]">
             <div aria-label="Scroll down" className="relative shrink-[0]">
               <div aria-label="Scroll down" className="items-center flex size-min justify-end overflow-hidden relative gap-[4px]">
                 <div className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
@@ -172,7 +172,7 @@ export function HomePage() {
                 </div>
               </div>
             </div>
-            <div aria-label="Text" className="items-start flex flex-col h-min justify-start overflow-clip relative w-full md:max-w-md gap-[8px]">
+            <div aria-label="Text" className="items-start flex flex-col h-min justify-start overflow-clip relative w-full md:max-w-md gap-[8px] [&_h2]:!text-[clamp(24px,5.5vw,44px)] [&_h2]:!leading-[1.2]">
               <div className="flex flex-col justify-start relative whitespace-pre-wrap w-full shrink-[0]">
                 <EditableText
                   contentKey="home.featured.title"

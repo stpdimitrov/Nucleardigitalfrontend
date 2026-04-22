@@ -76,7 +76,7 @@ export function EditableAboutUsSection({
             )}
 
             {/* Editable Heading */}
-            <div className="flex flex-col justify-start relative w-full shrink-[0]">
+            <div className="flex flex-col justify-start relative w-full shrink-[0] [&_h2]:!text-[clamp(22px,5.5vw,44px)] [&_h2]:!leading-[1.2] [&_h2]:!tracking-[-0.05em]">
               <EditableText
                 contentKey={`${contentKey}.heading`}
                 defaultValue={`<h2 class="font-medium text-center text-white text-[44px] tracking-[-1.32px] leading-[46.2px]" style="font-family:Ronzino, &quot;Ronzino Placeholder&quot;, sans-serif;text-decoration:rgb(255, 255, 255)">${defaultHeading}</h2>`}
