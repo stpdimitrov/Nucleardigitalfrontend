@@ -56,7 +56,7 @@ export function HomePage() {
   return (
     <div className="items-center contents h-min justify-start overflow-hidden relative bg-black gap-[0px] min-h-[640px]">{/* Removed DndProvider */}
       <EditableSection sectionId="home.hero" label="Hero">
-      <motion.header aria-label="Hero section" className="relative flex h-screen w-full overflow-hidden" initial="hidden" animate="visible" variants={heroAnimation}>
+      <motion.header aria-label="Hero section" className="relative flex h-[100dvh] w-full overflow-hidden" initial="hidden" animate="visible" variants={heroAnimation}>
         {/* Background image — no aspect ratio constraint, object-position for mobile portrait */}
         <div className={`absolute inset-0 ${isEditMode ? '' : 'pointer-events-none'}`}>
           <EditableImage
@@ -72,9 +72,9 @@ export function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10 md:from-black/60 md:via-transparent md:to-transparent pointer-events-none" />
 
         {/* Content — centered on mobile, bottom on desktop */}
-        <div className="relative z-10 flex flex-col w-full h-full max-w-[1240px] mx-auto px-6 justify-end pb-8 md:pb-0 md:justify-end gap-6 md:gap-16 pt-[100px]">
+        <div className="relative z-10 flex flex-col w-full h-full max-w-[1240px] mx-auto px-6 justify-end pb-20 md:pb-16 md:justify-end gap-6 md:gap-16 pt-[100px]">
           <div className="flex flex-col gap-4 md:gap-8">
-            <div className="max-w-[600px] [&_h1]:!text-[clamp(28px,6vw,56px)] [&_h1]:!leading-[1.15]">
+            <div className="hero-heading max-w-[600px]">
               <EditableText
                 contentKey="home.hero.headline"
                 defaultValue="<h1 class='font-medium text-white text-[56px] tracking-[-1.68px] leading-[67.2px]' style='font-family: Ronzino, &quot;Ronzino Placeholder&quot;, sans-serif; text-decoration: rgb(255, 255, 255);'><span class='inline-block' style='text-decoration: rgb(255, 255, 255);'>Create cinematic visuals that captivate every audience</span></h1>"
