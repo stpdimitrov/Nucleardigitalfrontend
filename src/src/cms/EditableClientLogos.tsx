@@ -213,12 +213,12 @@ function EditableLogoCard({ logo, index, moveLogo, deleteLogo, editLogo }: {
     >
       <div
         aria-label="Client logo"
-        className="items-center flex justify-center relative w-full h-[120px] bg-[rgb(36,_36,_36)] gap-[8px]"
+        className="items-center flex justify-center relative w-full h-[80px] md:h-[120px] bg-[rgb(36,_36,_36)] gap-[8px]"
         style={isEditMode ? { outline: '2px dashed rgba(0,153,255,0.5)', overflow: 'visible' } : { overflow: 'clip' }}
       >
         <div
           aria-label="Logo"
-          className="relative w-[140px] h-[52px] shrink-[0]"
+          className="relative w-[70%] max-w-[140px] h-[40px] md:h-[52px] shrink-[0]"
           style={{ transform: `scale(${logo.scale ?? 1})` }}
         >
           <div className="absolute left-0 top-0 right-0 bottom-0">

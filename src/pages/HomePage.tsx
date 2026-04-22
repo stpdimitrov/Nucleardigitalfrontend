@@ -65,7 +65,7 @@ export function HomePage() {
             className="block size-full object-cover overflow-clip aspect-[auto_1536_/_1024]"
           />
         </div>
-        <div aria-label="Container" className="items-start flex flex-col grow h-px justify-end overflow-clip relative w-full basis-0 gap-[64px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
+        <div aria-label="Container" className="items-start flex flex-col grow h-px justify-end overflow-clip relative w-full basis-0 gap-[24px] md:gap-[64px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
           <div aria-label="Top wrapper" className="items-center flex h-min justify-start relative w-full gap-[8px] shrink-[0]">
             <div className="flex flex-col grow justify-start relative w-px basis-0 max-w-[600px] shrink-[0] [&_h1]:!text-[clamp(24px,5.5vw,56px)] [&_h1]:!leading-[1.2]">
               <EditableText

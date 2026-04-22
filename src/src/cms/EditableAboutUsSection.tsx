@@ -41,7 +41,7 @@ export function EditableAboutUsSection({
   return (
     <motion.section
       aria-label="About us"
-      className="items-center flex h-screen justify-center overflow-clip relative w-full gap-[8px] pt-[100px] pr-0 pb-[100px] pl-0"
+      className="items-center flex h-screen justify-center overflow-clip relative w-full gap-[8px] pt-[60px] md:pt-[100px] pr-0 pb-[60px] md:pb-[100px] pl-0"
       initial="hidden"
       whileInView="visible"
       viewport={viewport}
@@ -64,8 +64,8 @@ export function EditableAboutUsSection({
         defaultColor={defaultOverlayColor}
         className="size-full overflow-clip left-[0%] top-[0%] z-[1] shrink-[0]"
       >
-        <div aria-label="Container" className="items-center flex grow h-min justify-center overflow-clip relative w-px basis-0 gap-[64px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
-          <div aria-label="Wrapper" className="items-center flex flex-col grow h-min justify-center overflow-clip relative w-px basis-0 gap-[24px] max-w-[790px] z-[1] shrink-[0]">
+        <div aria-label="Container" className="items-center flex grow h-min justify-center overflow-clip relative w-px basis-0 gap-[32px] md:gap-[64px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
+          <div aria-label="Wrapper" className="items-center flex flex-col grow h-min justify-center overflow-clip relative w-px basis-0 gap-[16px] md:gap-[24px] max-w-[790px] z-[1] shrink-[0]">
             {showLogo && (
               <SiteLogo
                 heightKey="site.logoHeightNavbar"
