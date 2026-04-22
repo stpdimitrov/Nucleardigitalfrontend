@@ -56,18 +56,25 @@ export function HomePage() {
   return (
     <div className="items-center contents h-min justify-start overflow-hidden relative bg-black gap-[0px] min-h-[640px]">{/* Removed DndProvider */}
       <EditableSection sectionId="home.hero" label="Hero">
-      <motion.header aria-label="Hero section" className="items-center flex flex-col h-screen justify-center overflow-clip relative w-full gap-[8px] pt-[100px] pr-0 pb-6 pl-0" initial="hidden" animate="visible" variants={heroAnimation}>
-        <div className={`absolute left-0 top-0 right-0 bottom-0 ${isEditMode ? '' : 'pointer-events-none'}`}>
+      <motion.header aria-label="Hero section" className="relative flex h-screen w-full overflow-hidden" initial="hidden" animate="visible" variants={heroAnimation}>
+        {/* Background image — no aspect ratio constraint, object-position for mobile portrait */}
+        <div className={`absolute inset-0 ${isEditMode ? '' : 'pointer-events-none'}`}>
           <EditableImage
             contentKey="home.hero.backgroundImage"
             defaultSrc=""
             alt="Silhouette of a person with a camera walking towards vibrant orange light under dim blue streetlights on a misty road at night. Mysterious and atmospheric."
-            className="block size-full object-cover overflow-clip aspect-[auto_1536_/_1024]"
+            className="block size-full object-cover"
+            style={{ objectPosition: 'center 25%' }}
           />
         </div>
-        <div aria-label="Container" className="items-start flex flex-col grow h-px justify-end overflow-clip relative w-full basis-0 gap-[24px] md:gap-[64px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
-          <div aria-label="Top wrapper" className="items-center flex h-min justify-start relative w-full gap-[8px] shrink-[0]">
-            <div className="flex flex-col grow justify-start relative w-px basis-0 max-w-[600px] shrink-[0] [&_h1]:!text-[clamp(24px,5.5vw,56px)] [&_h1]:!leading-[1.2]">
+
+        {/* Gradient overlay — stronger on mobile for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10 md:from-black/60 md:via-transparent md:to-transparent pointer-events-none" />
+
+        {/* Content — centered on mobile, bottom on desktop */}
+        <div className="relative z-10 flex flex-col w-full h-full max-w-[1240px] mx-auto px-6 justify-end pb-8 md:pb-0 md:justify-end gap-6 md:gap-16 pt-[100px]">
+          <div className="flex flex-col gap-4 md:gap-8">
+            <div className="max-w-[600px] [&_h1]:!text-[clamp(28px,6vw,56px)] [&_h1]:!leading-[1.15]">
               <EditableText
                 contentKey="home.hero.headline"
                 defaultValue="<h1 class='font-medium text-white text-[56px] tracking-[-1.68px] leading-[67.2px]' style='font-family: Ronzino, &quot;Ronzino Placeholder&quot;, sans-serif; text-decoration: rgb(255, 255, 255);'><span class='inline-block' style='text-decoration: rgb(255, 255, 255);'>Create cinematic visuals that captivate every audience</span></h1>"
@@ -76,22 +83,16 @@ export function HomePage() {
                 multiline
               />
             </div>
-          </div>
-          <div aria-label="Bottom wrapper" className="items-end flex min-h-[100px] md:min-h-[200px] justify-between overflow-clip relative w-full shrink-[0]">
-            <div aria-label="Scroll down" className="relative shrink-[0]">
-              <div aria-label="Scroll down" className="items-center flex size-min justify-end overflow-hidden relative gap-[4px]">
-                <div className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
-                  <EditableText
-                    contentKey="home.hero.scrollText"
-                    defaultValue="<p class='font-medium text-left uppercase text-white text-[16px] tracking-[-0.16px] leading-[22.4px]' style='font-family: &quot;Apfel Grotezk&quot;, &quot;Apfel Grotezk Placeholder&quot;, sans-serif; text-decoration: rgb(255, 255, 255);'>Scroll down</p>"
-                    as="div"
-                    className=""
-                  />
-                </div>
-                <div aria-label="Icon" className="aspect-square relative w-[18px] z-[1] shrink-[0] flex items-center justify-center">
-                  <ArrowDown className="w-full h-full text-white" strokeWidth={2} />
-                </div>
-              </div>
+
+            {/* Scroll down — hidden on mobile */}
+            <div aria-label="Scroll down" className="hidden md:flex items-center gap-[4px]">
+              <EditableText
+                contentKey="home.hero.scrollText"
+                defaultValue="<p class='font-medium text-left uppercase text-white text-[16px] tracking-[-0.16px] leading-[22.4px]' style='font-family: &quot;Apfel Grotezk&quot;, &quot;Apfel Grotezk Placeholder&quot;, sans-serif; text-decoration: rgb(255, 255, 255);'>Scroll down</p>"
+                as="div"
+                className=""
+              />
+              <ArrowDown className="w-[18px] h-[18px] text-white" strokeWidth={2} />
             </div>
           </div>
         </div>

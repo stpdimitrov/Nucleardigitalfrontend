@@ -41,31 +41,35 @@ export function EditableAboutUsSection({
   return (
     <motion.section
       aria-label="About us"
-      className="items-center flex h-screen justify-center overflow-clip relative w-full gap-[8px] pt-[60px] md:pt-[100px] pr-0 pb-[60px] md:pb-[100px] pl-0"
+      className="relative flex min-h-screen w-full items-center justify-center py-[80px] md:py-[100px]"
       initial="hidden"
       whileInView="visible"
       viewport={viewport}
       variants={scrollFadeIn}
     >
-      {/* Background Image — EditableImage handles upload, Supabase Storage, and backend persist */}
-      <div className="absolute left-0 top-0 right-0 bottom-0">
+      {/* Background Image */}
+      <div className="absolute inset-0">
         <EditableImage
           contentKey={`${contentKey}.backgroundImage`}
           defaultSrc={defaultBackgroundImage}
           alt={backgroundAlt}
-          className="block size-full object-cover overflow-clip aspect-[auto_1280_/_1280]"
+          className="block size-full object-cover"
+          style={{ objectPosition: 'center center' }}
         />
       </div>
 
-      {/* Overlay with editable opacity and color */}
+      {/* Gradient overlay for readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/60 pointer-events-none" />
+
+      {/* Editable overlay (colour/opacity CMS control) */}
       <EditableOverlay
         contentKey={contentKey}
         defaultOpacity={defaultOverlayOpacity}
         defaultColor={defaultOverlayColor}
-        className="size-full overflow-clip left-[0%] top-[0%] z-[1] shrink-[0]"
+        className="inset-0 z-[1]"
       >
-        <div aria-label="Container" className="items-center flex grow h-min justify-center overflow-clip relative w-px basis-0 gap-[32px] md:gap-[64px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
-          <div aria-label="Wrapper" className="items-center flex flex-col grow h-min justify-center overflow-clip relative w-px basis-0 gap-[16px] md:gap-[24px] max-w-[790px] z-[1] shrink-[0]">
+        <div aria-label="Container" className="relative z-10 flex w-full max-w-[1240px] items-center justify-center px-6">
+          <div aria-label="Wrapper" className="flex flex-col items-center gap-[16px] md:gap-[24px] max-w-[790px] w-full text-center">
             {showLogo && (
               <SiteLogo
                 heightKey="site.logoHeightNavbar"
