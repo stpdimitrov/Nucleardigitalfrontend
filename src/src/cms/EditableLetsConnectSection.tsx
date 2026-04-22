@@ -74,7 +74,7 @@ export function EditableLetsConnectSection({ contentKey = 'letsConnectSection' }
   return (
     <section 
       aria-label="Contact hero" 
-      className="items-center flex h-min justify-center overflow-clip relative w-full gap-[8px] pt-[100px] pr-0 pb-[100px] pl-0"
+      className="items-center flex h-min justify-center overflow-clip relative w-full gap-[8px] pt-[60px] md:pt-[100px] pr-0 pb-[60px] md:pb-[100px] pl-0"
       style={{ 
         backgroundColor: backgroundColor,
         backgroundImage: backgroundImage ? `url(${backgroundImage})` : undefined,
@@ -135,72 +135,51 @@ export function EditableLetsConnectSection({ contentKey = 'letsConnectSection' }
         </div>
       )}
 
-      <div aria-label="Container" className="items-center flex flex-col grow h-min justify-start overflow-clip relative w-px basis-0 gap-[0px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0] z-10">
-        
-        {/* Grid 6x - Section Tag + Text + Scroll Down */}
-        <div className="h-[125px] overflow-clip relative shrink-0 w-full" data-name="Grid 6x">
+      <div aria-label="Container" className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 md:gap-8 w-full max-w-[1240px] px-6 z-10">
+
+        {/* Left: tag + heading + description */}
+        <div className="flex flex-col gap-3 md:gap-2">
           {/* Section Tag */}
-          <div className="absolute content-stretch flex flex-col items-start left-0 right-[800px] top-0" data-name="Section tag">
-            <div className="content-stretch flex h-[22.41px] items-center justify-center overflow-clip pb-px relative shrink-0">
-              <div className="content-stretch flex flex-col items-start relative shrink-0">
-                <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
-                  <EditableText
-                    contentKey={`${contentKey}.tag`}
-                    defaultValue='<div class="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14.1px] text-white tracking-[-0.16px] uppercase whitespace-nowrap" style="font-family: &quot;Apfel Grotezk&quot;, &quot;Apfel Grotezk Placeholder&quot;, sans-serif"><p class="leading-[22.4px]">contact us</p></div>'
-                    as="div"
-                    className=""
-                  />
-                </div>
-              </div>
-            </div>
+          <EditableText
+            contentKey={`${contentKey}.tag`}
+            defaultValue='<div class="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14.1px] text-white tracking-[-0.16px] uppercase whitespace-nowrap" style="font-family: &quot;Apfel Grotezk&quot;, &quot;Apfel Grotezk Placeholder&quot;, sans-serif"><p class="leading-[22.4px]">contact us</p></div>'
+            as="div"
+            className=""
+          />
+          {/* Heading */}
+          <div className="about-heading">
+            <EditableText
+              contentKey={`${contentKey}.heading`}
+              defaultValue={"<div class=\"flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[57px] text-white tracking-[-1.8px] w-full\" style=\"font-family: &quot;Apfel Grotezk&quot;, &quot;Apfel Grotezk Placeholder&quot;, sans-serif\"><p class=\"leading-[63px] whitespace-pre-wrap\">Let's Connect</p></div>"}
+              as="div"
+              className=""
+            />
           </div>
-
-          {/* Text - Heading + Description */}
-          <div className="absolute content-stretch flex flex-col gap-[8px] items-start left-[400px] overflow-clip right-[400px] top-0" data-name="Text">
-            <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
-              <EditableText
-                contentKey={`${contentKey}.heading`}
-                defaultValue={"<div class=\"flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[57px] text-white tracking-[-1.8px] w-full\" style=\"font-family: &quot;Apfel Grotezk&quot;, &quot;Apfel Grotezk Placeholder&quot;, sans-serif\"><p class=\"leading-[63px] whitespace-pre-wrap\">Let's Connect</p></div>"}
-                as="div"
-                className=""
-              />
-            </div>
-            <div className="content-stretch flex flex-col items-start opacity-60 relative shrink-0 w-full">
-              <EditableText
-                contentKey={`${contentKey}.description`}
-                defaultValue={"<div class=\"flex flex-col font-medium justify-center leading-[27px] not-italic relative shrink-0 text-[#ddd] text-[16.3px] w-full whitespace-pre-wrap\" style=\"font-family: &quot;Apfel Grotezk&quot;, &quot;Apfel Grotezk Placeholder&quot;, sans-serif\"><p class=\"mb-0\">Connect with our team for collaborations, </p><p>inquiries, and creative opportunities.</p></div>"}
-                as="div"
-                className=""
-              />
-            </div>
+          {/* Description */}
+          <div className="opacity-60">
+            <EditableText
+              contentKey={`${contentKey}.description`}
+              defaultValue={"<div class=\"flex flex-col font-medium justify-center leading-[27px] not-italic relative shrink-0 text-[#ddd] text-[16.3px] w-full whitespace-pre-wrap\" style=\"font-family: &quot;Apfel Grotezk&quot;, &quot;Apfel Grotezk Placeholder&quot;, sans-serif\"><p class=\"mb-0\">Connect with our team for collaborations, </p><p>inquiries, and creative opportunities.</p></div>"}
+              as="div"
+              className=""
+            />
           </div>
+        </div>
 
-          {/* Scroll Down */}
-          <div className="absolute content-stretch flex gap-[4px] h-[22.41px] items-center justify-end left-[1067.17px] overflow-clip pb-px top-[102.59px]" data-name="Scroll down">
-            <div className="content-stretch flex flex-col items-start relative shrink-0">
-              <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
-                <EditableText
-                  contentKey={`${contentKey}.scrollText`}
-                  defaultValue='<div class="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14.1px] text-white tracking-[-0.16px] uppercase whitespace-nowrap" style="font-family: &quot;Apfel Grotezk&quot;, &quot;Apfel Grotezk Placeholder&quot;, sans-serif"><p class="leading-[22.4px]">Scroll down</p></div>'
-                  as="div"
-                  className=""
-                />
-              </div>
-            </div>
-            <div className="relative shrink-0 size-[18px]">
-              <div className="-translate-y-1/2 absolute content-stretch flex flex-col items-start right-0 top-1/2 w-[18px]">
-                <div className="content-stretch flex flex-col items-center justify-center overflow-clip relative shrink-0 size-[18px]">
-                  <div className="relative shrink-0 size-[18px]">
-                    <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 18 18">
-                      <g>
-                        <path d={svgPaths.p8871c00} stroke="white" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
-                      </g>
-                    </svg>
-                  </div>
-                </div>
-              </div>
-              <div className="-translate-y-1/2 absolute bg-white right-0 size-[18px] top-1/2" />
-            </div>
+        {/* Right: Scroll down (desktop only) */}
+        <div className="hidden md:flex items-center gap-[4px] shrink-0">
+          <EditableText
+            contentKey={`${contentKey}.scrollText`}
+            defaultValue='<div class="flex flex-col font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14.1px] text-white tracking-[-0.16px] uppercase whitespace-nowrap" style="font-family: &quot;Apfel Grotezk&quot;, &quot;Apfel Grotezk Placeholder&quot;, sans-serif"><p class="leading-[22.4px]">Scroll down</p></div>'
+            as="div"
+            className=""
+          />
+          <div className="relative shrink-0 size-[18px]">
+            <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 18 18">
+              <g>
+                <path d={svgPaths.p8871c00} stroke="white" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
+              </g>
+            </svg>
           </div>
         </div>
       </div>
