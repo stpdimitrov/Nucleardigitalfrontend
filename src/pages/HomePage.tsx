@@ -16,7 +16,7 @@ import { EditableWhyChooseUsSection } from '../src/cms/EditableWhyChooseUsSectio
 import { EditableHowWeWorkSection } from '../src/cms/EditableHowWeWorkSection';
 import { EditableTestimonialsSection } from '../src/cms/EditableTestimonialsSection';
 import { scrollFadeIn, staggerContainer, staggerItem, viewport } from '../lib/animations';
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useBackendData } from '../contexts/BackendDataContext';
 
 // Animation variants
@@ -35,6 +35,12 @@ const heroAnimation = {
 export function HomePage() {
   const { isEditMode } = useCMSStore();
   const { projects, services, testimonials } = useBackendData();
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 768);
+  useEffect(() => {
+    const update = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
 
   // Transform projects data to match EditableProjectsSection interface
   // useMemo prevents a new array reference on every render, which would
@@ -64,7 +70,7 @@ export function HomePage() {
             defaultSrc=""
             alt="Silhouette of a person with a camera walking towards vibrant orange light under dim blue streetlights on a misty road at night. Mysterious and atmospheric."
             className="block size-full object-cover"
-            style={{ objectPosition: 'center 25%' }}
+            style={{ objectPosition: isMobile ? '70% center' : 'center 25%' }}
           />
         </div>
 
