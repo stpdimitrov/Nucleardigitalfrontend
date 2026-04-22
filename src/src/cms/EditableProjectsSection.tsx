@@ -303,42 +303,35 @@ function DraggableProjectCard({
       <Link
         to={isEditMode ? '#' : `/projects/${project.slug}`}
         aria-label="Project card"
-        className={`items-center flex h-min justify-center relative w-full text-[rgb(0,_0,_238)] gap-[10px] min-h-[240px] md:min-h-[440px] ${
+        className={`flex flex-col justify-end relative w-full overflow-hidden min-h-[240px] md:min-h-[440px] ${
           isEditMode ? 'pointer-events-none cursor-move' : ''
         }`}
-        style={{"textDecoration":"rgb(0, 0, 238)"}}
         onClick={(e) => isEditMode && e.preventDefault()}
       >
-        <div aria-label="Video" className="size-full pointer-events-none absolute left-[0%] top-[0%] z-[1] shrink-[0]">
+        {/* Background image/video */}
+        <div aria-label="Video" className="absolute inset-0 z-[1] pointer-events-none">
           {(() => {
             const isVideo = (url?: string) => !!url && /\.(mp4|webm|ogg)(\?|$)/i.test(url);
             const videoSrc = isVideo(project.videoUrl) ? project.videoUrl : isVideo(project.thumbnailUrl) ? project.thumbnailUrl : null;
             return videoSrc ? (
-              <video src={videoSrc} className="size-full object-cover overflow-clip pointer-events-none" autoPlay muted loop playsInline></video>
+              <video src={videoSrc} className="size-full object-cover pointer-events-none" autoPlay muted loop playsInline />
             ) : (
               <img
                 src={project.thumbnailUrl || project.videoUrl}
                 alt={project.title}
-                className="size-full object-cover overflow-clip pointer-events-none"
+                className="size-full object-cover pointer-events-none"
               />
             );
           })()}
         </div>
-        <div aria-label="Text" className="items-start flex flex-col h-min justify-center absolute w-full left-[50%] bottom-0 gap-[12px] px-5 pt-10 pb-5 translate-x-[-50%] z-[3] shrink-[0] backdrop-blur-[10px]" style={{ background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.72) 40%)' }}>
-          <div aria-label="Heading" className="items-center flex flex-col h-min justify-center relative w-full gap-[8px] shrink-[0]">
-            <div className="flex flex-col justify-start relative whitespace-pre-wrap w-full z-[2] shrink-[0]">
-              <h6 className="font-medium text-left text-white text-[28px] tracking-[-0.84px] leading-[29.4px]" style={{"fontFamily":"Ronzino, \"Ronzino Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)","textShadow":"0 1px 6px rgba(0,0,0,0.6)"}}>{project.title}</h6>
-            </div>
-          </div>
+        {/* Text overlay — in-flow so it always fits regardless of title length */}
+        <div aria-label="Text" className="relative z-[3] flex flex-col gap-[12px] px-5 pt-10 pb-5" style={{ background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.82) 40%)' }}>
+          <h6 className="font-medium text-left text-white text-[28px] tracking-[-0.84px] leading-[1.15]" style={{"fontFamily":"Ronzino, \"Ronzino Placeholder\", sans-serif","textShadow":"0 1px 6px rgba(0,0,0,0.6)"}}>{project.title}</h6>
           {serviceLabel && (
-            <div aria-label="Details" className="items-center flex h-min justify-start relative w-full gap-[8px] shrink-[0]">
-              <div aria-label="Service" className="items-center flex size-min justify-center overflow-clip relative bg-black/30 gap-[4px] pt-1 pr-3 pb-1 pl-3 rounded-[62.5rem] border-[0.8px] border-solid border-white/30 backdrop-blur-[10px] shrink-[0]">
-                <div aria-label="Label" className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
-                  <p className="font-medium text-left uppercase text-white text-[11px] tracking-[-0.16px] leading-[16px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(255, 255, 255)"}}>
-                    {serviceLabel}
-                  </p>
-                </div>
-              </div>
+            <div aria-label="Service" className="flex size-min items-center overflow-clip bg-black/30 gap-[4px] pt-1 pr-3 pb-1 pl-3 rounded-full border border-white/30 backdrop-blur-[10px]">
+              <p className="font-medium uppercase text-white text-[11px] tracking-[-0.16px] leading-[16px] whitespace-nowrap" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}>
+                {serviceLabel}
+              </p>
             </div>
           )}
         </div>
