@@ -105,9 +105,16 @@ function TextFormatBar() {
   );
 }
 
+const ALLOWED_HOSTNAMES = ['nucleardigitalfrontend.onrender.com', 'localhost', '127.0.0.1'];
+
 export function EditModeToggle() {
   const { isEditMode, toggleEditMode, setEditMode, saveStatus, resetContent, adminToken, setAdminToken, activeTextKey, setActiveTextKey, addCustomTextBox, registeredSections, getContent, updateContent, persistContent } = useCMSStore();
   const { pathname } = useLocation();
+
+  // Only show on staging / local — never on production
+  if (!ALLOWED_HOSTNAMES.some(h => window.location.hostname === h || window.location.hostname.endsWith('.' + h))) {
+    return null;
+  }
 
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSectionsPanel, setShowSectionsPanel] = useState(false);
