@@ -77,7 +77,7 @@ export function NavbarAnimated() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ duration: 0.6, ease: [0.43, 0.13, 0.23, 0.96] }}
-              className="fixed right-0 top-0 bottom-0 w-[40%] bg-black z-[100] flex flex-col justify-between"
+              className="fixed right-0 top-0 bottom-0 w-full md:w-[40%] bg-black z-[100] flex flex-col justify-between"
             >
               {/* Close Button */}
               <div className="absolute top-8 right-6 z-10">
@@ -91,7 +91,7 @@ export function NavbarAnimated() {
               </div>
 
               {/* Menu Items */}
-              <div className="flex flex-col justify-center h-full pl-[88px] gap-[16px]">
+              <div className="flex flex-col justify-center h-full pl-8 md:pl-[88px] gap-[16px]">
                 {navMenuLinks.map((link, index) => {
                   const pageHidden = getContent(`visibility.page.${link.id}`, 'false') === 'true';
                   if (!isEditMode && pageHidden) return null;
@@ -109,7 +109,7 @@ export function NavbarAnimated() {
                           if (isEditMode) { e.preventDefault(); return; }
                           setIsMenuOpen(false);
                         }}
-                        className={`font-medium text-[48px] leading-[56px] tracking-[-1.44px] hover:text-white transition-colors block ${pageHidden ? 'text-[#555] line-through' : 'text-[#999]'}`}
+                        className={`font-medium text-[32px] md:text-[48px] leading-[40px] md:leading-[56px] tracking-[-0.96px] md:tracking-[-1.44px] hover:text-white transition-colors block ${pageHidden ? 'text-[#555] line-through' : 'text-[#999]'}`}
                         style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}
                       >
                         <EditableText
