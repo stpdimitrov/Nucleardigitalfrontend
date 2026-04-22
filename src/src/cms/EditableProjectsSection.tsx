@@ -243,7 +243,8 @@ function DraggableProjectCard({
   const serviceLabel =
     availableServices.find(s => s.id === project.serviceId)?.title ||
     availableServices.find(s => s.title.toLowerCase() === project.service?.toLowerCase())?.title ||
-    (availableServices.length > 0 ? '' : project.service);
+    project.service ||
+    '';
   const [{ isDragging }, drag] = useDrag({
     type: 'PROJECT',
     item: { index },
