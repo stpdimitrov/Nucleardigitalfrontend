@@ -68,7 +68,7 @@ function DraggableStoryRow({ item, index, isEditMode, onMove, onEdit, onDelete }
     <>
       <div
         ref={ref}
-        className="group relative flex w-full items-start gap-0 py-[32px]"
+        className="group relative flex flex-col md:flex-row w-full items-start gap-3 md:gap-0 py-[24px] md:py-[32px]"
         style={{ opacity: isDragging ? 0.4 : 1 }}
       >
         {/* Drag handle */}
@@ -79,9 +79,9 @@ function DraggableStoryRow({ item, index, isEditMode, onMove, onEdit, onDelete }
         )}
 
         {/* Number */}
-        <div className="w-[200px] shrink-0">
+        <div className="md:w-[200px] md:shrink-0">
           <p
-            className="font-medium leading-[24px] text-[#ddd] text-[14px] tracking-[-0.32px]"
+            className="font-medium leading-[24px] text-[#ddd] text-[12px] md:text-[14px] tracking-[-0.32px]"
             style={{ fontFamily: '"Inter", sans-serif' }}
           >
             {item.number}
@@ -89,9 +89,9 @@ function DraggableStoryRow({ item, index, isEditMode, onMove, onEdit, onDelete }
         </div>
 
         {/* Title */}
-        <div className="w-[400px] shrink-0 -mt-[1px]">
+        <div className="w-full md:w-[400px] md:shrink-0">
           <p
-            className="font-medium leading-[33.6px] text-[30px] text-white tracking-[-0.64px]"
+            className="font-medium leading-[1.2] text-[22px] md:text-[30px] text-white tracking-[-0.64px]"
             style={{ fontFamily: '"Inter", sans-serif' }}
           >
             {item.title}
@@ -99,7 +99,7 @@ function DraggableStoryRow({ item, index, isEditMode, onMove, onEdit, onDelete }
         </div>
 
         {/* Description */}
-        <div className="flex-1 opacity-80">
+        <div className="w-full md:flex-1 opacity-80">
           <p
             className="font-medium leading-[24px] text-[#ddd] text-[14px] tracking-[-0.32px]"
             style={{ fontFamily: '"Inter", sans-serif' }}
@@ -110,7 +110,7 @@ function DraggableStoryRow({ item, index, isEditMode, onMove, onEdit, onDelete }
 
         {/* Edit / Delete */}
         {isEditMode && (
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="flex gap-1 md:absolute md:right-0 md:top-1/2 md:-translate-y-1/2 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
             <button
               onClick={() => onEdit(item)}
               className="flex items-center gap-1 rounded bg-white/10 px-2 py-1 text-xs text-white hover:bg-white/20 transition-colors"

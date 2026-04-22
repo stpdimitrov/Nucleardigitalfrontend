@@ -102,8 +102,8 @@ function EditableHeroSection() {
   const coverScale = parseFloat(getContent('about.hero.coverImageScale', '1')) || 1;
   
   return (
-    <div className="content-stretch flex items-center justify-center pb-[72px] pt-[100px] px-[24px] md:px-[60px] lg:px-[100px] xl:px-[140px] 2xl:px-[340px] relative w-full" data-name="Hero section">
-      <div className="content-stretch flex flex-col gap-[64px] items-center max-w-[1240px] overflow-clip px-[24px] relative shrink-0" data-name="Container">
+    <div className="content-stretch flex items-center justify-center pb-[48px] md:pb-[72px] pt-[80px] md:pt-[100px] px-[16px] md:px-[60px] lg:px-[100px] xl:px-[140px] 2xl:px-[340px] relative w-full" data-name="Hero section">
+      <div className="content-stretch flex flex-col gap-[40px] md:gap-[64px] items-center max-w-[1240px] overflow-clip relative shrink-0 w-full" data-name="Container">
         
         {/* Grid 6x - Header with Title */}
         <div className="flex flex-col md:flex-row gap-[8px] items-start md:items-end justify-center overflow-clip relative shrink-0 w-full" data-name="Grid 6x">
@@ -295,8 +295,8 @@ function EditableCTASection() {
           defaultColor="#000000"
           className="inset-[0_0_0.02%_0]"
         >
-          <div className="content-stretch flex items-center justify-center max-w-[1240px] overflow-clip px-[24px] relative shrink-0 w-[1240px]" data-name="Container">
-            <div className="content-stretch flex flex-col gap-[22.9px] items-center justify-center max-w-[790px] overflow-clip relative shrink-0 w-[790px]" data-name="Wrapper">
+          <div className="content-stretch flex items-center justify-center w-full max-w-[1240px] overflow-clip px-6 relative shrink-0" data-name="Container">
+            <div className="content-stretch flex flex-col gap-[22.9px] items-center justify-center w-full max-w-[790px] overflow-clip relative shrink-0 px-2" data-name="Wrapper">
               {/* Section Tag */}
               <div className="content-stretch flex flex-col items-start relative shrink-0" data-name="Section tag">
                 <div className="content-stretch flex h-[22.41px] items-center justify-center overflow-clip pb-px relative shrink-0" data-name="Section tag">
