@@ -106,10 +106,10 @@ function EditableHeroSection() {
       <div className="content-stretch flex flex-col gap-[64px] items-center max-w-[1240px] overflow-clip px-[24px] relative shrink-0" data-name="Container">
         
         {/* Grid 6x - Header with Title */}
-        <div className="content-stretch flex gap-[8px] items-end justify-center overflow-clip relative shrink-0 w-full" data-name="Grid 6x">
-          {/* Left spacer - 2020-2025 */}
-          <div className="content-stretch flex flex-col gap-[23.59px] h-[85.59px] items-start min-h-px min-w-px overflow-clip relative w-[392px]" data-name="Users wrapper">
-            <div className="blur-[2px] h-[62px] relative w-[392px]" data-name="2020-2025" />
+        <div className="flex flex-col md:flex-row gap-[8px] items-start md:items-end justify-center overflow-clip relative shrink-0 w-full" data-name="Grid 6x">
+          {/* Left spacer - 2020-2025 — hidden on mobile */}
+          <div className="hidden md:flex flex-col gap-[23.59px] items-start overflow-clip relative shrink-0 w-[200px] lg:w-[392px]" data-name="Users wrapper">
+            <div className="blur-[2px] h-[62px] w-full" data-name="2020-2025" />
             <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
               <EditableText
                 contentKey="about.hero.yearsLabel"
@@ -121,7 +121,7 @@ function EditableHeroSection() {
           </div>
 
           {/* Center - Title and Description (EDITABLE) */}
-          <div className="content-stretch flex flex-[1_0_0] flex-col gap-[8px] items-start min-h-px min-w-px overflow-clip relative" data-name="Text wrapper">
+          <div className="content-stretch flex flex-1 flex-col gap-[8px] items-start overflow-clip relative w-full" data-name="Text wrapper">
             {/* Title: "About us" */}
             <div className="content-stretch flex gap-[13.46px] items-start relative shrink-0 w-full" data-name="h1.framer-text">
               <div className="blur-[2px] content-stretch flex items-start relative shrink-0">
@@ -153,8 +153,8 @@ function EditableHeroSection() {
             </div>
           </div>
 
-          {/* Right - Scroll Down */}
-          <div className="content-stretch flex gap-[4px] h-[22.41px] items-center justify-end overflow-clip pb-px pl-[267.17px] relative shrink-0" data-name="Scroll down → Scroll down">
+          {/* Right - Scroll Down — hidden on mobile */}
+          <div className="hidden md:flex gap-[4px] h-[22.41px] items-center justify-end overflow-clip pb-px relative shrink-0" data-name="Scroll down → Scroll down">
             <div className="content-stretch flex flex-col items-start relative shrink-0" data-name="div.framer-1lpeffq">
               <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
                 <EditableText
@@ -211,8 +211,8 @@ function EditableHeroSection() {
         </div>
 
         {/* Grid 2x - Images */}
-        <div className="content-stretch flex gap-[24px] items-start justify-center overflow-clip relative shrink-0 w-full" data-name="Grid 2x">
-          <div className="flex-[1_0_0] min-h-px min-w-px overflow-clip relative" style={{ height: 'clamp(180px, 37.9vw, 470px)' }} data-name="Image 01">
+        <div className="content-stretch flex flex-col md:flex-row gap-[24px] items-start justify-center overflow-clip relative shrink-0 w-full" data-name="Grid 2x">
+          <div className="w-full md:flex-[1_0_0] overflow-clip relative" style={{ height: 'clamp(220px, 37.9vw, 470px)' }} data-name="Image 01">
             <div className={`absolute inset-0 overflow-hidden ${isEditMode ? '' : 'pointer-events-none'}`}>
               <EditableImage
                 contentKey="about.hero.image01"
@@ -222,7 +222,7 @@ function EditableHeroSection() {
               />
             </div>
           </div>
-          <div className="flex-[1_0_0] min-h-px min-w-px overflow-clip relative" style={{ height: 'clamp(180px, 37.9vw, 470px)' }} data-name="Image 02">
+          <div className="w-full md:flex-[1_0_0] overflow-clip relative" style={{ height: 'clamp(220px, 37.9vw, 470px)' }} data-name="Image 02">
             <div className={`absolute inset-0 overflow-hidden ${isEditMode ? '' : 'pointer-events-none'}`}>
               <EditableImage
                 contentKey="about.hero.image02"

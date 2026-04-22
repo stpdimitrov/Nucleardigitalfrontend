@@ -56,55 +56,25 @@ export function Navbar() {
           </div>
 
           {/* Menu Items */}
-          <div className="flex flex-col justify-center items-start pl-[88px] h-full gap-[24px]">
-            <Link 
-              to="/" 
-              onClick={() => setIsMenuOpen(false)}
-              className="font-medium text-[#999] text-[80px] leading-[88px] tracking-[-2.4px] hover:text-white transition-colors"
-              style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}
-            >
-              Home
-            </Link>
-            <Link 
-              to="/about-us" 
-              onClick={() => setIsMenuOpen(false)}
-              className="font-medium text-[#999] text-[80px] leading-[88px] tracking-[-2.4px] hover:text-white transition-colors"
-              style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}
-            >
-              About us
-            </Link>
-            <Link 
-              to="/services" 
-              onClick={() => setIsMenuOpen(false)}
-              className="font-medium text-[#999] text-[80px] leading-[88px] tracking-[-2.4px] hover:text-white transition-colors"
-              style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}
-            >
-              Services
-            </Link>
-            <Link 
-              to="/projects" 
-              onClick={() => setIsMenuOpen(false)}
-              className="font-medium text-[#999] text-[80px] leading-[88px] tracking-[-2.4px] hover:text-white transition-colors"
-              style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}
-            >
-              Projects
-            </Link>
-            <Link 
-              to="/blogs" 
-              onClick={() => setIsMenuOpen(false)}
-              className="font-medium text-[#999] text-[80px] leading-[88px] tracking-[-2.4px] hover:text-white transition-colors"
-              style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}
-            >
-              Blogs
-            </Link>
-            <Link 
-              to="/contact-us" 
-              onClick={() => setIsMenuOpen(false)}
-              className="font-medium text-[#999] text-[80px] leading-[88px] tracking-[-2.4px] hover:text-white transition-colors"
-              style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}
-            >
-              Contact us
-            </Link>
+          <div className="flex flex-col justify-center items-start pl-8 md:pl-[88px] h-full gap-[16px] md:gap-[24px]">
+            {[
+              { to: '/', label: 'Home' },
+              { to: '/about-us', label: 'About us' },
+              { to: '/services', label: 'Services' },
+              { to: '/projects', label: 'Projects' },
+              { to: '/blogs', label: 'Blogs' },
+              { to: '/contact-us', label: 'Contact us' },
+            ].map(({ to, label }) => (
+              <Link
+                key={to}
+                to={to}
+                onClick={() => setIsMenuOpen(false)}
+                className="font-medium text-[#999] text-[40px] leading-[48px] md:text-[80px] md:leading-[88px] tracking-[-1.2px] md:tracking-[-2.4px] hover:text-white transition-colors"
+                style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif"}}
+              >
+                {label}
+              </Link>
+            ))}
           </div>
         </div>
       )}

@@ -30,10 +30,10 @@ export function Footer() {
 
   return (
     <div className="relative w-full shrink-[0]" style={{"order":"1003"}}>
-      <footer aria-label="Footer" className="items-center flex h-min justify-center overflow-clip relative w-full bg-black gap-[8px] pt-[100px] pr-0 pb-8 pl-0">
-        <div aria-label="Container" className="items-center flex flex-col grow h-min justify-start overflow-clip relative w-px basis-0 gap-[64px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
-          <div aria-label="Grid 3x" className="grid h-min justify-center overflow-clip relative w-full grid-rows-[repeat(1,min-content)] gap-[36px] z-[4] shrink-[0]" style={{"gridTemplateColumns":"repeat(3, minmax(50px, 1fr))"}}>
-            <div aria-label="Video" className="self-start size-full justify-self-start relative">
+      <footer aria-label="Footer" className="items-center flex h-min justify-center overflow-clip relative w-full bg-black gap-[8px] pt-[60px] md:pt-[100px] pr-0 pb-8 pl-0">
+        <div aria-label="Container" className="items-center flex flex-col grow h-min justify-start overflow-clip relative w-px basis-0 gap-[48px] md:gap-[64px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
+          <div aria-label="Grid 3x" className="grid h-min justify-center overflow-clip relative w-full grid-rows-[repeat(1,min-content)] gap-[36px] z-[4] shrink-[0] grid-cols-1 md:grid-cols-3">
+            <div aria-label="Video" className="self-start w-full justify-self-start relative h-[240px] md:h-auto">
               <EditableImage
                 contentKey="footer.videoUrl"
                 defaultSrc=""
@@ -41,7 +41,7 @@ export function Footer() {
                 className="size-full object-cover overflow-clip"
               />
             </div>
-            <div aria-label="Grid 3x" className="self-start grid h-min justify-center justify-self-start relative w-full grid-rows-[repeat(1,min-content)] gap-[8px]" style={{"gridTemplateColumns":"repeat(3, minmax(50px, 1fr))","gridArea":"auto / span 2"}}>
+            <div aria-label="Grid 3x" className="self-start grid h-min justify-center justify-self-start relative w-full grid-rows-[repeat(1,min-content)] gap-[32px] md:gap-[8px] grid-cols-1 sm:grid-cols-3 md:col-span-2">
               {/* Main Pages */}
               <div aria-label="Footer links wrapper" className="items-start self-start flex flex-col h-min justify-start justify-self-start overflow-clip relative w-full gap-[20px]">
                 <div className="flex flex-col justify-start relative whitespace-pre-wrap w-full shrink-[0]">
@@ -190,8 +190,8 @@ export function Footer() {
                 </div>
               </div>
             </div>
-            <div aria-label="Grid 6x" className="grid h-min justify-center overflow-clip relative w-full grid-rows-[repeat(1,min-content)] gap-[8px_36px] pt-[22px] pr-0 pb-0 pl-0 z-[4] shrink-[0] after:border-t after:size-full after:pointer-events-none after:absolute after:left-0 after:top-0 after:border-[rgb(68,_68,_68)] after:content-[&quot;&quot;]" style={{"gridTemplateColumns":"repeat(6, minmax(50px, 1fr))"}}>
-              <div aria-label="Copyright" className="items-center self-start flex h-min justify-start justify-self-start overflow-clip relative w-full gap-[8px]" style={{"gridArea":"auto / span 2"}}>
+            <div aria-label="Grid 6x" className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-3 pt-[22px] pr-0 pb-0 pl-0 relative w-full border-t border-[rgb(68,_68,_68)]">
+              <div aria-label="Copyright" className="items-center flex h-min justify-start overflow-clip relative gap-[8px]">
                 <div className="flex flex-col grow justify-start relative whitespace-pre-wrap w-px basis-0 shrink-[0]">
                   <EditableText
                     contentKey="footer.copyright"
@@ -202,7 +202,7 @@ export function Footer() {
                   />
                 </div>
               </div>
-              <div aria-label="Template owner" className="items-center self-start flex h-min justify-start justify-self-start overflow-clip relative w-full gap-[8px]" style={{"gridArea":"auto / span 2"}}>
+              <div aria-label="Template owner" className="items-center flex h-min justify-start overflow-clip relative gap-[8px]">
                 <div className="flex flex-col grow justify-start relative whitespace-pre-wrap w-px basis-0 shrink-[0]">
                   <p className="font-medium text-center text-[rgb(221,_221,_221)] text-[16px] tracking-[-0.32px] leading-[24px]" style={{"fontFamily":"\"Apfel Grotezk\", \"Apfel Grotezk Placeholder\", sans-serif","textDecoration":"rgb(221, 221, 221)"}}>
                     <EditableText

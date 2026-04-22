@@ -98,9 +98,9 @@ export function HomePage() {
       </motion.header>
       </EditableSection>
       <EditableSection sectionId="home.intro" label="Introduction">
-      <motion.section aria-label="Introduction" className="items-center flex h-min justify-center overflow-clip relative w-full gap-[8px] pt-[100px] pr-0 pb-[100px] pl-0" initial="hidden" whileInView="visible" viewport={viewport} variants={scrollFadeIn}>
-        <div aria-label="Container" className="items-center flex flex-col grow h-min justify-start overflow-clip relative w-px basis-0 gap-[64px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
-          <div aria-label="Grid 3x" className="grid h-min justify-center overflow-clip relative w-full grid-rows-[repeat(1,min-content)] gap-[24px_64px] z-[4] shrink-[0]" style={{"gridTemplateColumns":"repeat(3, minmax(50px, 1fr))"}}>
+      <motion.section aria-label="Introduction" className="items-center flex h-min justify-center overflow-clip relative w-full gap-[8px] pt-[60px] md:pt-[100px] pr-0 pb-[60px] md:pb-[100px] pl-0" initial="hidden" whileInView="visible" viewport={viewport} variants={scrollFadeIn}>
+        <div aria-label="Container" className="items-center flex flex-col grow h-min justify-start overflow-clip relative w-px basis-0 gap-[48px] md:gap-[64px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
+          <div aria-label="Grid 3x" className="grid h-min justify-center overflow-clip relative w-full grid-rows-[repeat(1,min-content)] gap-[24px] md:gap-[24px_64px] z-[4] shrink-[0] grid-cols-1 md:grid-cols-3">
             <motion.div aria-label="Section tag" className="self-start justify-self-start relative w-fit" variants={staggerItem}>
               <div aria-label="Section tag" className="items-center flex size-min justify-center overflow-clip relative gap-[8px]">
                 <div aria-label="Description" className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
@@ -113,7 +113,7 @@ export function HomePage() {
                 </div>
               </div>
             </motion.div>
-            <motion.div aria-label="Text wrapper" className="items-start self-start flex flex-col h-min justify-center justify-self-start relative w-full gap-[28px]" style={{"gridArea":"auto / span 2"}} variants={staggerItem}>
+            <motion.div aria-label="Text wrapper" className="items-start self-start flex flex-col h-min justify-center justify-self-start relative w-full gap-[28px] md:col-span-2" variants={staggerItem}>
               <div className="flex flex-col justify-start relative whitespace-pre-wrap w-full shrink-[0]">
                 <EditableText
                   contentKey="home.intro.heading"
@@ -150,17 +150,17 @@ export function HomePage() {
               </div>
             </motion.div>
           </div>
-          <motion.div aria-label="Grid 4x" className="grid h-min justify-center overflow-clip relative w-full grid-rows-[repeat(2,min-content)] gap-[12px] z-[4] shrink-[0]" style={{"gridTemplateColumns":"repeat(4, minmax(50px, 1fr))"}} initial="hidden" whileInView="visible" viewport={viewport} variants={staggerContainer}>
+          <motion.div aria-label="Grid 4x" className="grid h-min justify-center overflow-clip relative w-full grid-rows-[repeat(2,min-content)] gap-[12px] z-[4] shrink-[0] grid-cols-2 md:grid-cols-4" initial="hidden" whileInView="visible" viewport={viewport} variants={staggerContainer}>
             <EditableClientLogos defaultLogos={[]} />
           </motion.div>
         </div>
       </motion.section>
       </EditableSection>
       <EditableSection sectionId="home.featured" label="Featured Work">
-      <section aria-label="Featured work" className="items-center flex h-min justify-center overflow-clip relative w-full gap-[8px] pt-[100px] pr-0 pb-[100px] pl-0">
-        <div aria-label="Container" className="items-center flex flex-col grow h-min justify-start relative w-px basis-0 gap-[64px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
-          <div aria-label="Grid 6x" className="grid h-min justify-center overflow-clip relative w-full grid-rows-[repeat(1,min-content)] gap-[12px_32px] z-[4] shrink-[0]" style={{"gridTemplateColumns":"repeat(12, minmax(50px, 1fr))"}}>
-            <div aria-label="Section tag" className="self-start justify-self-start relative w-fit" style={{"gridArea":"auto / 1 / auto / 3"}}>
+      <section aria-label="Featured work" className="items-center flex h-min justify-center overflow-clip relative w-full gap-[8px] pt-[60px] md:pt-[100px] pr-0 pb-[60px] md:pb-[100px] pl-0">
+        <div aria-label="Container" className="items-center flex flex-col grow h-min justify-start relative w-px basis-0 gap-[48px] md:gap-[64px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
+          <div aria-label="Featured header" className="flex flex-col md:flex-row md:items-start md:justify-between gap-6 w-full">
+            <div aria-label="Section tag" className="shrink-0">
               <div aria-label="Section tag" className="items-center flex size-min justify-center overflow-clip relative gap-[8px]">
                 <div aria-label="Description" className="flex flex-col justify-start relative whitespace-pre shrink-[0]">
                   <EditableText
@@ -172,7 +172,7 @@ export function HomePage() {
                 </div>
               </div>
             </div>
-            <div aria-label="Text" className="items-start self-start flex flex-col h-min justify-start justify-self-start overflow-clip relative w-full gap-[8px]" style={{"gridArea":"auto / 4 / auto / 10"}}>
+            <div aria-label="Text" className="items-start flex flex-col h-min justify-start overflow-clip relative w-full md:max-w-md gap-[8px]">
               <div className="flex flex-col justify-start relative whitespace-pre-wrap w-full shrink-[0]">
                 <EditableText
                   contentKey="home.featured.title"
@@ -191,7 +191,7 @@ export function HomePage() {
                 />
               </div>
             </div>
-            <div aria-label="Button" className="self-start justify-self-end relative w-fit" style={{"gridArea":"auto / 10 / auto / -1"}}>
+            <div aria-label="Button" className="shrink-0">
               <EditableLink
                 contentKey="home.featured.buttonLink"
                 defaultValue="/projects"
