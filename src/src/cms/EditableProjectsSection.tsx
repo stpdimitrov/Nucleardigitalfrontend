@@ -550,7 +550,7 @@ export function EditableProjectsSection({ defaultProjects = [], availableService
         )}
 
         {/* Projects */}
-        {projects.map((project, index) => (
+        {projects.filter(p => isEditMode || p.thumbnailUrl || p.videoUrl).map((project, index) => (
           <EditableGridItem
             key={project.id}
             contentKey={`home.projects.${project.id}`}

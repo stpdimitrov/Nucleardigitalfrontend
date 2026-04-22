@@ -32,7 +32,7 @@ export function ProjectsPageNew() {
     <div className="items-center contents h-min justify-start overflow-hidden relative bg-black gap-[0px] min-h-[640px]">
       {/* Hero */}
       <EditableSection sectionId="projects.hero" label="Hero">
-        <div className="relative w-full overflow-hidden flex items-end" style={{ height: 'clamp(180px, 32.3vw, 400px)' }}>
+        <div className="relative w-full overflow-hidden flex items-end" style={{ minHeight: 'clamp(160px, 40vw, 400px)' }}>
           <div className="absolute inset-0 pointer-events-none">
             <EditableImage
               contentKey="projects.hero.backgroundImage"
@@ -42,21 +42,23 @@ export function ProjectsPageNew() {
             />
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent pointer-events-none" />
-          <div className="relative z-10 w-full max-w-[1240px] mx-auto px-6 pb-10">
-            <EditableText
-              contentKey="projects.hero.title"
-              defaultValue="<h1 class='font-medium text-white text-[57px] tracking-[-1.8px] leading-[63px]'>Our projects</h1>"
-              as="div"
-              multiline
-            />
+          <div className="relative z-10 w-full max-w-[1240px] mx-auto px-6 pb-6 md:pb-10">
+            <div className="hero-heading">
+              <EditableText
+                contentKey="projects.hero.title"
+                defaultValue="<h1 class='font-medium text-white text-[57px] tracking-[-1.8px] leading-[63px]'>Our projects</h1>"
+                as="div"
+                multiline
+              />
+            </div>
           </div>
         </div>
       </EditableSection>
 
       <EditableSection sectionId="projects.grid" label="Projects Grid">
-        <div className="relative w-full bg-black flex justify-center pt-[64px] pb-[150px]">
+        <div className="relative w-full bg-black flex justify-center pt-8 md:pt-[64px] pb-16 md:pb-[150px]">
           <div className="w-full max-w-[1240px] px-[24px]">
-            <div className="flex flex-col gap-[64px]">
+            <div className="flex flex-col gap-4 md:gap-[64px]">
               <EditableProjectsSection defaultProjects={defaultProjects} availableServices={services.map(s => ({ id: s.id, title: s.title }))} />
             </div>
           </div>
