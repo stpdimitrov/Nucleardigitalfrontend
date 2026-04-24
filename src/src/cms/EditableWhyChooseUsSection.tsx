@@ -720,10 +720,9 @@ function ProfileCard({ card, contentKey }: { card: WhyChooseUsCard; contentKey: 
       )}
 
       {/* Bottom blur + info */}
-      <div className="absolute bottom-0 left-0 right-0 h-[90px] backdrop-blur-[20px]" style={{ zIndex: 3 }} />
-      <div className="absolute bottom-0 left-0 right-0 p-3" style={{ zIndex: 4 }}>
-        <EditableText contentKey={`${contentKey}.card.${card.id}.title`} defaultValue={`<p class="font-semibold text-white text-[16px] leading-[20px]">${card.title || 'Name'}</p>`} as="div" className="" />
-        <EditableText contentKey={`${contentKey}.card.${card.id}.subtitle`} defaultValue={`<p class="text-white/60 text-[12px] leading-[16px]">${card.subtitle || 'Role'}</p>`} as="div" className="" />
+      <div className="absolute bottom-0 left-0 right-0 p-3 backdrop-blur-[20px]" style={{ zIndex: 3, background: 'linear-gradient(to top, rgba(0,0,0,0.55), transparent)' }}>
+        <EditableText contentKey={`${contentKey}.card.${card.id}.title`} defaultValue={`<p class="font-semibold text-white text-[16px] leading-[20px]" style="color:white">${card.title || 'Name'}</p>`} as="div" className="" style={{ color: 'white' }} />
+        <EditableText contentKey={`${contentKey}.card.${card.id}.subtitle`} defaultValue={`<p class="text-white/60 text-[12px] leading-[16px]" style="color:rgba(255,255,255,0.6)">${card.subtitle || 'Role'}</p>`} as="div" className="" style={{ color: 'rgba(255,255,255,0.6)' }} />
       </div>
 
       {/* Online indicator */}
