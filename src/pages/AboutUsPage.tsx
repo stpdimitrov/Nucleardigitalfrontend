@@ -126,7 +126,7 @@ function EditableHeroSection() {
             <div className="about-hero-title w-full">
               <EditableText
                 contentKey="about.hero.title"
-                defaultValue="<h1 class='font-medium text-white text-[56px] tracking-[-1.8px] leading-[1.1]' style='font-family:\"Inter\",sans-serif'>About us</h1>"
+                defaultValue={'<h1 class="font-medium text-white text-[56px] tracking-[-1.8px] leading-[1.1]" style="font-family:Inter,sans-serif">About us</h1>'}
                 as="div"
                 className=""
               />
