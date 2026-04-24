@@ -4,7 +4,7 @@
 // CRITICAL: This maintains EXACT visual parity with the original
 // Only adds smooth entrance animations - no layout/spacing changes
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from "motion/react";
 import { Link } from "react-router";
 import { Eye, EyeOff } from 'lucide-react';
@@ -21,9 +21,26 @@ const navMenuLinks = [
   { id: 'nav-contact', label: 'Contact us', href: '/contact-us' },
 ];
 
+const FLIXEN_ARTIFACTS = ['© 2025 Flixen™', 'Made with ❤️ by Muhammad talha', 'Flixen'];
+
 export function NavbarAnimated() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isEditMode, getContent, updateContent, persistContent } = useCMSStore();
+
+  // One-time cleanup: wipe any stored Flixen branding from navbar footer fields
+  useEffect(() => {
+    const keys = ['navbar.footerCopyright', 'navbar.footerCredit'];
+    let dirty = false;
+    keys.forEach(key => {
+      const val = getContent(key, '');
+      if (FLIXEN_ARTIFACTS.some(a => val.includes(a))) {
+        updateContent(key, '');
+        dirty = true;
+      }
+    });
+    if (dirty) persistContent().catch(() => {});
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -148,12 +165,12 @@ export function NavbarAnimated() {
               >
                 <EditableText
                   contentKey="navbar.footerCopyright"
-                  defaultValue="© 2025 Flixen™"
+                  defaultValue=""
                   as="span"
                 />
                 <EditableText
                   contentKey="navbar.footerCredit"
-                  defaultValue="Made with ❤️ by Muhammad talha"
+                  defaultValue=""
                   as="span"
                 />
               </motion.div>
