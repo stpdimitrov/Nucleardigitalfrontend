@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
-import { ArrowRight, Plus, Trash2, Pencil, GripVertical, X, ChevronUp, ChevronDown } from 'lucide-react';
+import { ArrowRight, Plus, Trash2, Pencil, X, ChevronUp, ChevronDown, Eye, EyeOff } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import { useCMSStore, EditableText, EditableImage } from '../src/cms';
 import { SiteLogo } from '../src/cms/SiteLogo';
@@ -20,6 +20,7 @@ interface FooterGroup {
   heading: string;
   type: 'internal' | 'external'; // internal = <Link>, external = <a>
   links: FooterLink[];
+  hidden?: boolean;
 }
 
 // ─── Defaults ─────────────────────────────────────────────────────────────────
@@ -290,8 +291,10 @@ export function Footer() {
             {/* Right: link groups */}
             <div className="self-start grid h-min justify-center justify-self-start relative w-full gap-[32px] md:gap-[8px] grid-cols-1 sm:grid-cols-3 md:col-span-2"
               style={{ gridTemplateColumns: `repeat(${Math.max(groups.length, 1)}, minmax(0, 1fr))` }}>
-              {groups.map((group, gi) => (
-                <div key={group.id} aria-label="Footer links wrapper" className="items-start self-start flex flex-col h-min justify-start overflow-clip relative w-full gap-[20px] group/footergroup">
+              {groups.map((group, gi) => {
+                if (!isEditMode && group.hidden) return null;
+                return (
+                <div key={group.id} aria-label="Footer links wrapper" className={`items-start self-start flex flex-col h-min justify-start overflow-clip relative w-full gap-[20px] group/footergroup transition-opacity ${isEditMode && group.hidden ? 'opacity-40' : 'opacity-100'}`}>
 
                   {/* Group heading + edit controls */}
                   <div className="flex items-center justify-between w-full gap-2">
@@ -302,6 +305,13 @@ export function Footer() {
                       <div className="flex items-center gap-1 opacity-0 group-hover/footergroup:opacity-100 transition-opacity shrink-0">
                         <button onClick={() => moveGroup(gi, -1)} disabled={gi === 0} className="text-white/40 hover:text-white disabled:opacity-20 transition-colors" title="Move left"><ChevronUp className="size-3.5 rotate-[-90deg]" /></button>
                         <button onClick={() => moveGroup(gi, 1)} disabled={gi === groups.length - 1} className="text-white/40 hover:text-white disabled:opacity-20 transition-colors" title="Move right"><ChevronDown className="size-3.5 rotate-[-90deg]" /></button>
+                        <button
+                          onClick={() => saveGroups(groups.map((g, i) => i === gi ? { ...g, hidden: !g.hidden } : g))}
+                          className={`transition-colors ${group.hidden ? 'text-red-400 hover:text-red-300' : 'text-white/40 hover:text-white'}`}
+                          title={group.hidden ? 'Show group' : 'Hide group'}
+                        >
+                          {group.hidden ? <EyeOff className="size-3.5" /> : <Eye className="size-3.5" />}
+                        </button>
                         <button onClick={() => setEditingGroup(group)} className="text-white/40 hover:text-[#0099FF] transition-colors" title="Edit group"><Pencil className="size-3.5" /></button>
                       </div>
                     )}
@@ -354,7 +364,8 @@ export function Footer() {
                     )}
                   </div>
                 </div>
-              ))}
+                );
+              })}
 
               {/* Add group button (edit mode) */}
               {isEditMode && (
