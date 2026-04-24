@@ -28,6 +28,24 @@
   letter-spacing: -0.05em !important;
 }
 
+.about-hero-title h1,
+.about-hero-title h1 *,
+.about-hero-title div,
+.about-hero-title p {
+  font-size: clamp(28px, 7vw, 56px) !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.04em !important;
+  white-space: normal !important;
+}
+
+.about-hero-desc *,
+.about-hero-desc div,
+.about-hero-desc p {
+  font-size: clamp(14px, 4vw, 16.3px) !important;
+  line-height: 1.6 !important;
+  white-space: normal !important;
+}
+
 @media (max-width: 767px) {
   /* Hero headline */
   h1 {

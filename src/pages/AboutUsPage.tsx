@@ -122,27 +122,17 @@ function EditableHeroSection() {
 
           {/* Center - Title and Description (EDITABLE) */}
           <div className="content-stretch flex flex-1 flex-col gap-[8px] items-start overflow-clip relative w-full" data-name="Text wrapper">
-            {/* Title: "About us" */}
-            <div className="content-stretch flex gap-[13.46px] items-start relative shrink-0 w-full" data-name="h1.framer-text">
-              <div className="blur-[2px] content-stretch flex items-start relative shrink-0">
-                <EditableText
-                  contentKey="about.hero.title.part1"
-                  defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[56px] text-white tracking-[-1.8px] whitespace-nowrap'><p class='leading-[63px]'>About</p></div>"
-                  as="div"
-                  className=""
-                />
-              </div>
-              <div className="blur-[0px] content-stretch flex items-start relative shrink-0">
-                <EditableText
-                  contentKey="about.hero.title.part2"
-                  defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[56px] text-white tracking-[-1.8px] whitespace-nowrap'><p class='leading-[63px]'>us</p></div>"
-                  as="div"
-                  className=""
-                />
-              </div>
+            {/* Title: "About us" — single field, responsive size */}
+            <div className="about-hero-title w-full">
+              <EditableText
+                contentKey="about.hero.title"
+                defaultValue="<h1 class='font-medium text-white text-[56px] tracking-[-1.8px] leading-[1.1]' style='font-family:\"Inter\",sans-serif'>About us</h1>"
+                as="div"
+                className=""
+              />
             </div>
             {/* Description */}
-            <div className="content-stretch flex flex-col items-start opacity-60 relative shrink-0 w-full" data-name="p.framer-text">
+            <div className="about-hero-desc content-stretch flex flex-col items-start opacity-60 relative shrink-0 w-full" data-name="p.framer-text">
               <EditableText
                 contentKey="about.hero.description"
                 defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[27px] not-italic relative shrink-0 text-[#ddd] text-[16.3px] w-full whitespace-pre-wrap'><p class='mb-0'>We're a creative video agency crafting stories that </p><p>inspire, engage, & elevate brands globally.</p></div>"
