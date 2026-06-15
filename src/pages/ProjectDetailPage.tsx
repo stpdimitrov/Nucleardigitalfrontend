@@ -1,4 +1,5 @@
 import { useParams, Link } from 'react-router';
+import { Helmet } from 'react-helmet-async';
 import svgPaths from "../imports/svg-lcn8oo4q1c";
 import svgPathsDetails from "../imports/svg-k2fmqh99j6";
 import { EditableCTASection, EditableText, EditableImage, useCMSStore } from '../src/cms';
@@ -25,6 +26,15 @@ export function ProjectDetailPage() {
 
   return (
     <div className="w-full bg-black relative">
+      <Helmet>
+        <title>{projectTitle} | Nuclear Digital</title>
+        <meta name="description" content={projectDescription || `${projectTitle} — a project by Nuclear Digital.`} />
+        <meta property="og:title" content={`${projectTitle} | Nuclear Digital`} />
+        <meta property="og:description" content={projectDescription || `${projectTitle} — a project by Nuclear Digital.`} />
+        <meta property="og:url" content={`https://www.newcleardigital.com/projects/${slug}`} />
+        {heroMedia && !heroMedia.match(/\.(mp4|webm|ogg)/i) && <meta property="og:image" content={heroMedia} />}
+        <link rel="canonical" href={`https://www.newcleardigital.com/projects/${slug}`} />
+      </Helmet>
       {/* Hero Section */}
       <EditableSection sectionId={`projectDetail.${slug}.hero`} label="Hero">
       <section className="relative w-full min-h-screen flex items-end justify-center pb-24">

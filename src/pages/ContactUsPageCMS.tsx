@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useCMSStore } from '../src/cms/cmsStore';
 import { EditableText } from '../src/cms/EditableText';
 import { EditableFAQSection } from '../src/cms/EditableFAQSection';
@@ -58,6 +59,14 @@ export function ContactUsPageCMS() {
 
   return (
     <div id="main" data-framer-generated-page className="items-center contents h-min justify-start overflow-hidden relative bg-black gap-[0px] min-h-[640px]">
+      <Helmet>
+        <title>Contact Us | Nuclear Digital</title>
+        <meta name="description" content="Get in touch with Nuclear Digital. Let's discuss your project and build something remarkable together." />
+        <meta property="og:title" content="Contact Us | Nuclear Digital" />
+        <meta property="og:description" content="Get in touch with Nuclear Digital. Let's discuss your project and build something remarkable together." />
+        <meta property="og:url" content="https://www.newcleardigital.com/contact-us" />
+        <link rel="canonical" href="https://www.newcleardigital.com/contact-us" />
+      </Helmet>
 
       {/* Hero Section - Let's Connect */}
       <EditableSection sectionId="contact.hero" label="Contact Hero">

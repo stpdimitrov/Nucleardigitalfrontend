@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import {
   EditableText,
   EditableImage,
@@ -365,6 +366,14 @@ function EditableCTASection() {
 export function AboutUsPage() {
   return (
     <div className="bg-black flex flex-col min-h-screen relative w-full">
+      <Helmet>
+        <title>About Us | Nuclear Digital</title>
+        <meta name="description" content="Learn about Nuclear Digital — a futuristic software development agency building digital products that feel ahead of their time." />
+        <meta property="og:title" content="About Us | Nuclear Digital" />
+        <meta property="og:description" content="Learn about Nuclear Digital — a futuristic software development agency building digital products that feel ahead of their time." />
+        <meta property="og:url" content="https://www.newcleardigital.com/about-us" />
+        <link rel="canonical" href="https://www.newcleardigital.com/about-us" />
+      </Helmet>
       <EditableSection sectionId="about.hero" label="Hero"><EditableHeroSection /></EditableSection>
       <EditableSection sectionId="about.team" label="Team"><EditableTeamSection defaultMembers={defaultTeamMembers} /></EditableSection>
       <EditableSection sectionId="about.video" label="Video"><EditableVideoSection /></EditableSection>

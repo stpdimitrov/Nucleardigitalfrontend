@@ -1,9 +1,18 @@
 'use client';
+import { Helmet } from 'react-helmet-async';
 import { EditableText, EditableCTASection } from '../src/cms';
 
 export function BlogsPage() {
   return (
     <div className="items-center contents h-min justify-start overflow-hidden relative bg-black gap-[0px] min-h-[640px]">
+      <Helmet>
+        <title>Blog | Nuclear Digital</title>
+        <meta name="description" content="Insights, articles, and perspectives on software development, AI, and digital product design from the Nuclear Digital team." />
+        <meta property="og:title" content="Blog | Nuclear Digital" />
+        <meta property="og:description" content="Insights, articles, and perspectives on software development, AI, and digital product design from the Nuclear Digital team." />
+        <meta property="og:url" content="https://www.newcleardigital.com/blogs" />
+        <link rel="canonical" href="https://www.newcleardigital.com/blogs" />
+      </Helmet>
       <section aria-label="Blogs" className="items-center flex h-screen justify-center overflow-clip relative w-full gap-[8px] pt-[100px] pr-0 pb-[100px] pl-0">
         <div aria-label="Container" className="items-center flex flex-col grow h-min justify-start overflow-clip relative w-px basis-0 gap-[64px] max-w-[1240px] pt-0 pr-6 pb-0 pl-6 shrink-[0]">
           <div className="flex flex-col justify-start relative whitespace-pre-wrap w-full shrink-[0]">

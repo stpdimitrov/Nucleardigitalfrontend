@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { createPortal } from 'react-dom';
 import { motion } from 'motion/react';
 import { ArrowRight, Settings, Plus, Trash2 } from 'lucide-react';
@@ -179,6 +180,14 @@ export function EditableServicesPage({ contentKey = 'servicesPage' }: EditableSe
 
   return (
     <div className="w-full">
+      <Helmet>
+        <title>Services | Nuclear Digital</title>
+        <meta name="description" content="Nuclear Digital offers custom web development, AI integration, mobile apps, UI/UX design, and enterprise software solutions." />
+        <meta property="og:title" content="Services | Nuclear Digital" />
+        <meta property="og:description" content="Nuclear Digital offers custom web development, AI integration, mobile apps, UI/UX design, and enterprise software solutions." />
+        <meta property="og:url" content="https://www.newcleardigital.com/services" />
+        <link rel="canonical" href="https://www.newcleardigital.com/services" />
+      </Helmet>
       {/* Hero + Services Grid */}
       <EditableSection sectionId="services.hero" label="Hero">
         <motion.section

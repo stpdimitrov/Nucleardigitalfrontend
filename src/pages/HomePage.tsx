@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import { CTASection } from '../components/CTASection';
 import { EditablePricingSection } from '../src/cms/EditablePricingSection';
 import { EditableFAQSection } from '../src/cms/EditableFAQSection';
@@ -60,7 +61,16 @@ export function HomePage() {
   })), [projects, services]);
   
   return (
-    <div className="items-center contents h-min justify-start overflow-hidden relative bg-black gap-[0px] min-h-[640px]">{/* Removed DndProvider */}
+    <div className="items-center contents h-min justify-start overflow-hidden relative bg-black gap-[0px] min-h-[640px]">
+      <Helmet>
+        <title>Nuclear Digital — Futuristic Software Development Agency</title>
+        <meta name="description" content="Nuclear Digital builds cutting-edge digital products — custom web apps, AI integrations, and enterprise software that feels ahead of its time." />
+        <meta property="og:title" content="Nuclear Digital — Futuristic Software Development Agency" />
+        <meta property="og:description" content="We design, build, and ship cutting-edge digital products. Custom web apps, AI integrations, enterprise software — built to feel ahead of its time." />
+        <meta property="og:url" content="https://www.newcleardigital.com/" />
+        <link rel="canonical" href="https://www.newcleardigital.com/" />
+      </Helmet>
+      {/* Removed DndProvider */}
       <EditableSection sectionId="home.hero" label="Hero">
       <motion.header aria-label="Hero section" className="relative flex h-[100dvh] w-full overflow-hidden" initial="hidden" animate="visible" variants={heroAnimation}>
         {/* Background image — no aspect ratio constraint, object-position for mobile portrait */}

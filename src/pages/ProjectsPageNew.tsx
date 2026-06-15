@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { EditableText } from '../src/cms/EditableText';
 import { EditableImage } from '../src/cms/EditableImage';
 import { EditableProjectsSection } from '../src/cms/EditableProjectsSection';
@@ -30,6 +31,14 @@ export function ProjectsPageNew() {
 
   return (
     <div className="items-center contents h-min justify-start overflow-hidden relative bg-black gap-[0px] min-h-[640px]">
+      <Helmet>
+        <title>Projects | Nuclear Digital</title>
+        <meta name="description" content="Explore Nuclear Digital's portfolio of custom web apps, AI integrations, and enterprise software projects built for forward-thinking clients." />
+        <meta property="og:title" content="Projects | Nuclear Digital" />
+        <meta property="og:description" content="Explore Nuclear Digital's portfolio of custom web apps, AI integrations, and enterprise software projects built for forward-thinking clients." />
+        <meta property="og:url" content="https://www.newcleardigital.com/projects" />
+        <link rel="canonical" href="https://www.newcleardigital.com/projects" />
+      </Helmet>
       {/* Hero */}
       <EditableSection sectionId="projects.hero" label="Hero">
         <div className="relative w-full overflow-hidden flex items-end" style={{ minHeight: 'clamp(160px, 40vw, 400px)' }}>

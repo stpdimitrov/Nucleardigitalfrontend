@@ -1,4 +1,5 @@
 import React from 'react';
+import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router';
 import { motion, AnimatePresence } from 'motion/react';
 import { DndProvider } from 'react-dnd';
@@ -64,6 +65,7 @@ function AnimatedRoutes() {
 
 export default function App() {
   return (
+    <HelmetProvider>
     <BrowserRouter>
       {/* V2 / V3 — standalone, no CMS layout */}
       <Routes>
@@ -93,5 +95,6 @@ export default function App() {
         } />
       </Routes>
     </BrowserRouter>
+    </HelmetProvider>
   );
 }
