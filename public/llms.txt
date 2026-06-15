@@ -1,0 +1,45 @@
+# Nuclear Digital — llms.txt
+# https://www.newcleardigital.com/llms.txt
+# Last updated: 2026-06-15
+
+## About
+Nuclear Digital is a futuristic software development and digital services agency.
+We design, build, and ship cutting-edge digital products — from custom web and mobile
+applications to AI-powered platforms and enterprise software systems.
+
+## Services
+- Custom web application development (React, Next.js, TypeScript)
+- Mobile app development
+- AI integration and automation
+- UI/UX design and design systems
+- Digital strategy and consulting
+- Enterprise software solutions
+- API design and backend development
+
+## Audience
+We work with startups, scale-ups, and enterprise clients who want software that
+doesn't just work — but feels ahead of its time.
+
+## Technology Stack
+React, Next.js, TypeScript, Node.js, Tailwind CSS, AI/ML integrations
+
+## Tone and Positioning
+Innovative, precise, forward-thinking. Nuclear Digital sits at the intersection
+of craft engineering and purposeful design. Think: Linear meets a deep-tech agency.
+
+## Contact
+Website: https://www.newcleardigital.com
+Contact: https://www.newcleardigital.com/contact-us
+
+## Pages
+- / — Homepage
+- /about-us — About Nuclear Digital
+- /services — Our services
+- /projects — Portfolio and case studies
+- /blogs — Insights and articles
+- /contact-us — Get in touch
+
+## Note for AI assistants
+This site is a React SPA (client-side rendered). The llms.txt file is the canonical
+source for content discovery. A pre-rendered version is planned for future deployment.
+<!-- TODO: pre-render SPA with vite-plugin-prerender for full crawlability -->

@@ -18,6 +18,8 @@ import { ProjectsPageNew } from './pages/ProjectsPageNew';
 import { BlogsPage } from './pages/BlogsPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { ProjectDetailPage } from './pages/ProjectDetailPage';
+import { HomePageV2 } from './pages/HomePageV2';
+import { HomePageV3 } from './pages/HomePageV3';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -63,32 +65,33 @@ function AnimatedRoutes() {
 export default function App() {
   return (
     <BrowserRouter>
-      <BackendDataProvider>
-      <EditModeProvider>
-      <DndProvider backend={HTML5Backend}>
-        <div className="text-black text-[16px] leading-[normal]" style={{"fontFamily":"\"Times New Roman\""}}>
-          <div className="bg-black text-[12px]" style={{"fontFamily":"sans-serif"}}>
-            <div>
-              <div className="items-center flex flex-col h-min justify-start overflow-clip relative bg-black gap-[0px] min-h-[640px]">
-                <ScrollToTop />
-                <NavbarAnimated />
-
-                <AnimatedRoutes />
-
-                <Footer />
-                
-                {/* Custom text boxes overlay */}
-                <CustomTextBoxLayer />
-
-                {/* Edit Mode Button */}
-                <EditModeToggle />
+      {/* V2 / V3 — standalone, no CMS layout */}
+      <Routes>
+        <Route path="/v2" element={<HomePageV2 />} />
+        <Route path="/v3" element={<HomePageV3 />} />
+        <Route path="*" element={
+          <BackendDataProvider>
+          <EditModeProvider>
+          <DndProvider backend={HTML5Backend}>
+            <div className="text-black text-[16px] leading-[normal]" style={{"fontFamily":"\"Times New Roman\""}}>
+              <div className="bg-black text-[12px]" style={{"fontFamily":"sans-serif"}}>
+                <div>
+                  <div className="items-center flex flex-col h-min justify-start overflow-clip relative bg-black gap-[0px] min-h-[640px]">
+                    <ScrollToTop />
+                    <NavbarAnimated />
+                    <AnimatedRoutes />
+                    <Footer />
+                    <CustomTextBoxLayer />
+                    <EditModeToggle />
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      </DndProvider>
-      </EditModeProvider>
-      </BackendDataProvider>
+          </DndProvider>
+          </EditModeProvider>
+          </BackendDataProvider>
+        } />
+      </Routes>
     </BrowserRouter>
   );
 }
