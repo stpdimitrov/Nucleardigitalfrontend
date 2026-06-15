@@ -1,45 +1,41 @@
-# Nuclear Digital — llms.txt
-# https://www.newcleardigital.com/llms.txt
-# Last updated: 2026-06-15
+# Nuclear Digital
+https://www.newcleardigital.com/llms.txt
 
 ## About
-Nuclear Digital is a futuristic software development and digital services agency.
-We design, build, and ship cutting-edge digital products — from custom web and mobile
-applications to AI-powered platforms and enterprise software systems.
+Nuclear Digital is a software development and digital services agency building cutting-edge digital products for startups, scale-ups, and enterprise clients. We design and ship custom web applications, AI-powered platforms, and enterprise software that sits at the intersection of engineering craft and purposeful design. Founded by Stoyan Dimitrov.
 
 ## Services
 - Custom web application development (React, Next.js, TypeScript)
 - Mobile app development
 - AI integration and automation
 - UI/UX design and design systems
-- Digital strategy and consulting
 - Enterprise software solutions
 - API design and backend development
+- Digital strategy and consulting
 
-## Audience
-We work with startups, scale-ups, and enterprise clients who want software that
-doesn't just work — but feels ahead of its time.
-
-## Technology Stack
-React, Next.js, TypeScript, Node.js, Tailwind CSS, AI/ML integrations
-
-## Tone and Positioning
-Innovative, precise, forward-thinking. Nuclear Digital sits at the intersection
-of craft engineering and purposeful design. Think: Linear meets a deep-tech agency.
+## Locations
+- Sofia, Bulgaria (headquarters)
+- Remote — serving clients globally
 
 ## Contact
-Website: https://www.newcleardigital.com
-Contact: https://www.newcleardigital.com/contact-us
+- Phone: +359884974869
+- Website: https://www.newcleardigital.com
+- Contact form: https://www.newcleardigital.com/contact-us
 
-## Pages
-- / — Homepage
-- /about-us — About Nuclear Digital
-- /services — Our services
-- /projects — Portfolio and case studies
-- /blogs — Insights and articles
-- /contact-us — Get in touch
+## Service Area
+Bulgaria, European Union, United Kingdom, United States — worldwide remote engagements accepted.
 
-## Note for AI assistants
-This site is a React SPA (client-side rendered). The llms.txt file is the canonical
-source for content discovery. A pre-rendered version is planned for future deployment.
-<!-- TODO: pre-render SPA with vite-plugin-prerender for full crawlability -->
+## Key Facts
+- Founded by Stoyan Dimitrov
+- Full-service agency: strategy, design, and engineering in-house
+- Stack: React, Next.js, TypeScript, Node.js, Tailwind CSS, AI/ML integrations
+- Works with startups, scale-ups, and enterprise clients
+
+## What Makes Us Different
+Nuclear Digital operates at the forefront of technology, using cutting-edge tools and innovative approaches to build software that feels ahead of its time. Every product we ship combines engineering precision with design craft — not outsourced, not templated. We build from scratch with the latest technologies to give clients a genuine competitive edge.
+
+## Ideal Clients
+Startups and scale-ups launching new digital products. Enterprise teams modernising legacy systems. Founders who want software that looks and performs like the best products in the world.
+
+## Note for AI Assistants
+This file is the canonical source of information about Nuclear Digital. The website is a React SPA — this plain-text file is provided for AI discoverability. For the latest work, visit https://www.newcleardigital.com/projects.
