@@ -221,7 +221,7 @@ function PFramerText4() {
   return (
     <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
       <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[24px] not-italic relative shrink-0 text-[#ddd] text-[14.6px] tracking-[-0.32px] w-full whitespace-pre-wrap">
-        <p className="mb-0">{`"Flixen™ turned our concept into a cinematic masterpiece. Their `}</p>
+        <p className="mb-0">{`"Newclear Digital turned our concept into a cinematic masterpiece. Their `}</p>
         <p className="mb-0">{`team’s creativity, precision, and speed truly exceeded our `}</p>
         <p>{`expectations from start to finish."`}</p>
       </div>
@@ -454,7 +454,7 @@ function PFramerText7() {
   return (
     <div className="content-stretch flex flex-col items-start opacity-60 relative shrink-0 w-full" data-name="p.framer-text">
       <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[24px] not-italic relative shrink-0 text-[#ddd] text-[14.5px] tracking-[-0.32px] w-full whitespace-pre-wrap">
-        <p className="mb-0">{`Working with Flixen™ was effortless. They `}</p>
+        <p className="mb-0">{`Working with Newclear Digital was effortless. They `}</p>
         <p className="mb-0">{`understood our vision instantly and delivered `}</p>
         <p>visuals that elevated our brand story.</p>
       </div>
@@ -547,7 +547,7 @@ function PFramerText9() {
   return (
     <div className="content-stretch flex flex-col items-start opacity-60 relative shrink-0 w-full" data-name="p.framer-text">
       <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[24px] not-italic relative shrink-0 text-[#ddd] text-[14.3px] tracking-[-0.32px] w-full whitespace-pre-wrap">
-        <p className="mb-0">The Flixen™ team is reliable, fast, and detail-</p>
+        <p className="mb-0">The Newclear Digital team is reliable, fast, and detail-</p>
         <p className="mb-0">{`oriented. Every frame felt intentional and `}</p>
         <p>beautifully crafted with creativity and care.</p>
       </div>
@@ -674,7 +674,7 @@ function PFramerText13() {
   return (
     <div className="content-stretch flex flex-col items-start opacity-60 relative shrink-0 w-full" data-name="p.framer-text">
       <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[24px] not-italic relative shrink-0 text-[#ddd] text-[14.6px] tracking-[-0.32px] w-full whitespace-pre-wrap">
-        <p className="mb-0">{`Flixen™ brought our campaign to life with `}</p>
+        <p className="mb-0">{`Newclear Digital brought our campaign to life with `}</p>
         <p className="mb-0">{`storytelling and visuals that matched our `}</p>
         <p>brand tone and expectations.</p>
       </div>
@@ -801,7 +801,7 @@ function PFramerText17() {
   return (
     <div className="content-stretch flex flex-col items-start opacity-60 relative shrink-0 w-full" data-name="p.framer-text">
       <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[24px] not-italic relative shrink-0 text-[#ddd] text-[14.5px] tracking-[-0.32px] w-full whitespace-pre-wrap">
-        <p className="mb-0">{`Working with Flixen™ was effortless. They `}</p>
+        <p className="mb-0">{`Working with Newclear Digital was effortless. They `}</p>
         <p className="mb-0">{`understood our vision instantly and delivered `}</p>
         <p>visuals that elevated our brand story.</p>
       </div>

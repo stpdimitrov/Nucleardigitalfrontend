@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide provides complete instructions for integrating animations into ALL remaining sections of the Flixen™ website App.tsx file.
+This guide provides complete instructions for integrating animations into ALL remaining sections of the Newclear Digital website App.tsx file.
 
 ---
 

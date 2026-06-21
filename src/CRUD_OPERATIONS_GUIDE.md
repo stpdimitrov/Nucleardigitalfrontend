@@ -319,7 +319,7 @@ active:scale-[0.98]
 ### **Storage Structure**
 
 ```javascript
-// localStorage key: 'flixen-cms-edits'
+// localStorage key: 'newclear-cms-edits'
 {
   // Individual content
   "hero-title": "Welcome",

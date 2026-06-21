@@ -21,26 +21,9 @@ const navMenuLinks = [
   { id: 'nav-contact', label: 'Contact us', href: '/contact-us' },
 ];
 
-const FLIXEN_ARTIFACTS = ['© 2025 Flixen™', 'Made with ❤️ by Muhammad talha', 'Flixen'];
-
 export function NavbarAnimated() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isEditMode, getContent, updateContent, persistContent } = useCMSStore();
-
-  // One-time cleanup: wipe any stored Flixen branding from navbar footer fields
-  useEffect(() => {
-    const keys = ['navbar.footerCopyright', 'navbar.footerCredit'];
-    let dirty = false;
-    keys.forEach(key => {
-      const val = getContent(key, '');
-      if (FLIXEN_ARTIFACTS.some(a => val.includes(a))) {
-        updateContent(key, '');
-        dirty = true;
-      }
-    });
-    if (dirty) persistContent().catch(() => {});
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <>

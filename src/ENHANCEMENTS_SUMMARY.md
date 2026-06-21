@@ -2,7 +2,7 @@
 
 ## Overview
 
-Optional Framer Motion enhancements have been added to the Flixen™ website migration. These animations enhance the user experience while maintaining **100% visual parity** with the original design.
+Optional Framer Motion enhancements have been added to the Newclear Digital website migration. These animations enhance the user experience while maintaining **100% visual parity** with the original design.
 
 ---
 
@@ -452,7 +452,7 @@ See `/ANIMATION_ENHANCEMENTS.md` for detailed implementation examples.
 - Cinematic aesthetic
 - Premium quality
 - Attention to detail
-- Flixen™ brand values
+- Newclear Digital brand values
 
 ---
 

@@ -19,14 +19,14 @@ const DEFAULT_ITEMS: StoryItem[] = [
     number: '001.',
     title: 'Our Story',
     description:
-      'Flixen™ began with a simple yet powerful vision — to transform creative ideas into cinematic stories that inspire and connect people everywhere. From our humble beginnings as a small, passionate production team, we\'ve grown into a full-scale creative agency trusted by global brands. Today, we continue crafting visuals that spark emotion, build connection, and elevate every story we tell.',
+      'Newclear Digital began with a simple yet powerful vision — to transform creative ideas into cinematic stories that inspire and connect people everywhere. From our humble beginnings as a small, passionate production team, we\'ve grown into a full-scale creative agency trusted by global brands. Today, we continue crafting visuals that spark emotion, build connection, and elevate every story we tell.',
   },
   {
     id: 'story-2',
     number: '002.',
     title: 'Our Mission',
     description:
-      'Our mission is to deliver powerful, emotion-driven videos that deeply engage audiences, strengthen brands, and create lasting impressions. We believe every story deserves to be told with passion, precision, and creativity — transforming ideas into visuals that inspire, connect, and endure. At Flixen™, we turn every client\'s vision into an unforgettable cinematic experience that truly stands out.',
+      'Our mission is to deliver powerful, emotion-driven videos that deeply engage audiences, strengthen brands, and create lasting impressions. We believe every story deserves to be told with passion, precision, and creativity — transforming ideas into visuals that inspire, connect, and endure. At Newclear Digital, we turn every client\'s vision into an unforgettable cinematic experience that truly stands out.',
   },
 ];
 

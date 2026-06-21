@@ -30,7 +30,7 @@ Add these updates to your `package.json` file at the project root:
 
 ```json
 {
-  "name": "flixen-video-agency",
+  "name": "newclear-digital",
   "private": true,
   "version": "0.0.0",
   "type": "module",

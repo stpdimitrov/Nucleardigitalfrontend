@@ -2,7 +2,7 @@
 
 ## Summary
 
-The Flixen™ website has been successfully integrated with Framer Motion animations while maintaining **100% visual parity**. The application now features smooth, professional animations that enhance the user experience without changing any visual design elements.
+The Newclear Digital website has been successfully integrated with Framer Motion animations while maintaining **100% visual parity**. The application now features smooth, professional animations that enhance the user experience without changing any visual design elements.
 
 ---
 

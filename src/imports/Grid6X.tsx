@@ -40,7 +40,7 @@ function PFramerText1() {
   return (
     <div className="absolute content-stretch flex flex-col items-start left-0 opacity-70 right-0 top-[58.41px]" data-name="p.framer-text">
       <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[24px] not-italic relative shrink-0 text-[#ddd] text-[14.5px] tracking-[-0.32px] whitespace-nowrap">
-        <p className="mb-0">{`Meet the talented creatives behind Flixen™, dedicated to `}</p>
+        <p className="mb-0">{`Meet the talented creatives behind Newclear Digital, dedicated to `}</p>
         <p>{`crafting exceptional visuals & bringing every story to life.`}</p>
       </div>
     </div>

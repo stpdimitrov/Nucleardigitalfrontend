@@ -131,7 +131,7 @@ overflow: clip;
       <a href="/">
         <img src="..." />
         <p className="font-medium uppercase text-white text-[24px]">
-          Flixen™
+          Newclear Digital
         </p>
       </a>
     </div>
@@ -256,7 +256,7 @@ Static Version:
 - Height: Calculated by content (same)
 - Width: 100% (same)
 - Backdrop blur: 20px (same)
-- Text: "Flixen™" at 24px (same)
+- Text: "Newclear Digital" at 24px (same)
 - Spacing: pt-5, pb-5, px-6 (same)
 
 Animated Version (after entrance):
@@ -264,7 +264,7 @@ Animated Version (after entrance):
 - Height: Calculated by content (same)
 - Width: 100% (same)
 - Backdrop blur: 20px (same)
-- Text: "Flixen™" at 24px (same)
+- Text: "Newclear Digital" at 24px (same)
 - Spacing: pt-5, pb-5, px-6 (same)
 
 Difference: 0 pixels

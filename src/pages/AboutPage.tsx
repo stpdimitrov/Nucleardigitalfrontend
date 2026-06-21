@@ -13,21 +13,21 @@ export default function AboutPage() {
     
     <meta name="viewport" content="width=device-width">
     <meta name="generator" content="Framer 842b0c0">
-    <title>About us | Flixen™</title>
-    <meta name="description" content="Discover Flixen's mission, vision, and the passionate team driving our commitment to cinematic storytelling and client-focused creativity.">
+    <title>About us | Newclear Digital</title>
+    <meta name="description" content="Discover Newclear Digital's mission, vision, and the passionate team driving our commitment to cinematic storytelling and client-focused creativity.">
     <meta name="framer-search-index" content="https://framerusercontent.com/sites/3PrM8PoCHykUm4I8fisxCn/searchIndex-XFURaiJHSNN8.json">
     <meta name="framer-html-plugin" content="disable">
     <link href="https://framerusercontent.com/images/pA0vWj700T24Z9NAPMM9UZPHTic.svg" rel="icon" media="(prefers-color-scheme: light)">
     <link href="https://framerusercontent.com/images/pA0vWj700T24Z9NAPMM9UZPHTic.svg" rel="icon" media="(prefers-color-scheme: dark)">
     
     <meta property="og:type" content="website">
-    <meta property="og:title" content="About us | Flixen™">
-    <meta property="og:description" content="Discover Flixen's mission, vision, and the passionate team driving our commitment to cinematic storytelling and client-focused creativity.">
+    <meta property="og:title" content="About us | Newclear Digital">
+    <meta property="og:description" content="Discover Newclear Digital's mission, vision, and the passionate team driving our commitment to cinematic storytelling and client-focused creativity.">
     <meta property="og:image" content="https://framerusercontent.com/images/XyIx80SB7cuzHQbBFe9yBjLXo.png">
     
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="About us | Flixen™">
-    <meta name="twitter:description" content="Discover Flixen's mission, vision, and the passionate team driving our commitment to cinematic storytelling and client-focused creativity.">
+    <meta name="twitter:title" content="About us | Newclear Digital">
+    <meta name="twitter:description" content="Discover Newclear Digital's mission, vision, and the passionate team driving our commitment to cinematic storytelling and client-focused creativity.">
     <meta name="twitter:image" content="https://framerusercontent.com/images/XyIx80SB7cuzHQbBFe9yBjLXo.png">
     
     <style data-framer-font-css>@font-face { font-family: "Inter"; src: url("https://framerusercontent.com/assets/5vvr9Vy74if2I6bQbJvbw7SY1pQ.woff2"); font-display: swap; font-style: normal; font-weight: 400; unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F }

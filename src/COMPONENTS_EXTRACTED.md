@@ -17,7 +17,7 @@ Components have been extracted from the original JSX with **100% visual parity**
 
 **Structure:**
 - Fixed position navigation (z-[10])
-- Logo with icon and "Flixen™" text
+- Logo with icon and "Newclear Digital" text
 - Menu button (right side)
 - Backdrop blur effect
 
@@ -54,7 +54,7 @@ export default function Page() {
 - Video element (left column)
 - Footer navigation links (Main Pages, CMS Pages)
 - Social media links (Facebook, Instagram, X-Twitter, Dribbble, YouTube)
-- Large Flixen™ logo
+- Large Newclear Digital logo
 - Copyright and credits
 
 **Usage:**

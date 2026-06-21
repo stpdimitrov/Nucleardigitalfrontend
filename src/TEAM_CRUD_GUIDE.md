@@ -113,7 +113,7 @@ Stored in localStorage under key: `team.members`
 
 ```json
 {
-  "flixen-cms-content": {
+  "newclear-cms-content": {
     "state": {
       "content": {
         "team.members": "[{\"id\":\"1\",\"name\":\"Liam Carter\",\"role\":\"Creative Director\",\"image\":\"...\",\"twitter\":\"...\"}]"

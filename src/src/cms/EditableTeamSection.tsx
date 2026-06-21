@@ -482,7 +482,7 @@ export function EditableTeamSection({ defaultMembers = [] }: EditableTeamSection
               <div className="content-stretch flex flex-col items-center opacity-70">
                 <EditableText
                   contentKey="team.subtitle"
-                  defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[24px] not-italic relative shrink-0 text-[#ddd] text-[14.5px] tracking-[-0.32px] text-center'><p class='mb-0'>Meet the talented creatives behind Flixen™, dedicated to </p><p>crafting exceptional visuals &amp; bringing every story to life.</p></div>"
+                  defaultValue="<div class='flex flex-col font-[&quot;Inter:Medium&quot;,sans-serif] font-medium justify-center leading-[24px] not-italic relative shrink-0 text-[#ddd] text-[14.5px] tracking-[-0.32px] text-center'><p class='mb-0'>Meet the talented creatives behind Newclear Digital, dedicated to </p><p>crafting exceptional visuals &amp; bringing every story to life.</p></div>"
                   as="div"
                   className=""
                   multiline

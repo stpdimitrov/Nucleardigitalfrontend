@@ -1,4 +1,4 @@
-// TypeScript types for Flixen™ application
+// TypeScript types for Newclear Digital application
 // CRITICAL: Types match exact data structure from static content
 // DO NOT modify without ensuring visual parity
 

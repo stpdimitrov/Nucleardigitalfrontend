@@ -98,7 +98,7 @@ import { EditableText } from '../components/EditableText';
 
 <EditableText
   id="hero-title"
-  value="Welcome to Flixen™"
+  value="Welcome to Newclear Digital"
   as="h1"
   className="text-6xl font-bold text-white"
 />
@@ -236,7 +236,7 @@ function ProjectCard({ project }) {
 ### **Storage Structure**
 
 ```javascript
-// Stored in localStorage under 'flixen-cms-edits'
+// Stored in localStorage under 'newclear-cms-edits'
 {
   "hero-title": "New Title",
   "hero-description": "New description",
@@ -250,10 +250,10 @@ function ProjectCard({ project }) {
 // In browser console:
 
 // View all edits
-localStorage.getItem('flixen-cms-edits');
+localStorage.getItem('newclear-cms-edits');
 
 // Clear all edits
-localStorage.removeItem('flixen-cms-edits');
+localStorage.removeItem('newclear-cms-edits');
 location.reload();
 ```
 

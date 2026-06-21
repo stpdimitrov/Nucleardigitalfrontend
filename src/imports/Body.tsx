@@ -623,7 +623,7 @@ function DivFramer1Wtix2R() {
   return (
     <div className="absolute h-[24px] left-0 top-0 w-[373.33px]" data-name="Div [framer-1wtix2r]">
       <div className="-translate-y-1/2 absolute flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] left-0 not-italic text-[#ddd] text-[14.4px] top-[11.5px] tracking-[-0.32px] whitespace-nowrap">
-        <p className="leading-[24px]">Flixen ™. All rights reserved.</p>
+        <p className="leading-[24px]">Newclear Digital. All rights reserved.</p>
       </div>
     </div>
   );
@@ -1926,7 +1926,7 @@ function DivFramer10Eoqs() {
   return (
     <div className="absolute h-[24px] left-[34px] top-[3px] w-[91.43px]" data-name="Div [framer-10eoqs3]">
       <div className="-translate-y-1/2 absolute flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] left-0 not-italic text-[23.4px] text-white top-[12px] tracking-[-0.72px] uppercase whitespace-nowrap">
-        <p className="leading-[24px]">Flixen™</p>
+        <p className="leading-[24px]">Newclear Digital</p>
       </div>
     </div>
   );

@@ -2098,7 +2098,7 @@ function PFramerText35() {
   return (
     <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
       <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[252.1px] text-white tracking-[-7.684px] uppercase w-full">
-        <p className="leading-[230.531px] whitespace-pre-wrap">Flixen™</p>
+        <p className="leading-[230.531px] whitespace-pre-wrap">Newclear Digital</p>
       </div>
     </div>
   );
@@ -2134,7 +2134,7 @@ function PFramerText36() {
   return (
     <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
       <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#ddd] text-[14.4px] tracking-[-0.32px] w-full">
-        <p className="leading-[24px] whitespace-pre-wrap">Flixen ™. All rights reserved.</p>
+        <p className="leading-[24px] whitespace-pre-wrap">Newclear Digital. All rights reserved.</p>
       </div>
     </div>
   );
@@ -2321,7 +2321,7 @@ function PFramerText39() {
   return (
     <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
       <a className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[0px] text-white tracking-[-0.72px] uppercase whitespace-nowrap" href="https://primary-words-404174.framer.app/">
-        <p className="cursor-pointer leading-[24px] text-[23.6px]">Flixen™</p>
+        <p className="cursor-pointer leading-[24px] text-[23.6px]">Newclear Digital</p>
       </a>
     </div>
   );

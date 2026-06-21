@@ -243,7 +243,7 @@ export default async function ProjectsPage() {
 
 1. **Update API_BASE_URL** in `/services/api.ts`:
    ```typescript
-   const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.flixen.com';
+   const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.newcleardigital.com';
    ```
 
 2. **Uncomment API fetch calls**:
@@ -360,7 +360,7 @@ export default async function FeaturedWork() {
 
 ```env
 # .env.local
-NEXT_PUBLIC_API_URL=https://api.flixen.com
+NEXT_PUBLIC_API_URL=https://api.newcleardigital.com
 ```
 
 ### Optional

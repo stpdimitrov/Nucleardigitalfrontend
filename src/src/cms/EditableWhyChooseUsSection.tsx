@@ -70,7 +70,7 @@ const DEFAULT_CARDS: WhyChooseUsCard[] = [
     id: 'card-6',
     type: 'quote',
     sidebar: true,
-    quote: '"At Flixen™, our goal is simple — to turn ideas into visuals that move people. Every project is a chance to tell a story worth remembering."',
+    quote: '"At Newclear Digital, our goal is simple — to turn ideas into visuals that move people. Every project is a chance to tell a story worth remembering."',
     title: 'Dylan Cross',
     subtitle: 'CEO & Co-Founder',
     backgroundColor: 'rgb(36, 36, 36)',

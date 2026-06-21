@@ -60,7 +60,7 @@ function PFramerText() {
   return (
     <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
       <a className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[0px] text-white tracking-[-0.72px] uppercase whitespace-nowrap" href="https://primary-words-404174.framer.app/">
-        <p className="cursor-pointer leading-[24px] text-[23.6px]">Flixen™</p>
+        <p className="cursor-pointer leading-[24px] text-[23.6px]">Newclear Digital</p>
       </a>
     </div>
   );
@@ -751,7 +751,7 @@ function PFramerText5() {
   return (
     <div className="absolute content-stretch flex flex-col items-start left-[600px] opacity-80 pr-[9.55px] right-[-3.55px] top-0" data-name="p.framer-text">
       <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[24px] not-italic relative shrink-0 text-[#ddd] text-[14.4px] tracking-[-0.32px] whitespace-nowrap">
-        <p className="mb-0">{`Flixen™ began with a simple yet powerful vision — to transform creative ideas into `}</p>
+        <p className="mb-0">{`Newclear Digital began with a simple yet powerful vision — to transform creative ideas into `}</p>
         <p className="mb-0">{`cinematic stories that inspire and connect people everywhere. From our humble `}</p>
         <p className="mb-0">{`beginnings as a small, passionate production team, we’ve grown into a full-scale creative `}</p>
         <p className="mb-0">{`agency trusted by global brands. Today, we continue crafting visuals that spark emotion, `}</p>
@@ -802,7 +802,7 @@ function PFramerText6() {
         <p className="mb-0">{`Our mission is to deliver powerful, emotion-driven videos that deeply engage audiences, `}</p>
         <p className="mb-0">{`strengthen brands, and create lasting impressions. We believe every story deserves to be `}</p>
         <p className="mb-0">{`told with passion, precision, and creativity — transforming ideas into visuals that inspire, `}</p>
-        <p className="mb-0">{`connect, and endure. At Flixen™, we turn every client’s vision into an unforgettable `}</p>
+        <p className="mb-0">{`connect, and endure. At Newclear Digital, we turn every client’s vision into an unforgettable `}</p>
         <p>cinematic experience that truly stands out.</p>
       </div>
     </div>
@@ -922,7 +922,7 @@ function PFramerText8() {
   return (
     <div className="absolute content-stretch flex flex-col items-start left-0 opacity-70 right-0 top-[58.41px]" data-name="p.framer-text">
       <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[24px] not-italic relative shrink-0 text-[#ddd] text-[14.5px] tracking-[-0.32px] whitespace-nowrap">
-        <p className="mb-0">{`Meet the talented creatives behind Flixen™, dedicated to `}</p>
+        <p className="mb-0">{`Meet the talented creatives behind Newclear Digital, dedicated to `}</p>
         <p>{`crafting exceptional visuals & bringing every story to life.`}</p>
       </div>
     </div>
@@ -3850,7 +3850,7 @@ function PFramerText49() {
   return (
     <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
       <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[252.1px] text-white tracking-[-7.684px] uppercase w-full">
-        <p className="leading-[230.531px] whitespace-pre-wrap">Flixen™</p>
+        <p className="leading-[230.531px] whitespace-pre-wrap">Newclear Digital</p>
       </div>
     </div>
   );
@@ -3886,7 +3886,7 @@ function PFramerText50() {
   return (
     <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="p.framer-text">
       <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#ddd] text-[14.4px] tracking-[-0.32px] w-full">
-        <p className="leading-[24px] whitespace-pre-wrap">Flixen ™. All rights reserved.</p>
+        <p className="leading-[24px] whitespace-pre-wrap">Newclear Digital. All rights reserved.</p>
       </div>
     </div>
   );

@@ -161,7 +161,7 @@ const {
 ```tsx
 <EditableText
   id="hero-title"
-  value="Welcome to Flixen™"
+  value="Welcome to Newclear Digital"
   as="h1"
   className="text-6xl font-bold text-white"
 />

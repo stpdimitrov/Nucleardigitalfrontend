@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the optional Framer Motion enhancements added to the Flixen™ website. These animations enhance the user experience WITHOUT changing layout, spacing, colors, fonts, or breakpoints.
+This document describes the optional Framer Motion enhancements added to the Newclear Digital website. These animations enhance the user experience WITHOUT changing layout, spacing, colors, fonts, or breakpoints.
 
 **CRITICAL:** These are ENHANCEMENTS, not redesigns. Visual parity is maintained 100%.
 

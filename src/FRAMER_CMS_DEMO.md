@@ -252,7 +252,7 @@ Now that you have the system, make your entire site editable:
 <EditableText id="blog-1-title" value="Post title" as="h2" />
 
 // Footer text
-<EditableText id="footer-tagline" value="© 2025 Flixen" />
+<EditableText id="footer-tagline" value="© 2025 Newclear Digital" />
 ```
 
 **Every piece of content can be edited with a single click!** 🎨

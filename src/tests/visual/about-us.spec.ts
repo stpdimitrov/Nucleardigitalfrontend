@@ -178,7 +178,7 @@ test.describe('About Us Page - Visual Regression', () => {
     await expect(footer.locator('text=Main Pages')).toBeVisible();
     await expect(footer.locator('text=CMS Pages')).toBeVisible();
     await expect(footer.locator('text=Follow us on')).toBeVisible();
-    await expect(footer.locator('text=Flixen ™. All rights reserved.')).toBeVisible();
+    await expect(footer.locator('text=Newclear Digital. All rights reserved.')).toBeVisible();
     
     await expect(footer).toHaveScreenshot(`footer-${testInfo.project.name}.png`, {
       animations: 'disabled',

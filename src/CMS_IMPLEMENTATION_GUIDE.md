@@ -84,7 +84,7 @@ Content keys should follow a hierarchical pattern:
 ```tsx
 <EditableText
   contentKey="about.hero.title"         // Required: unique key
-  defaultValue="About Flixen™"          // Required: default content
+  defaultValue="About Newclear Digital"          // Required: default content
   as="h1"                               // Optional: HTML tag (default: 'div')
   className="text-6xl font-bold"        // Optional: keep existing classes
   style={{ color: 'white' }}            // Optional: keep existing styles  
@@ -208,7 +208,7 @@ function H1FramerText() {
 
 ```json
 {
-  "flixen-cms-content": {
+  "newclear-cms-content": {
     "state": {
       "content": {
         "about.hero.title.part1": "About",
@@ -225,7 +225,7 @@ function H1FramerText() {
 
 ```javascript
 // View all content
-const store = JSON.parse(localStorage.getItem('flixen-cms-content'));
+const store = JSON.parse(localStorage.getItem('newclear-cms-content'));
 console.log(store.state.content);
 
 // Get specific value
@@ -239,7 +239,7 @@ console.log(store.state.content['about.hero.title.part1']);
 // Click the reset icon → Confirm
 
 // Option 2: Clear localStorage manually
-localStorage.removeItem('flixen-cms-content');
+localStorage.removeItem('newclear-cms-content');
 location.reload();
 ```
 

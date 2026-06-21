@@ -88,7 +88,7 @@
 ### Navigation (Fixed Top):
 - Location: Lines 9-34 in App.tsx
 - Position: `fixed w-full left-[50%] top-0 translate-x-[-50%] z-[10]`
-- Logo: "Flixen™" with icon
+- Logo: "Newclear Digital" with icon
 - Menu button: Right aligned
 - Backdrop blur: 20px
 

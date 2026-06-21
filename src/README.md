@@ -1,6 +1,6 @@
-# Flixen™ Website Migration
+# Newclear Digital Website Migration
 
-Complete migration of the Flixen™ portfolio/agency website from Framer to a development environment with optional Framer Motion enhancements.
+Complete migration of the Newclear Digital portfolio/agency website from Framer to a development environment with optional Framer Motion enhancements.
 
 ---
 

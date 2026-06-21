@@ -1,6 +1,6 @@
 # CMS Usage Guide
 
-This guide explains how to use and manage content in your Flixen™ application.
+This guide explains how to use and manage content in your Newclear Digital application.
 
 ---
 

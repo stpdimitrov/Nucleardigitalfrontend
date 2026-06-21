@@ -98,7 +98,7 @@ When edit mode is ON:
 function MyComponent() {
   return (
     <div className="text-4xl font-bold text-white">
-      Welcome to Flixen™
+      Welcome to Newclear Digital
     </div>
   );
 }
@@ -113,7 +113,7 @@ function MyComponent() {
   return (
     <EditableText
       contentKey="home.hero.title"
-      defaultValue="Welcome to Flixen™"
+      defaultValue="Welcome to Newclear Digital"
       as="div"
       className="text-4xl font-bold text-white"
     />
@@ -152,7 +152,7 @@ page.section.element
 
 ```json
 {
-  "flixen-cms-content": {
+  "newclear-cms-content": {
     "state": {
       "content": {
         "about.hero.title.part1": "About",
@@ -167,7 +167,7 @@ page.section.element
 ### View in Console
 
 ```javascript
-JSON.parse(localStorage.getItem('flixen-cms-content')).state.content
+JSON.parse(localStorage.getItem('newclear-cms-content')).state.content
 ```
 
 ### Reset Content

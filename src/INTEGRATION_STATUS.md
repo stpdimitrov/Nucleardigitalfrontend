@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-The Flixen™ website has been **partially integrated** with Framer Motion animations. Core sections are live with animations while maintaining 100% visual parity. Additional sections can be integrated using the provided components and guides.
+The Newclear Digital website has been **partially integrated** with Framer Motion animations. Core sections are live with animations while maintaining 100% visual parity. Additional sections can be integrated using the provided components and guides.
 
 ---
 
