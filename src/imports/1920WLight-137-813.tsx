@@ -112,7 +112,7 @@ function Content() {
 
 function Light() {
   return (
-    <a className="block cursor-pointer h-[38px] relative shrink-0 w-[140px]" data-name="Light" href="https://www.framer.com/">
+    <a className="block cursor-pointer h-[38px] relative shrink-0 w-[140px]" data-name="Light" href="#">
       <Backdrop />
       <Content />
       <div className="absolute bg-[rgba(255,255,255,0)] inset-0 mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[0%_0%] mask-size-[100%_100%] opacity-6 rounded-[11px]" data-name="Bottom" style={{ maskImage: `url('${imgBottom}')` }}>

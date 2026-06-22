@@ -23,7 +23,7 @@ interface EditableAboutUsSectionProps {
 
 export function EditableAboutUsSection({
   contentKey = 'aboutUsSection',
-  defaultBackgroundImage = 'https://framerusercontent.com/images/HEAOCxviii67uzFqzwzTJpBfTw.jpg',
+  defaultBackgroundImage = '/images/about-bg.jpg',
   defaultBackgroundAlt = 'Background',
   defaultHeading = 'The creative agency for studios & production companies.',
   defaultButtonText = 'More about us',

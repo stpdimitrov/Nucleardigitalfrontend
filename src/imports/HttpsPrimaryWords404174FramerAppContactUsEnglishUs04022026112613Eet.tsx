@@ -314,7 +314,7 @@ function Border() {
 
 function Light() {
   return (
-    <a className="block cursor-pointer h-[38px] relative shrink-0 w-[140px]" data-name="Light" href="https://www.framer.com/">
+    <a className="block cursor-pointer h-[38px] relative shrink-0 w-[140px]" data-name="Light" href="#">
       <Backdrop />
       <Content />
       <Bottom />
